@@ -1,0 +1,2638 @@
+[
+  {
+    "id": "ggml-org-gemma-3-1b-it-gguf-gemma-3-1b-it-q8-0",
+    "name": "Gemma3-1B (ggml官方)",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma Terms",
+    "githubRepo": "ggml-org/llama.cpp",
+    "githubStars": 14000,
+    "params": "1B",
+    "quant": "Q8_0",
+    "sizeInGB": 0.996,
+    "tags": [
+      "官方"
+    ],
+    "colorIndex": 5,
+    "description": "llama.cpp 官方量化。",
+    "downloadUrl": "https://hf-mirror.com/ggml-org/gemma-3-1b-it-GGUF/resolve/main/gemma-3-1b-it-Q8_0.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "ggml-org-gemma-3-4b-it-gguf-gemma-3-4b-it-q8-0",
+    "name": "Gemma3-4B (ggml官方)",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Gemma Terms",
+    "githubRepo": "ggml-org/llama.cpp",
+    "githubStars": 14000,
+    "params": "4B",
+    "quant": "Q8_0",
+    "sizeInGB": 3.847,
+    "tags": [
+      "图像"
+    ],
+    "colorIndex": 3,
+    "description": "ggml 官方视觉版。",
+    "downloadUrl": "https://hf-mirror.com/ggml-org/gemma-3-4b-it-GGUF/resolve/main/gemma-3-4b-it-Q8_0.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/ggml-org/gemma-3-4b-it-GGUF/resolve/main/mmproj-model-f16.gguf",
+    "projectorSizeMB": 811
+  },
+  {
+    "id": "ggml-org-qwen3-asr-1-7b-gguf-qwen3-asr-1-7b-q8-0",
+    "name": "Qwen3-ASR-1.7B",
+    "author": "Qwen",
+    "vendor": "Qwen",
+    "domain": "全模态",
+    "vertical": "语音识别",
+    "license": "apache-2.0",
+    "githubRepo": "QwenLM/Qwen3-ASR",
+    "githubStars": 2600,
+    "params": "1.7B",
+    "quant": "Q8_0",
+    "sizeInGB": 2.015,
+    "tags": [
+      "音频",
+      "语音识别"
+    ],
+    "colorIndex": 4,
+    "description": "Qwen3 语音识别大模型，多语言高精度转写，配音频投影器使用。",
+    "downloadUrl": "https://hf-mirror.com/ggml-org/Qwen3-ASR-1.7B-GGUF/resolve/main/Qwen3-ASR-1.7B-Q8_0.gguf",
+    "projectorUrl": "https://hf-mirror.com/ggml-org/Qwen3-ASR-1.7B-GGUF/resolve/main/mmproj-Qwen3-ASR-1.7B-Q8_0.gguf",
+    "projectorSizeMB": 339,
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "asr"
+    ]
+  },
+  {
+    "id": "unsloth-llama-3-2-1b-instruct-gguf-llama-3-2-1b-instruct-q4-k-m",
+    "name": "Llama-3.2-1B (unsloth)",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "unsloth/llama",
+    "githubStars": 32000,
+    "params": "1B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.752,
+    "tags": [
+      "轻量"
+    ],
+    "colorIndex": 0,
+    "description": "unsloth 优化版，imatrix 量化。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Llama-3.2-1B-Instruct-GGUF/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-llama-3-2-3b-instruct-gguf-llama-3-2-3b-instruct-q4-k-m",
+    "name": "Llama-3.2-3B (unsloth)",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "unsloth/llama",
+    "githubStars": 32000,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.881,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 0,
+    "description": "unsloth 优化版 3B。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-llama-3-2-1b-instruct-gguf-llama-3-2-1b-instruct-q4-k-m",
+    "name": "Llama-3.2-1B-Instruct",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "meta-llama/llama3",
+    "githubStars": 28000,
+    "params": "1B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.752,
+    "tags": [
+      "英文",
+      "轻量"
+    ],
+    "colorIndex": 4,
+    "description": "Meta 最小端侧模型。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Llama-3.2-1B-Instruct-GGUF/resolve/main/Llama-3.2-1B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-llama-3-2-3b-instruct-gguf-llama-3-2-3b-instruct-q4-k-m",
+    "name": "Llama-3.2-3B-Instruct",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "meta-llama/llama3",
+    "githubStars": 28000,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.881,
+    "tags": [
+      "通用",
+      "生态"
+    ],
+    "colorIndex": 4,
+    "description": "Meta 官方端侧主力。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-llama-3-3-70b-instruct-gguf-llama-3-3-70b-instruct-q4-k-m",
+    "name": "Llama-3.3-70B-Instruct",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "meta-llama/llama3",
+    "githubStars": 28000,
+    "params": "70B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 39.6,
+    "tags": [
+      "旗舰",
+      "超大杯"
+    ],
+    "colorIndex": 2,
+    "description": "Llama 3.3 最新旗舰。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Llama-3.3-70B-Instruct-GGUF/resolve/main/Llama-3.3-70B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "lmstudio-community-meta-llama-3-1-8b-instruct-gguf-meta-llama-3-1-8b-instruct-q4",
+    "name": "Meta-Llama-3.1-8B (LM Studio)",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "meta-llama/llama3",
+    "githubStars": 28000,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.583,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 5,
+    "description": "LM Studio 社区量化版。",
+    "downloadUrl": "https://hf-mirror.com/lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "quantfactory-meta-llama-3-1-8b-instruct-gguf-meta-llama-3-1-8b-instruct-q4-k-m",
+    "name": "Llama-3.1-8B (QuantFactory)",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "meta-llama/llama3",
+    "githubStars": 28000,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.583,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 3,
+    "description": "高质量社区量化。",
+    "downloadUrl": "https://hf-mirror.com/QuantFactory/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct.Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-llama-3-1-8b-instruct-gguf-llama-3-1-8b-instruct-q4-k-m",
+    "name": "Llama-3.1-8B (unsloth)",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama License",
+    "githubRepo": "meta-llama/llama3",
+    "githubStars": 28000,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.583,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 1,
+    "description": "unsloth 量化版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Llama-3.1-8B-Instruct-GGUF/resolve/main/Llama-3.1-8B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-mistral-7b-instruct-v0-3-gguf-mistral-7b-instruct-v0-3-q4-k-m",
+    "name": "Mistral-7B-Instruct-v0.3",
+    "author": "Mistral AI",
+    "vendor": "Mistral AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "mistralai/mistral-inference",
+    "githubStars": 26000,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.072,
+    "tags": [
+      "英文",
+      "通用"
+    ],
+    "colorIndex": 3,
+    "description": "欧洲代表开源模型。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-mistral-nemo-instruct-2407-gguf-mistral-nemo-instruct-2407-q4-k-m",
+    "name": "Mistral-Nemo-12B",
+    "author": "Mistral AI",
+    "vendor": "Mistral AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "mistralai/mistral-inference",
+    "githubStars": 26000,
+    "params": "12B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 6.964,
+    "tags": [
+      "通用",
+      "多语言"
+    ],
+    "colorIndex": 0,
+    "description": "NVIDIA 合作 12B 模型。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Mistral-Nemo-Instruct-2407-GGUF/resolve/main/Mistral-Nemo-Instruct-2407-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-mistral-small-instruct-2409-gguf-mistral-small-instruct-2409-q4-k-m",
+    "name": "Mistral-Small-24B",
+    "author": "Mistral AI",
+    "vendor": "Mistral AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "mistralai/mistral-inference",
+    "githubStars": 26000,
+    "params": "24B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 12.425,
+    "tags": [
+      "高质量"
+    ],
+    "colorIndex": 0,
+    "description": "Mistral 中端旗舰。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Mistral-Small-Instruct-2409-GGUF/resolve/main/Mistral-Small-Instruct-2409-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-mistral-small-24b-instruct-2501-gguf-mistral-small-24b-instruct-2501-q",
+    "name": "Mistral-Small-24B-2501",
+    "author": "Mistral AI",
+    "vendor": "Mistral AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "mistralai/mistral-inference",
+    "githubStars": 26000,
+    "params": "24B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 13.349,
+    "tags": [
+      "高质量"
+    ],
+    "colorIndex": 1,
+    "description": "Mistral Small 2025 更新。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Mistral-Small-24B-Instruct-2501-GGUF/resolve/main/Mistral-Small-24B-Instruct-2501-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "thebloke-mixtral-8x7b-instruct-v0-1-gguf-mixtral-8x7b-instruct-v0-1-q4-k-m",
+    "name": "Mixtral-8x7B",
+    "author": "Mistral AI",
+    "vendor": "Mistral AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "mistralai/Mixtral-8x7B",
+    "githubStars": 22000,
+    "params": "8x7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 22.942,
+    "tags": [
+      "MoE",
+      "英文"
+    ],
+    "colorIndex": 2,
+    "description": "经典 MoE 架构，英文能力强，需大内存。",
+    "downloadUrl": "https://modelscope.cn/models/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/resolve/master/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "qwen-qwen3-32b-gguf-qwen3-32b-q4-k-m",
+    "name": "Qwen3-32B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3",
+    "githubStars": 21000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.405,
+    "tags": [
+      "中文",
+      "旗舰"
+    ],
+    "colorIndex": 0,
+    "description": "Qwen3 代旗舰稠密模型。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen3-32B-GGUF/resolve/main/Qwen3-32B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-qwen3-32b-gguf-qwen3-32b-q4-k-m",
+    "name": "Qwen3-32B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3",
+    "githubStars": 21000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.405,
+    "tags": [
+      "中文",
+      "旗舰"
+    ],
+    "colorIndex": 4,
+    "description": "Qwen3 旗舰 unsloth 量化版。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen3-32B-GGUF/resolve/master/Qwen3-32B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-qwen3-8b-gguf-qwen3-8b-q4-k-m",
+    "name": "Qwen3-8B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3",
+    "githubStars": 21000,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.682,
+    "tags": [
+      "中文",
+      "通用"
+    ],
+    "colorIndex": 5,
+    "description": "Qwen3 主力 unsloth 量化。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen3-8B-GGUF/resolve/master/Qwen3-8B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-qwen3-4b-gguf-qwen3-4b-q4-k-m",
+    "name": "Qwen3-4B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3",
+    "githubStars": 21000,
+    "params": "4B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.326,
+    "tags": [
+      "中文",
+      "通用"
+    ],
+    "colorIndex": 5,
+    "description": "Qwen3 甜点尺寸 unsloth 量化。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen3-4B-GGUF/resolve/master/Qwen3-4B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-qwen3-14b-gguf-qwen3-14b-q4-k-m",
+    "name": "Qwen3-14B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3",
+    "githubStars": 21000,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.384,
+    "tags": [
+      "中文",
+      "高质量"
+    ],
+    "colorIndex": 2,
+    "description": "Qwen3 大尺寸 unsloth 量化。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen3-14B-GGUF/resolve/master/Qwen3-14B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "qwen-qwen3-30b-a3b-gguf-qwen3-30b-a3b-q4-k-m",
+    "name": "Qwen3-30B-A3B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3",
+    "githubStars": 21000,
+    "params": "30B-A3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 16.0,
+    "tags": [
+      "MoE",
+      "高效"
+    ],
+    "colorIndex": 0,
+    "description": "MoE 架构，激活仅 3B，速度快能力全。",
+    "downloadUrl": "https://modelscope.cn/models/Qwen/Qwen3-30B-A3B-GGUF/resolve/master/Qwen3-30B-A3B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-deepseek-r1-distill-qwen-7b-gguf-deepseek-r1-distill-qwen-7b-q4-k-m",
+    "name": "DeepSeek-R1-Distill (unsloth)",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "unsloth/deepseek",
+    "githubStars": 20000,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.361,
+    "tags": [
+      "推理"
+    ],
+    "colorIndex": 1,
+    "description": "unsloth R1 蒸馏。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/DeepSeek-R1-Distill-Qwen-7B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "openbmb-minicpm-v-2-6-gguf-ggml-model-q4-k-m",
+    "name": "MiniCPM-V-2.6",
+    "author": "面壁智能",
+    "vendor": "面壁智能",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Apache 2.0",
+    "githubRepo": "OpenBMB/MiniCPM-V",
+    "githubStars": 19000,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.36,
+    "tags": [
+      "端侧视觉",
+      "OCR"
+    ],
+    "colorIndex": 2,
+    "description": "端侧视觉 OCR 强。",
+    "downloadUrl": "https://hf-mirror.com/openbmb/MiniCPM-V-2_6-gguf/resolve/main/ggml-model-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "ocr",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/openbmb/MiniCPM-V-2_6-gguf/resolve/main/mmproj-model-f16.gguf",
+    "projectorSizeMB": 996
+  },
+  {
+    "id": "qwen-qwen2-5-0-5b-instruct-gguf-qwen2-5-0-5b-instruct-q4-k-m",
+    "name": "Qwen2.5-0.5B-Instruct",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5",
+    "githubStars": 16000,
+    "params": "0.5B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.458,
+    "tags": [
+      "中文",
+      "轻量"
+    ],
+    "colorIndex": 2,
+    "description": "通义千问最小尺寸，百元机可跑，入门首选。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-1-5b-instruct-gguf-qwen2-5-1-5b-instruct-q4-k-m",
+    "name": "Qwen2.5-1.5B-Instruct",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5",
+    "githubStars": 16000,
+    "params": "1.5B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.041,
+    "tags": [
+      "中文",
+      "轻量"
+    ],
+    "colorIndex": 0,
+    "description": "小尺寸高效应，日常对话流畅。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-3b-instruct-gguf-qwen2-5-3b-instruct-q4-k-m",
+    "name": "Qwen2.5-3B-Instruct",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5",
+    "githubStars": 16000,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.96,
+    "tags": [
+      "中文",
+      "通用对话"
+    ],
+    "colorIndex": 2,
+    "description": "中文能力突出，适合对话、摘要与改写。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "ggml-org-gemma-3-12b-it-gguf-gemma-3-12b-it-q4-k-m",
+    "name": "Gemma3-12B (ggml)",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma License",
+    "githubRepo": "google/gemma",
+    "githubStars": 14000,
+    "params": "12B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 6.799,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 2,
+    "description": "ggml 官方量化。",
+    "downloadUrl": "https://hf-mirror.com/ggml-org/gemma-3-12b-it-GGUF/resolve/main/gemma-3-12b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "ggml-org-gemma-3-27b-it-gguf-gemma-3-27b-it-q4-k-m",
+    "name": "Gemma3-27B (ggml)",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma License",
+    "githubRepo": "google/gemma",
+    "githubStars": 14000,
+    "params": "27B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 15.41,
+    "tags": [
+      "旗舰"
+    ],
+    "colorIndex": 5,
+    "description": "ggml 官方量化。",
+    "downloadUrl": "https://hf-mirror.com/ggml-org/gemma-3-27b-it-GGUF/resolve/main/gemma-3-27b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-gemma-3n-e2b-it-gguf-gemma-3n-e2b-it-q4-k-m",
+    "name": "Gemma3n-E2B",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Gemma License",
+    "githubRepo": "google/gemma",
+    "githubStars": 14000,
+    "params": "2B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.819,
+    "tags": [
+      "图像",
+      "端侧"
+    ],
+    "colorIndex": 0,
+    "description": "Gemma 多模态端侧版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gemma-3n-E2B-it-GGUF/resolve/main/gemma-3n-E2B-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-glm-4-32b-0414-gguf-glm-4-32b-0414-q4-k-m",
+    "name": "GLM-4-32B",
+    "author": "智谱 AI",
+    "vendor": "智谱 AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "THUDM/GLM-4",
+    "githubStars": 13000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.328,
+    "tags": [
+      "中文",
+      "高质量"
+    ],
+    "colorIndex": 5,
+    "description": "智谱大尺寸对话模型。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/GLM-4-32B-0414-GGUF/resolve/master/GLM-4-32B-0414-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-phi-4-gguf-phi-4-q4-k-m",
+    "name": "Phi-4",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "microsoft/phi-4",
+    "githubStars": 12000,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.28,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 0,
+    "description": "Phi-4，推理数理强。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/phi-4-GGUF/resolve/main/phi-4-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-phi-4-gguf-phi-4-q4-k-m",
+    "name": "Phi-4 (bartowski)",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "microsoft/phi-4",
+    "githubStars": 12000,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.431,
+    "tags": [
+      "推理"
+    ],
+    "colorIndex": 1,
+    "description": "bartowski 版 Phi-4。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/phi-4-GGUF/resolve/main/phi-4-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-gpt-oss-20b-gguf-gpt-oss-20b-q4-k-m",
+    "name": "GPT-OSS-20B",
+    "author": "OpenAI",
+    "vendor": "OpenAI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "openai/gpt-oss",
+    "githubStars": 12000,
+    "params": "21B-A3.6B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 10.826,
+    "tags": [
+      "MoE",
+      "工具调用"
+    ],
+    "colorIndex": 1,
+    "description": "OpenAI 开放权重 MoE。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-deepseek-r1-distill-qwen-1-5b-gguf-deepseek-r1-distill-qwen-1-5b-q4-k-",
+    "name": "DeepSeek-R1-Distill-Qwen-1.5B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "1.5B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.041,
+    "tags": [
+      "推理",
+      "思维链"
+    ],
+    "colorIndex": 2,
+    "description": "R1 最小蒸馏版，思维链入门。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-deepseek-r1-distill-qwen-7b-gguf-deepseek-r1-distill-qwen-7b-q4-k-m",
+    "name": "DeepSeek-R1-Distill-Qwen-7B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.361,
+    "tags": [
+      "推理",
+      "思维链"
+    ],
+    "colorIndex": 1,
+    "description": "R1 蒸馏主力，数理逻辑突出。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-deepseek-r1-distill-qwen-14b-gguf-deepseek-r1-distill-qwen-14b-q4-k-m",
+    "name": "DeepSeek-R1-Distill-Qwen-14B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.371,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 3,
+    "description": "R1 蒸馏大尺寸，思考更深。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/DeepSeek-R1-Distill-Qwen-14B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-deepseek-r1-distill-qwen-32b-gguf-deepseek-r1-distill-qwen-32b-q4-k-m",
+    "name": "DeepSeek-R1-Distill-Qwen-32B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.488,
+    "tags": [
+      "推理",
+      "旗舰"
+    ],
+    "colorIndex": 4,
+    "description": "R1 蒸馏旗舰，接近满血版推理。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-deepseek-r1-distill-llama-8b-gguf-deepseek-r1-distill-llama-8b-q4-k-m",
+    "name": "DeepSeek-R1-Distill-Llama-8B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.583,
+    "tags": [
+      "推理"
+    ],
+    "colorIndex": 2,
+    "description": "Llama 架构 R1 蒸馏版。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/DeepSeek-R1-Distill-Llama-8B-GGUF/resolve/main/DeepSeek-R1-Distill-Llama-8B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-deepseek-r1-0528-qwen3-8b-gguf-deepseek-r1-0528-qwen3-8b-q4-k-m",
+    "name": "DeepSeek-R1-0528-Qwen3-8B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.682,
+    "tags": [
+      "推理",
+      "新版"
+    ],
+    "colorIndex": 1,
+    "description": "R1 0528 更新版，Qwen3 架构。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF/resolve/main/DeepSeek-R1-0528-Qwen3-8B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-deepseek-r1-distill-llama-70b-gguf-deepseek-r1-distill-llama-70b-q4-k-m",
+    "name": "DeepSeek-R1-Distill-Llama-70B",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "70B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 39.6,
+    "tags": [
+      "推理",
+      "超大杯"
+    ],
+    "colorIndex": 5,
+    "description": "R1 最大蒸馏版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/DeepSeek-R1-Distill-Llama-70B-GGUF/resolve/main/DeepSeek-R1-Distill-Llama-70B-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-deepseek-r1-0528-qwen3-8b-gguf-deepseek-r1-0528-qwen3-8b-q5-k-m",
+    "name": "DeepSeek-R1-0528-Qwen3-8B-Q5",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "8B",
+    "quant": "Q5_K_M",
+    "sizeInGB": 5.449,
+    "tags": [
+      "推理"
+    ],
+    "colorIndex": 4,
+    "description": "R1 0528 高精度版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/DeepSeek-R1-0528-Qwen3-8B-GGUF/resolve/main/DeepSeek-R1-0528-Qwen3-8B-Q5_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-deepseek-r1-distill-qwen-32b-gguf-deepseek-r1-distill-qwen-32b-q4-k-m",
+    "name": "DeepSeek-R1-Distill-Qwen-32B (unsloth)",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-R1",
+    "githubStars": 10500,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.488,
+    "tags": [
+      "推理",
+      "旗舰"
+    ],
+    "colorIndex": 4,
+    "description": "R1 蒸馏旗舰 unsloth 版。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/DeepSeek-R1-Distill-Qwen-32B-GGUF/resolve/master/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-coder-1-5b-instruct-gguf-qwen2-5-coder-1-5b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-1.5B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "1.5B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.041,
+    "tags": [
+      "代码",
+      "轻量"
+    ],
+    "colorIndex": 4,
+    "description": "最小代码模型，补全解释轻量搞定。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/resolve/main/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-coder-3b-instruct-gguf-qwen2-5-coder-3b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-3B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.96,
+    "tags": [
+      "代码"
+    ],
+    "colorIndex": 1,
+    "description": "代码生成黄金尺寸。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-Coder-3B-Instruct-GGUF/resolve/main/qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-coder-7b-instruct-gguf-qwen2-5-coder-7b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-7B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.361,
+    "tags": [
+      "代码",
+      "编程助手"
+    ],
+    "colorIndex": 0,
+    "description": "代码能力标杆，40+ 语言。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/main/qwen2.5-coder-7b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-coder-14b-instruct-gguf-qwen2-5-coder-14b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-14B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.371,
+    "tags": [
+      "代码",
+      "高质量"
+    ],
+    "colorIndex": 2,
+    "description": "大尺寸代码模型，复杂重构无忧。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-Coder-14B-Instruct-GGUF/resolve/main/qwen2.5-coder-14b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "qwen-qwen2-5-coder-32b-instruct-gguf-qwen2-5-coder-32b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-32B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.488,
+    "tags": [
+      "代码",
+      "旗舰"
+    ],
+    "colorIndex": 1,
+    "description": "代码旗舰，接近 GPT-4o 水平。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/Qwen2.5-Coder-32B-Instruct-GGUF/resolve/main/qwen2.5-coder-32b-instruct-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "unsloth-qwen2-5-coder-32b-instruct-gguf-qwen2-5-coder-32b-instruct-q5-k-m",
+    "name": "Qwen2.5-Coder-32B-Q5",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "32B",
+    "quant": "Q5_K_M",
+    "sizeInGB": 21.665,
+    "tags": [
+      "代码",
+      "旗舰"
+    ],
+    "colorIndex": 0,
+    "description": "代码旗舰高精度版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Qwen2.5-Coder-32B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-32B-Instruct-Q5_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "unsloth-qwen2-5-coder-7b-instruct-gguf-qwen2-5-coder-7b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-7B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.361,
+    "tags": [
+      "代码",
+      "编程助手"
+    ],
+    "colorIndex": 2,
+    "description": "代码标杆 unsloth 量化。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/master/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "unsloth-qwen2-5-vl-7b-instruct-gguf-qwen2-5-vl-7b-instruct-q4-k-m",
+    "name": "Qwen2.5-VL-7B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-VL",
+    "githubStars": 9500,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.361,
+    "tags": [
+      "图像理解",
+      "OCR"
+    ],
+    "colorIndex": 5,
+    "description": "2.5 代视觉主力，OCR 文档全能。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen2.5-VL-7B-Instruct-GGUF/resolve/master/Qwen2.5-VL-7B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "ocr",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/Qwen2.5-VL-7B-Instruct-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 1291
+  },
+  {
+    "id": "unsloth-qwen2-5-coder-14b-instruct-gguf-qwen2-5-coder-14b-instruct-q4-k-m",
+    "name": "Qwen2.5-Coder-14B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-Coder",
+    "githubStars": 9500,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.371,
+    "tags": [
+      "代码",
+      "高质量"
+    ],
+    "colorIndex": 4,
+    "description": "大尺寸代码模型，复杂重构无忧。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen2.5-Coder-14B-Instruct-GGUF/resolve/master/Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "unsloth-qwen2-5-vl-3b-instruct-gguf-qwen2-5-vl-3b-instruct-q4-k-m",
+    "name": "Qwen2.5-VL-3B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen2.5-VL",
+    "githubStars": 9500,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.68,
+    "tags": [
+      "图像",
+      "轻量"
+    ],
+    "colorIndex": 2,
+    "description": "2.5 代视觉轻量版，图文理解端侧友好。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Qwen2.5-VL-3B-Instruct-GGUF/resolve/master/Qwen2.5-VL-3B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/Qwen2.5-VL-3B-Instruct-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 1276
+  },
+  {
+    "id": "qwen-qwq-32b-gguf-qwq-32b-q4-k-m",
+    "name": "QwQ-32B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/QwQ",
+    "githubStars": 9000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.488,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 1,
+    "description": "推理模型，深度思考数理逻辑。",
+    "downloadUrl": "https://hf-mirror.com/Qwen/QwQ-32B-GGUF/resolve/main/qwq-32b-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "gpustack-bge-m3-gguf-bge-m3-q4-k-m",
+    "name": "BGE-M3",
+    "author": "智源 BAAI",
+    "vendor": "智源 BAAI",
+    "domain": "文本",
+    "vertical": "检索",
+    "license": "MIT",
+    "githubRepo": "FlagAI-Open/FlagEmbedding",
+    "githubStars": 9000,
+    "params": "567M",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.408,
+    "tags": [
+      "Embedding",
+      "RAG"
+    ],
+    "colorIndex": 0,
+    "description": "多语言向量模型，RAG 必备。",
+    "downloadUrl": "https://hf-mirror.com/gpustack/bge-m3-GGUF/resolve/main/bge-m3-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "embedding"
+    ]
+  },
+  {
+    "id": "gpustack-bge-reranker-v2-m3-gguf-bge-reranker-v2-m3-q4-k-m",
+    "name": "BGE-Reranker-v2-m3",
+    "author": "智源 BAAI",
+    "vendor": "智源 BAAI",
+    "domain": "文本",
+    "vertical": "检索",
+    "license": "MIT",
+    "githubRepo": "FlagAI-Open/FlagEmbedding",
+    "githubStars": 9000,
+    "params": "568M",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.408,
+    "tags": [
+      "Rerank",
+      "RAG"
+    ],
+    "colorIndex": 5,
+    "description": "重排序模型。",
+    "downloadUrl": "https://hf-mirror.com/gpustack/bge-reranker-v2-m3-GGUF/resolve/main/bge-reranker-v2-m3-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "rerank"
+    ]
+  },
+  {
+    "id": "bartowski-phi-3-5-mini-instruct-gguf-phi-3-5-mini-instruct-q4-k-m",
+    "name": "Phi-3.5-mini",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "microsoft/Phi-3",
+    "githubStars": 9000,
+    "params": "3.8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.229,
+    "tags": [
+      "轻量",
+      "推理"
+    ],
+    "colorIndex": 5,
+    "description": "小钢炮，推理强。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Phi-3.5-mini-instruct-GGUF/resolve/main/Phi-3.5-mini-instruct-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-phi-3-medium-4k-instruct-gguf-phi-3-medium-4k-instruct-q4-k-m",
+    "name": "Phi-3-medium",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "microsoft/Phi-3",
+    "githubStars": 9000,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 7.978,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 3,
+    "description": "Phi-3 中等尺寸。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Phi-3-medium-4k-instruct-GGUF/resolve/main/Phi-3-medium-4k-instruct-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-qwq-32b-gguf-qwq-32b-q5-k-m",
+    "name": "QwQ-32B-Q5",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/QwQ",
+    "githubStars": 9000,
+    "params": "32B",
+    "quant": "Q5_K_M",
+    "sizeInGB": 21.665,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 5,
+    "description": "推理模型高精度版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/QwQ-32B-GGUF/resolve/main/QwQ-32B-Q5_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-qwq-32b-gguf-qwq-32b-q4-k-m",
+    "name": "QwQ-32B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/QwQ",
+    "githubStars": 9000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.488,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 4,
+    "description": "推理模型，深度思考数理逻辑。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/QwQ-32B-GGUF/resolve/master/QwQ-32B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "bartowski-gemma-2-2b-it-gguf-gemma-2-2b-it-q4-k-m",
+    "name": "Gemma2-2B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "2B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.591,
+    "tags": [
+      "英文",
+      "轻量"
+    ],
+    "colorIndex": 1,
+    "description": "Google 小模型，轻量低延迟。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/gemma-2-2b-it-GGUF/resolve/main/gemma-2-2b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-gemma-2-9b-it-gguf-gemma-2-9b-it-q4-k-m",
+    "name": "Gemma2-9B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "9B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 5.365,
+    "tags": [
+      "英文",
+      "通用"
+    ],
+    "colorIndex": 1,
+    "description": "Gemma2 黄金尺寸。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/gemma-2-9b-it-GGUF/resolve/main/gemma-2-9b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-gemma-2-27b-it-gguf-gemma-2-27b-it-q4-k-m",
+    "name": "Gemma2-27B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "27B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 15.502,
+    "tags": [
+      "英文",
+      "高质量"
+    ],
+    "colorIndex": 3,
+    "description": "Gemma2 大尺寸。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/gemma-2-27b-it-GGUF/resolve/main/gemma-2-27b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-gemma-3-1b-it-gguf-gemma-3-1b-it-q4-k-m",
+    "name": "Gemma3-1B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "1B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.751,
+    "tags": [
+      "轻量"
+    ],
+    "colorIndex": 2,
+    "description": "Gemma3 最小端侧版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gemma-3-1b-it-GGUF/resolve/main/gemma-3-1b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-gemma-3-4b-it-gguf-gemma-3-4b-it-q4-k-m",
+    "name": "Gemma3-4B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "4B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.319,
+    "tags": [
+      "图像",
+      "通用"
+    ],
+    "colorIndex": 3,
+    "description": "Gemma3 支持图像输入。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gemma-3-4b-it-GGUF/resolve/main/gemma-3-4b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/gemma-3-4b-it-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 811
+  },
+  {
+    "id": "unsloth-gemma-3-12b-it-gguf-gemma-3-12b-it-q4-k-m",
+    "name": "Gemma3-12B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "12B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 6.799,
+    "tags": [
+      "图像",
+      "高质量"
+    ],
+    "colorIndex": 0,
+    "description": "Gemma3 大尺寸视觉版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gemma-3-12b-it-GGUF/resolve/main/gemma-3-12b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/gemma-3-12b-it-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 814
+  },
+  {
+    "id": "unsloth-gemma-3-27b-it-gguf-gemma-3-27b-it-q4-k-m",
+    "name": "Gemma3-27B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "27B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 15.41,
+    "tags": [
+      "图像",
+      "旗舰"
+    ],
+    "colorIndex": 4,
+    "description": "Gemma3 旗舰视觉版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gemma-3-27b-it-GGUF/resolve/main/gemma-3-27b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/gemma-3-27b-it-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 818
+  },
+  {
+    "id": "unsloth-gemma-3n-e4b-it-gguf-gemma-3n-e4b-it-q4-k-m",
+    "name": "Gemma3n-E4B-it",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "Gemma Terms",
+    "githubRepo": "google/gemma_pytorch",
+    "githubStars": 14000,
+    "params": "6B-E4B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.227,
+    "tags": [
+      "图像",
+      "端侧"
+    ],
+    "colorIndex": 3,
+    "description": "Gemma3n 端侧多模态。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/gemma-3n-E4B-it-GGUF/resolve/main/gemma-3n-E4B-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-yi-1-5-9b-chat-gguf-yi-1-5-9b-chat-q4-k-m",
+    "name": "Yi-1.5-9B-Chat",
+    "author": "零一万物 01.AI",
+    "vendor": "零一万物 01.AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "01-ai/Yi-1.5",
+    "githubStars": 8000,
+    "params": "9B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.963,
+    "tags": [
+      "中文",
+      "双语"
+    ],
+    "colorIndex": 0,
+    "description": "零一万物中英双语。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/Yi-1.5-9B-Chat-GGUF/resolve/main/Yi-1.5-9B-Chat-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-qwen2-5-vl-32b-instruct-gguf-qwen2-5-vl-32b-instruct-q4-k-m",
+    "name": "Qwen2.5-VL-32B (unsloth)",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "视频",
+    "vertical": "图像",
+    "license": "Apache 2.0",
+    "githubRepo": "unsloth/qwen-vl",
+    "githubStars": 8000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.488,
+    "tags": [
+      "图像",
+      "旗舰"
+    ],
+    "colorIndex": 4,
+    "description": "unsloth 视觉旗舰。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Qwen2.5-VL-32B-Instruct-GGUF/resolve/main/Qwen2.5-VL-32B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "vision",
+      "ocr"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/Qwen2.5-VL-32B-Instruct-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 1314
+  },
+  {
+    "id": "unsloth-phi-4-mini-instruct-gguf-phi-4-mini-instruct-q4-k-m",
+    "name": "Phi-4-mini",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "microsoft/phi-4-mini",
+    "githubStars": 6500,
+    "params": "3.8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.321,
+    "tags": [
+      "轻量",
+      "工具调用"
+    ],
+    "colorIndex": 0,
+    "description": "Phi-4 mini，函数调用强。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Phi-4-mini-instruct-GGUF/resolve/main/Phi-4-mini-instruct-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-phi-4-mini-reasoning-gguf-phi-4-mini-reasoning-q4-k-m",
+    "name": "Phi-4-mini-reasoning",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "microsoft/phi-4-mini",
+    "githubStars": 6500,
+    "params": "3.8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.321,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 0,
+    "description": "Phi-4 推理特化版。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Phi-4-mini-reasoning-GGUF/resolve/main/Phi-4-mini-reasoning-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-internvl3-8b-gguf-internvl3-8b-q4-k-m",
+    "name": "InternVL3-8B",
+    "author": "上海AI实验室",
+    "vendor": "上海AI实验室",
+    "domain": "图像",
+    "vertical": "图像",
+    "license": "MIT",
+    "githubRepo": "OpenGVLab/InternVL",
+    "githubStars": 6000,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.36,
+    "tags": [
+      "图像",
+      "多语言"
+    ],
+    "colorIndex": 5,
+    "description": "InternVL 第三代，推理更强。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/InternVL3-8B-GGUF/resolve/master/InternVL3-8B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/InternVL3-8B-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 635
+  },
+  {
+    "id": "thebloke-tinyllama-1-1b-1t-openorca-gguf-tinyllama-1-1b-1t-openorca-q4-k-m",
+    "name": "TinyLlama-1.1B-OpenOrca",
+    "author": "学术开源",
+    "vendor": "学术开源",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "jzhang38/TinyLlama",
+    "githubStars": 6000,
+    "params": "1.1B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.622,
+    "tags": [
+      "轻量",
+      "英文"
+    ],
+    "colorIndex": 3,
+    "description": "超轻量指令模型，嵌入式设备可跑。",
+    "downloadUrl": "https://modelscope.cn/models/TheBloke/TinyLlama-1.1B-1T-OpenOrca-GGUF/resolve/master/tinyllama-1.1b-1t-openorca.Q4_K_M.gguf",
+    "chatTemplate": "vicuna",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-deepseek-coder-v2-lite-instruct-gguf-deepseek-coder-v2-lite-instruct-q",
+    "name": "DeepSeek-Coder-V2-Lite",
+    "author": "深度求索 DeepSeek",
+    "vendor": "深度求索 DeepSeek",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-Coder-V2",
+    "githubStars": 5800,
+    "params": "16B-A2.4B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 9.653,
+    "tags": [
+      "代码",
+      "MoE"
+    ],
+    "colorIndex": 2,
+    "description": "轻量代码 MoE，速度极快。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/DeepSeek-Coder-V2-Lite-Instruct-GGUF/resolve/main/DeepSeek-Coder-V2-Lite-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "openbmb-minicpm-o-2-6-gguf-model-7-6b-q4-k-m",
+    "name": "MiniCPM-o-2.6",
+    "author": "面壁智能",
+    "vendor": "面壁智能",
+    "domain": "全模态",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "OpenBMB/MiniCPM-o",
+    "githubStars": 4800,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.36,
+    "tags": [
+      "全模态",
+      "端侧"
+    ],
+    "colorIndex": 1,
+    "description": "端侧全模态，图文音视频。",
+    "downloadUrl": "https://modelscope.cn/models/openbmb/MiniCPM-o-2_6-gguf/resolve/master/Model-7.6B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/openbmb/MiniCPM-o-2_6-gguf/resolve/main/mmproj-model-f16.gguf",
+    "projectorSizeMB": 996
+  },
+  {
+    "id": "unsloth-qwen3-coder-30b-a3b-instruct-gguf-qwen3-coder-30b-a3b-instruct-q4-k-m",
+    "name": "Qwen3-Coder-30B-A3B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3-Coder",
+    "githubStars": 4500,
+    "params": "30B-A3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 17.282,
+    "tags": [
+      "代码",
+      "MoE"
+    ],
+    "colorIndex": 3,
+    "description": "Qwen3 代码旗舰，Agentic 编程。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF/resolve/main/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "unsloth-mistral-nemo-instruct-2407-gguf-mistral-nemo-instruct-2407-q4-k-m",
+    "name": "Mistral-Nemo-12B (unsloth)",
+    "author": "Mistral AI",
+    "vendor": "Mistral AI",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "mistralai/Mistral-NeMo",
+    "githubStars": 4200,
+    "params": "12B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 6.964,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 3,
+    "description": "Mistral-NVIDIA 合作 12B。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Mistral-Nemo-Instruct-2407-GGUF/resolve/master/Mistral-Nemo-Instruct-2407.Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-medgemma-4b-it-gguf-medgemma-4b-it-q4-k-m",
+    "name": "MedGemma-4B",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "医疗",
+    "license": "Gemma License",
+    "githubRepo": "google-health/medgemma",
+    "githubStars": 14000,
+    "params": "4B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 2.319,
+    "tags": [
+      "医疗",
+      "影像"
+    ],
+    "colorIndex": 3,
+    "description": "Google 医疗多模态，影像报告解读。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/medgemma-4b-it-GGUF/resolve/main/medgemma-4b-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat",
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/unsloth/medgemma-4b-it-GGUF/resolve/main/mmproj-F16.gguf",
+    "projectorSizeMB": 811
+  },
+  {
+    "id": "unsloth-smollm2-360m-instruct-gguf-smollm2-360m-instruct-q4-k-m",
+    "name": "SmolLM2-360M",
+    "author": "HuggingFace",
+    "vendor": "HuggingFace",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "huggingface/smollm",
+    "githubStars": 3500,
+    "params": "360M",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.252,
+    "tags": [
+      "轻量",
+      "端侧"
+    ],
+    "colorIndex": 4,
+    "description": "超轻量，嵌入式可跑。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/SmolLM2-360M-Instruct-GGUF/resolve/main/SmolLM2-360M-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-smollm2-135m-instruct-gguf-smollm2-135m-instruct-q4-k-m",
+    "name": "SmolLM2-135M",
+    "author": "HuggingFace",
+    "vendor": "HuggingFace",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "huggingface/smollm",
+    "githubStars": 3500,
+    "params": "135M",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.098,
+    "tags": [
+      "轻量",
+      "端侧"
+    ],
+    "colorIndex": 4,
+    "description": "最小可用对话模型。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-medgemma-27b-text-it-gguf-medgemma-27b-text-it-q4-k-m",
+    "name": "MedGemma-27B",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "多模态",
+    "vertical": "医疗",
+    "license": "Gemma License",
+    "githubRepo": "google-health/medgemma",
+    "githubStars": 14000,
+    "params": "27B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 15.41,
+    "tags": [
+      "医疗",
+      "高质量"
+    ],
+    "colorIndex": 5,
+    "description": "Google 医疗旗舰，医学问答强。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/medgemma-27b-text-it-GGUF/resolve/master/medgemma-27b-text-it-Q4_K_M.gguf",
+    "chatTemplate": "gemma",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-glm-z1-9b-0414-gguf-glm-z1-9b-0414-q4-k-m",
+    "name": "GLM-Z1-9B",
+    "author": "智谱 AI",
+    "vendor": "智谱 AI",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "THUDM/GLM-Z1",
+    "githubStars": 2000,
+    "params": "9B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 5.743,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 1,
+    "description": "智谱推理模型。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/GLM-Z1-9B-0414-GGUF/resolve/main/GLM-Z1-9B-0414-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-glm-z1-32b-0414-gguf-glm-z1-32b-0414-q4-k-m",
+    "name": "GLM-Z1-32B",
+    "author": "智谱 AI",
+    "vendor": "智谱 AI",
+    "domain": "文本",
+    "vertical": "数学",
+    "license": "MIT",
+    "githubRepo": "THUDM/GLM-Z1",
+    "githubStars": 2000,
+    "params": "32B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.328,
+    "tags": [
+      "推理",
+      "数理"
+    ],
+    "colorIndex": 1,
+    "description": "智谱推理模型，数理逻辑突出。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/GLM-Z1-32B-0414-GGUF/resolve/main/GLM-Z1-32B-0414-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-phi-4-gguf-phi-4-q4-k-m-x",
+    "name": "Phi-4 (unsloth)",
+    "author": "Microsoft",
+    "vendor": "Microsoft",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "microsoft/Phi-4",
+    "githubStars": 2000,
+    "params": "14B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 8.28,
+    "tags": [
+      "通用"
+    ],
+    "colorIndex": 3,
+    "description": "Phi-4 unsloth 量化版。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/Phi-4-GGUF/resolve/master/phi-4-Q4_K_M.gguf",
+    "chatTemplate": "phi",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-ernie-4-5-0-3b-pt-gguf-ernie-4-5-0-3b-pt-q4-k-m",
+    "name": "ERNIE-4.5-0.3B",
+    "author": "百度",
+    "vendor": "百度",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "PaddlePaddle/ERNIE-4.5",
+    "githubStars": 2000,
+    "params": "0.3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.224,
+    "tags": [
+      "中文",
+      "轻量"
+    ],
+    "colorIndex": 0,
+    "description": "百度文心最小开源版。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/ERNIE-4.5-0.3B-PT-GGUF/resolve/master/ERNIE-4.5-0.3B-PT-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "qwen-codeqwen1-5-7b-chat-gguf-codeqwen-1-5-7b-chat-q4-k-m",
+    "name": "CodeQwen1.5-7B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/CodeQwen1.5",
+    "githubStars": 2000,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.108,
+    "tags": [
+      "代码",
+      "编程助手"
+    ],
+    "colorIndex": 1,
+    "description": "代码专用模型，40+ 语言生成补全解释。",
+    "downloadUrl": "https://modelscope.cn/models/Qwen/CodeQwen1.5-7B-Chat-GGUF/resolve/master/codeqwen-1_5-7b-chat-q4_k_m.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "ggml-org-smolvlm-256m-instruct-gguf-smolvlm-256m-instruct-q8-0",
+    "name": "SmolVLM-256M",
+    "author": "HuggingFace",
+    "vendor": "HuggingFace",
+    "domain": "图像",
+    "vertical": "图像",
+    "license": "Apache 2.0",
+    "githubRepo": "huggingface/smol-vlm",
+    "githubStars": 1500,
+    "params": "256M",
+    "quant": "Q8_0",
+    "sizeInGB": 0.156,
+    "tags": [
+      "图像",
+      "轻量"
+    ],
+    "colorIndex": 2,
+    "description": "最小开源视觉模型，端侧图文问答。",
+    "downloadUrl": "https://modelscope.cn/models/ggml-org/SmolVLM-256M-Instruct-GGUF/resolve/master/SmolVLM-256M-Instruct-Q8_0.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "vision"
+    ],
+    "projectorUrl": "https://hf-mirror.com/ggml-org/SmolVLM-256M-Instruct-GGUF/resolve/main/mmproj-SmolVLM-256M-Instruct-Q8_0.gguf",
+    "projectorSizeMB": 98
+  },
+  {
+    "id": "unsloth-smollm2-1-7b-instruct-gguf-smollm2-1-7b-instruct-q4-k-m",
+    "name": "SmolLM2-1.7B",
+    "author": "HuggingFace",
+    "vendor": "HuggingFace",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "huggingface/smollm",
+    "githubStars": 1200,
+    "params": "1.7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.983,
+    "tags": [
+      "轻量",
+      "端侧"
+    ],
+    "colorIndex": 0,
+    "description": "HF 官方超小模型。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/SmolLM2-1.7B-Instruct-GGUF/resolve/main/SmolLM2-1.7B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-smollm2-1-7b-instruct-gguf-smollm2-1-7b-instruct-q4-k-m",
+    "name": "SmolLM2-1.7B (bartowski)",
+    "author": "HuggingFace",
+    "vendor": "HuggingFace",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "huggingface/smollm",
+    "githubStars": 1200,
+    "params": "1.7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.983,
+    "tags": [
+      "轻量"
+    ],
+    "colorIndex": 5,
+    "description": "bartowski SmolLM。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/SmolLM2-1.7B-Instruct-GGUF/resolve/main/SmolLM2-1.7B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-smollm3-3b-gguf-smollm3-3b-q4-k-m",
+    "name": "SmolLM3-3B",
+    "author": "HuggingFace",
+    "vendor": "HuggingFace",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "huggingface/smollm",
+    "githubStars": 1200,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.784,
+    "tags": [
+      "长上下文"
+    ],
+    "colorIndex": 0,
+    "description": "SmolLM3 长上下文。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/SmolLM3-3B-GGUF/resolve/main/SmolLM3-3B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "mradermacher-huatuogpt2-7b-gguf-huatuogpt2-7b-q4-k-m",
+    "name": "HuatuoGPT2-7B",
+    "author": "医疗社区",
+    "vendor": "医疗社区",
+    "domain": "文本",
+    "vertical": "医疗",
+    "license": "Apache 2.0",
+    "githubRepo": "FreedomIntelligence/HuatuoGPT2",
+    "githubStars": 1200,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.297,
+    "tags": [
+      "医疗",
+      "中文"
+    ],
+    "colorIndex": 3,
+    "description": "华佗中文医疗大模型，健康咨询与报告解读，仅供学习参考。",
+    "downloadUrl": "https://hf-mirror.com/mradermacher/HuatuoGPT2-7B-GGUF/resolve/main/HuatuoGPT2-7B.Q4_K_M.gguf",
+    "chatTemplate": "vicuna",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "second-state-fingpt-mt-llama-3-8b-lora-gguf-fingpt-mt-llama-3-8b-lora-q4-k-m",
+    "name": "FinGPT-MT-Llama-3-8B",
+    "author": "金融社区",
+    "vendor": "金融社区",
+    "domain": "文本",
+    "vertical": "金融",
+    "license": "Llama License",
+    "githubRepo": "AI4Finance-Foundation/FinGPT",
+    "githubStars": 1100,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.268,
+    "tags": [
+      "金融",
+      "财报"
+    ],
+    "colorIndex": 2,
+    "description": "开源金融大模型，财报情绪与新闻分析。",
+    "downloadUrl": "https://modelscope.cn/models/second-state/FinGPT-MT-Llama-3-8B-LoRA-GGUF/resolve/master/FinGPT-MT-Llama-3-8B-LoRA-Q4_K_M.gguf",
+    "chatTemplate": "llama2",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-exaone-3-5-7-8b-instruct-gguf-exaone-3-5-7-8b-instruct-q4-k-m",
+    "name": "EXAONE-3.5-7.8B",
+    "author": "LG AI Research",
+    "vendor": "LG AI Research",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "MIT",
+    "githubRepo": "LGAI-EXAONE/EXAONE-3.5",
+    "githubStars": 800,
+    "params": "7.8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.443,
+    "tags": [
+      "双语",
+      "韩语"
+    ],
+    "colorIndex": 2,
+    "description": "LG 英韩双语模型。",
+    "downloadUrl": "https://hf-mirror.com/bartowski/EXAONE-3.5-7.8B-Instruct-GGUF/resolve/main/EXAONE-3.5-7.8B-Instruct-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "unsloth-granite-4-0-h-tiny-gguf-granite-4-0-h-tiny-q4-k-m",
+    "name": "Granite-4.0-h-Tiny",
+    "author": "IBM",
+    "vendor": "IBM",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "ibm-granite/granite-4.0",
+    "githubStars": 800,
+    "params": "7B-A1B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 3.963,
+    "tags": [
+      "MoE",
+      "企业"
+    ],
+    "colorIndex": 2,
+    "description": "IBM 企业级 MoE 轻量版。",
+    "downloadUrl": "https://modelscope.cn/models/unsloth/granite-4.0-h-tiny-GGUF/resolve/master/granite-4.0-h-tiny-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "mradermacher-chatlaw2e-plain-7b-gguf-chatlaw2e-plain-7b-q4-k-m",
+    "name": "ChatLaw2E-7B",
+    "author": "法律社区",
+    "vendor": "法律社区",
+    "domain": "文本",
+    "vertical": "法律",
+    "license": "Apache 2.0",
+    "githubRepo": "PandaLLM/ChatLaw2",
+    "githubStars": 800,
+    "params": "7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.389,
+    "tags": [
+      "法律",
+      "中文"
+    ],
+    "colorIndex": 2,
+    "description": "中文法律问答模型，覆盖咨询、文书与案例检索。",
+    "downloadUrl": "https://hf-mirror.com/mradermacher/ChatLaw2E_plain_7B-GGUF/resolve/main/ChatLaw2E_plain_7B.Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat"
+    ]
+  },
+  {
+    "id": "bartowski-huatuogpt-o1-8b-gguf-huatuogpt-o1-8b-q4-k-m",
+    "name": "HuatuoGPT-o1-8B",
+    "author": "医疗社区",
+    "vendor": "医疗社区",
+    "domain": "文本",
+    "vertical": "医疗",
+    "license": "Apache 2.0",
+    "githubRepo": "FreedomIntelligence/HuatuoGPT-o1",
+    "githubStars": 800,
+    "params": "8B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 4.583,
+    "tags": [
+      "医疗",
+      "推理"
+    ],
+    "colorIndex": 0,
+    "description": "医疗推理模型，可验证医学问题深度思考。",
+    "downloadUrl": "https://modelscope.cn/models/bartowski/HuatuoGPT-o1-8B-GGUF/resolve/master/HuatuoGPT-o1-8B-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "reasoning"
+    ]
+  },
+  {
+    "id": "unsloth-granite-4-0-h-small-gguf-granite-4-0-h-small-q4-k-m",
+    "name": "Granite-4.0-h-Small",
+    "author": "IBM",
+    "vendor": "IBM",
+    "domain": "文本",
+    "vertical": "代码",
+    "license": "Apache 2.0",
+    "githubRepo": "ibm-granite/granite-4.0-small",
+    "githubStars": 500,
+    "params": "32B-A6.7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 18.228,
+    "tags": [
+      "MoE"
+    ],
+    "colorIndex": 4,
+    "description": "IBM 混合架构 MoE。",
+    "downloadUrl": "https://hf-mirror.com/unsloth/granite-4.0-h-small-GGUF/resolve/main/granite-4.0-h-small-Q4_K_M.gguf",
+    "chatTemplate": "chatml",
+    "capabilities": [
+      "chat",
+      "code"
+    ]
+  },
+  {
+    "id": "sabafallah-deepseek-ocr-gguf-deepseek-ocr-q4-k-m",
+    "name": "DeepSeek-OCR",
+    "author": "DeepSeek",
+    "vendor": "DeepSeek",
+    "domain": "多模态",
+    "vertical": "图像",
+    "license": "MIT",
+    "githubRepo": "deepseek-ai/DeepSeek-OCR",
+    "githubStars": 12000,
+    "params": "3B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 1.95,
+    "tags": [
+      "OCR",
+      "文档识别"
+    ],
+    "colorIndex": 2,
+    "description": "DeepSeek 视觉压缩 OCR，文档转 Markdown。需配套 mmproj 投影器（下载时自动获取）。",
+    "capabilities": [
+      "vision",
+      "ocr"
+    ],
+    "downloadUrl": "https://hf-mirror.com/sabafallah/DeepSeek-OCR-GGUF/resolve/main/deepseek-ocr-Q4_K_M.gguf",
+    "projectorUrl": "https://hf-mirror.com/sabafallah/DeepSeek-OCR-GGUF/resolve/main/mmproj-deepseek-ocr-q8_0.gguf",
+    "projectorSizeMB": 461,
+    "chatTemplate": "deepseek-ocr"
+  },
+  {
+    "id": "ggml-org-qwen3-asr-0-6b-gguf-qwen3-asr-0-6b-q8-0",
+    "name": "Qwen3-ASR-0.6B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "全模态",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3-ASR",
+    "githubStars": 6000,
+    "params": "0.6B",
+    "quant": "Q8_0",
+    "sizeInGB": 0.767,
+    "tags": [
+      "语音识别",
+      "ASR",
+      "多语言"
+    ],
+    "colorIndex": 4,
+    "description": "Qwen3 语音识别，30 种语言。需配套音频投影器（下载时自动获取），单次输入限 30 秒。",
+    "capabilities": [
+      "asr"
+    ],
+    "downloadUrl": "https://hf-mirror.com/ggml-org/Qwen3-ASR-0.6B-GGUF/resolve/main/Qwen3-ASR-0.6B-Q8_0.gguf",
+    "projectorUrl": "https://hf-mirror.com/ggml-org/Qwen3-ASR-0.6B-GGUF/resolve/main/mmproj-Qwen3-ASR-0.6B-Q8_0.gguf",
+    "projectorSizeMB": 204,
+    "chatTemplate": "chatml"
+  },
+  {
+    "id": "ggml-org-qwen3-tts-12hz-1-7b-base-gguf-q4-k-m",
+    "name": "Qwen3-TTS-1.7B",
+    "author": "阿里云 Qwen",
+    "vendor": "阿里云 Qwen",
+    "domain": "全模态",
+    "vertical": "通用",
+    "license": "Apache 2.0",
+    "githubRepo": "Qwen/Qwen3-TTS",
+    "githubStars": 6000,
+    "params": "1.7B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.96,
+    "tags": [
+      "语音合成",
+      "TTS",
+      "多语言"
+    ],
+    "colorIndex": 5,
+    "description": "Qwen3 语音合成，支持中英日韩等 10 种语言，输出 24kHz 语音。需配套音频投影器（下载时自动获取）。",
+    "capabilities": [
+      "tts"
+    ],
+    "downloadUrl": "https://hf-mirror.com/ggml-org/Qwen3-TTS-12Hz-1.7B-Base-GGUF/resolve/main/Qwen3-TTS-12Hz-1.7B-Base-Q4_K_M.gguf",
+    "projectorUrl": "https://hf-mirror.com/ggml-org/Qwen3-TTS-12Hz-1.7B-Base-GGUF/resolve/main/mmproj-Qwen3-TTS-12Hz-1.7B-Base-Q8_0.gguf",
+    "projectorSizeMB": 460,
+    "chatTemplate": "chatml"
+  },
+  {
+    "id": "quantfactory-llama-guard-3-1b-gguf-q4-k-m",
+    "name": "Llama-Guard-3-1B",
+    "author": "Meta",
+    "vendor": "Meta",
+    "domain": "文本",
+    "vertical": "通用",
+    "license": "Llama 3.2",
+    "githubRepo": "meta-llama/Llama-Guard-3",
+    "githubStars": 4000,
+    "params": "1B",
+    "quant": "Q4_K_M",
+    "sizeInGB": 0.955,
+    "tags": [
+      "安全",
+      "审核",
+      "内容分类"
+    ],
+    "colorIndex": 1,
+    "description": "Meta 内容安全模型，对输入/输出做 13 类风险分类（safe/unsafe），可作合作管线安全闸门。",
+    "capabilities": [
+      "security"
+    ],
+    "downloadUrl": "https://hf-mirror.com/QuantFactory/Llama-Guard-3-1B-GGUF/resolve/main/Llama-Guard-3-1B.Q4_K_M.gguf",
+    "chatTemplate": "llama3"
+  },
+  {
+    "id": "ggml-org-embeddinggemma-300m-gguf-q8-0",
+    "name": "EmbeddingGemma-300M",
+    "author": "Google",
+    "vendor": "Google",
+    "domain": "文本",
+    "vertical": "检索",
+    "license": "Gemma Terms",
+    "githubRepo": "ggml-org/llama.cpp",
+    "githubStars": 14000,
+    "params": "300M",
+    "quant": "Q8_0",
+    "sizeInGB": 0.33,
+    "tags": [
+      "Embedding",
+      "向量",
+      "RAG"
+    ],
+    "colorIndex": 3,
+    "description": "Google 300M 向量模型，768 维输出，llama.cpp 官方量化，RAG 检索管线专用。",
+    "capabilities": [
+      "embedding"
+    ],
+    "downloadUrl": "https://hf-mirror.com/ggml-org/embeddinggemma-300M-GGUF/resolve/main/embeddinggemma-300M-Q8_0.gguf",
+    "chatTemplate": "chatml"
+  }
+]

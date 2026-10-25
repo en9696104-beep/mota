@@ -1,0 +1,62 @@
+name: mota
+description: "MOTA - 本地大模型（GGUF）应用商店"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # 状态管理 + 路由管理
+  get: ^4.6.6
+  # 本地推理引擎：llama.cpp
+  # - 移动端：llama_flutter_android（Android ARM64 预编译 AAR，无需手动编译）
+  llama_flutter_android: ^0.2.6
+  # - 桌面端：llamadart（llama.cpp 预编译二进制经 native assets 自动分发，
+  #   Linux/Windows 走 Vulkan，macOS 走 Metal，无 GPU 自动回退 CPU）
+  llamadart: ^0.16.0
+  # 模型文件下载
+  dio: ^5.7.0
+  # Work 工作台控制端 HTTP 客户端（设备配对/任务下发/审批）
+  http: ^1.2.0
+  # 本地目录（getApplicationDocumentsDirectory）
+  path_provider: ^2.1.4
+  # 轻量持久化（已下载模型列表）
+  shared_preferences: ^2.2.3
+  # 聊天记录本地数据库（历史对话持久化）
+  sqflite: ^2.3.2
+  # 桌面端（Windows/Linux）sqflite 原生实现：sqflite 官方包仅覆盖 android/ios/macos
+  sqflite_common_ffi: ^2.3.3
+  # 检查更新：打开浏览器下载新版本
+  url_launcher: ^6.2.6
+  # 本地 API 服务（OpenAI 兼容，对标 Ollama / LM Studio）
+  shelf: ^1.4.1
+  shelf_router: ^1.1.4
+  flutter_js: 0.8.7
+  file_picker: ^11.0.3
+  # 语音输入（合作系统 ASR 阶段：麦克风录音 → WAV）
+  record: ^7.1.2
+  # 语音播放（合作系统 TTS 阶段：PCM → WAV → 播放）
+  audioplayers: ^6.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+# native assets 构建钩子配置（llamadart）
+# - 限定 llama_cpp 单运行时：默认集会附带 litert_lm，hook 会尝试从
+#   GitHub 下载 litert-lm 预编译包，国内网络直连 GitHub 会挂死构建。
+#   MOTA 桌面端只需要 llama.cpp 推理，显式声明可让构建完全离线化。
+hooks:
+  user_defines:
+    llamadart:
+      llamadart_native_runtimes: llama_cpp
+
+flutter:
+  uses-material-design: true
+  assets:
+    # 商店模型目录（100 个 GGUF，真实直链，不在 Dart 中硬编码）
+    - assets/store_data.json

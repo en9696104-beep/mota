@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_label">MOTA 工作台</string>
+    <string name="accessibility_service_description">允许已配对的 MOTA 设备在您授权后操作本机屏幕：点击、滑动、输入文本、读取屏幕内容。所有操作均有人工审批记录，可随时在系统设置中关闭。</string>
+</resources>
