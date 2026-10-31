@@ -16,14 +16,14 @@ class StorePage extends StatelessWidget {
     final controller = Get.find<StoreController>();
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('模型商店'),
-            SizedBox(height: 2),
+          children: [
+            Text('模型商店'.tr),
+            const SizedBox(height: 2),
             Text(
-              'GGUF 格式 · 下载后完全离线运行',
-              style: TextStyle(
+              'GGUF 格式 · 下载后完全离线运行'.tr,
+              style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 11,
               ),
@@ -54,8 +54,10 @@ class StorePage extends StatelessWidget {
                   Expanded(
                     child: Text(
                       controller.activeFilterCount == 0
-                          ? '全部 ${controller.models.length} 个模型'
-                          : '筛选出 ${controller.models.length} 个模型',
+                          ? '全部 @n 个模型'
+                              .trParams({'n': '${controller.models.length}'})
+                          : '筛选出 @n 个模型'
+                              .trParams({'n': '${controller.models.length}'}),
                       style: const TextStyle(
                         color: AppColors.textTertiary,
                         fontSize: 11.5,
@@ -88,7 +90,7 @@ class StorePage extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
-                                    m.label,
+                                    m.label.tr,
                                     style: TextStyle(
                                       color: controller.sortBy.value == m
                                           ? AppColors.accent
@@ -120,7 +122,7 @@ class StorePage extends StatelessWidget {
                           const SizedBox(width: 5),
                           Obx(
                             () => Text(
-                              controller.sortBy.value.label,
+                              controller.sortBy.value.label.tr,
                               style: const TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 12,
@@ -184,7 +186,7 @@ class _EmptyResult extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              hasFilter ? '没有符合筛选条件的模型' : '商店暂无数据',
+              hasFilter ? '没有符合筛选条件的模型'.tr : '商店暂无数据'.tr,
               style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 13,
@@ -194,9 +196,9 @@ class _EmptyResult extends StatelessWidget {
               const SizedBox(height: 12),
               TextButton(
                 onPressed: onClear,
-                child: const Text(
-                  '清空筛选条件',
-                  style: TextStyle(color: AppColors.accent),
+                child: Text(
+                  '清空筛选条件'.tr,
+                  style: const TextStyle(color: AppColors.accent),
                 ),
               ),
             ],

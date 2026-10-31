@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../controllers/store_controller.dart';
 import '../data/models/ai_model.dart';
+import '../services/model_repository.dart';
 import '../theme/app_theme.dart';
 import '../theme/format_theme.dart';
 
@@ -34,9 +35,9 @@ class FilterPanel extends StatelessWidget {
                 children: [
                   const Icon(Icons.tune, size: 16, color: AppColors.accent),
                   const SizedBox(width: 8),
-                  const Text(
-                    '多维度筛选',
-                    style: TextStyle(
+                  Text(
+                    '多维度筛选'.tr,
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 13.5,
                       fontWeight: FontWeight.w600,
@@ -46,9 +47,9 @@ class FilterPanel extends StatelessWidget {
                   Obx(() {
                     final n = controller.activeFilterCount;
                     if (n == 0) {
-                      return const Text(
-                        '未筛选',
-                        style: TextStyle(
+                      return Text(
+                        '未筛选'.tr,
+                        style: const TextStyle(
                           color: AppColors.textTertiary,
                           fontSize: 11.5,
                         ),
@@ -64,7 +65,7 @@ class FilterPanel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        '$n 个条件',
+                        '@count 个条件'.trParams({'count': '$n'}),
                         style: const TextStyle(
                           color: AppColors.accent,
                           fontSize: 11,
@@ -81,11 +82,11 @@ class FilterPanel extends StatelessWidget {
                     }
                     return GestureDetector(
                       onTap: controller.clearFilters,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: Text(
-                          '清空',
-                          style: TextStyle(
+                          '清空'.tr,
+                          style: const TextStyle(
                             color: AppColors.accent,
                             fontSize: 12,
                           ),
@@ -108,14 +109,21 @@ class FilterPanel extends StatelessWidget {
               ),
             ),
           ),
-          // 展开的维度区
+          // 展开的维度区（小屏防溢出：限高 + 滚动，修复分类展示不全）
           Obx(
             () => AnimatedCrossFade(
               duration: const Duration(milliseconds: 180),
               crossFadeState: controller.panelExpanded.value
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
-              firstChild: _DimensionSections(controller: controller),
+              firstChild: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.55,
+                ),
+                child: SingleChildScrollView(
+                  child: _DimensionSections(controller: controller),
+                ),
+              ),
               secondChild: const SizedBox(width: double.infinity),
             ),
           ),
@@ -132,51 +140,79 @@ class _DimensionSections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Divider(color: AppColors.border, height: 1),
-          const SizedBox(height: 10),
-          // 架构维度：专属极客配色 Chip（置顶，最基础的筛选维度）
-          const _FormatDimensionTitle(),
-          _DimensionTitle(
-            title: '大小',
-            options: SizeBucket.values.map((b) => b.label).toList(),
-            selected: controller.selectedSizes.map((b) => b.label).toList(),
-            onToggle: (label) {
-              final bucket = SizeBucket.values.firstWhere((b) => b.label == label);
-              controller.toggleSize(bucket);
-            },
-          ),
-          _DimensionTitle(
-            title: '领域',
-            options: StoreController.domainOptions,
-            selected: controller.selectedDomains.toList(),
-            onToggle: controller.toggleDomain,
-          ),
-          _DimensionTitle(
-            title: '垂直',
-            options: controller.verticalOptions,
-            selected: controller.selectedVerticals.toList(),
-            onToggle: controller.toggleVertical,
-          ),
-          _DimensionTitle(
-            title: '厂商',
-            options: controller.vendorOptions,
-            selected: controller.selectedVendors.toList(),
-            onToggle: controller.toggleVendor,
-          ),
-          _DimensionTitle(
-            title: '协议',
-            options: controller.licenseOptions,
-            selected: controller.selectedLicenses.toList(),
-            onToggle: controller.toggleLicense,
-          ),
-        ],
+    // Obx：领域/垂直等选项为动态 getter，目录就绪或更新后自动刷新
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Divider(color: AppColors.border, height: 1),
+            const SizedBox(height: 10),
+            // 架构维度：专属极客配色 Chip（置顶，最基础的筛选维度）
+            const _FormatDimensionTitle(),
+            _DimensionTitle(
+              title: '大小',
+              options: SizeBucket.values.map((b) => b.label).toList(),
+              selected: controller.selectedSizes.map((b) => b.label).toList(),
+              onToggle: (label) {
+                final bucket = SizeBucket.values
+                    .firstWhere((b) => b.label == label);
+                controller.toggleSize(bucket);
+              },
+            ),
+            _DimensionTitle(
+              title: '能力',
+              options: ModelCapability.values
+                  .where((c) => _hasModelsOf(c))
+                  .map((c) => c.label)
+                  .toList(),
+              selected:
+                  controller.selectedCapabilities.map((c) => c.label).toList(),
+              onToggle: (label) {
+                final cap = ModelCapability.values
+                    .firstWhere((c) => c.label == label);
+                controller.toggleCapability(cap);
+              },
+            ),
+            _DimensionTitle(
+              title: '领域',
+              options: controller.domainOptions,
+              selected: controller.selectedDomains.toList(),
+              onToggle: controller.toggleDomain,
+              translateOptions: true,
+            ),
+            _DimensionTitle(
+              title: '垂直',
+              options: controller.verticalOptions,
+              selected: controller.selectedVerticals.toList(),
+              onToggle: controller.toggleVertical,
+              translateOptions: true,
+            ),
+            _DimensionTitle(
+              title: '厂商',
+              options: controller.vendorOptions,
+              selected: controller.selectedVendors.toList(),
+              onToggle: controller.toggleVendor,
+            ),
+            _DimensionTitle(
+              title: '协议',
+              options: controller.licenseOptions,
+              selected: controller.selectedLicenses.toList(),
+              onToggle: controller.toggleLicense,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  /// 只展示商店中真实存在该能力的选项（避免「点了筛不出任何模型」的空分类）
+  bool _hasModelsOf(ModelCapability capability) {
+    for (final m in ModelRepository.to.models) {
+      if (m.effectiveCapabilities.contains(capability)) return true;
+    }
+    return false;
   }
 }
 
@@ -186,12 +222,16 @@ class _DimensionTitle extends StatelessWidget {
     required this.options,
     required this.selected,
     required this.onToggle,
+    this.translateOptions = false,
   });
 
   final String title;
   final List<String> options;
   final List<String> selected;
   final ValueChanged<String> onToggle;
+
+  /// 选项文案走翻译表（领域/垂直等数据值在英文界面显示英文）
+  final bool translateOptions;
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +241,7 @@ class _DimensionTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            title.tr,
             style: const TextStyle(
               color: AppColors.textTertiary,
               fontSize: 11,
@@ -214,6 +254,7 @@ class _DimensionTitle extends StatelessWidget {
             runSpacing: 6,
             children: options.map((opt) {
               final isSelected = selected.contains(opt);
+              final display = translateOptions ? opt.tr : opt;
               return GestureDetector(
                 onTap: () => onToggle(opt),
                 child: Container(
@@ -233,7 +274,7 @@ class _DimensionTitle extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    opt,
+                    display,
                     style: TextStyle(
                       color: isSelected
                           ? AppColors.accent
@@ -264,9 +305,9 @@ class _FormatDimensionTitle extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '架构',
-            style: TextStyle(
+          Text(
+            '架构'.tr,
+            style: const TextStyle(
               color: AppColors.textTertiary,
               fontSize: 11,
               fontWeight: FontWeight.w600,

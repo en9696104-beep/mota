@@ -12,6 +12,7 @@ import 'services/chat_history_db.dart';
 import 'services/cooperation_pipeline.dart';
 import 'services/github_stars_sync.dart';
 import 'services/llama_service.dart';
+import 'services/locale_service.dart';
 import 'services/model_repository.dart';
 import 'services/storage_service.dart';
 import 'work/services/work_agent_server.dart';
@@ -35,6 +36,8 @@ Future<void> main(List<String> args) async {
       WidgetsFlutterBinding.ensureInitialized();
       // 本地存储（已下载模型映射）需在 UI 之前就绪
       await Get.putAsync<StorageService>(() => StorageService().init());
+      // 界面语言（跟随系统 / 中文 / English；app.dart 读取初始 locale）
+      await Get.putAsync<LocaleService>(() => LocaleService().init());
       // 模型目录（assets/store_data.json + 星数本地缓存）
       await Get.putAsync<ModelRepository>(() => ModelRepository().init());
       // 聊天记录数据库（sqflite；桌面端走 sqflite_common_ffi）。

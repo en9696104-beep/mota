@@ -7,6 +7,7 @@ import '../config/app_config.dart';
 import '../controllers/mcp_controller.dart';
 import '../routes/app_routes.dart';
 import '../services/api_service.dart';
+import '../services/locale_service.dart';
 import '../services/model_repository.dart';
 import '../services/update_checker.dart';
 import '../theme/app_theme.dart';
@@ -32,16 +33,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
     if (info == null) {
       Get.snackbar(
-        '检查更新失败',
-        '网络异常或更新配置无效，请稍后重试',
+        '检查更新失败'.tr,
+        '网络异常或更新配置无效，请稍后重试'.tr,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
     }
     if (!UpdateChecker.isNewer(info.version, AppConfig.currentVersion)) {
       Get.snackbar(
-        '已是最新版本',
-        '当前版本 v${AppConfig.currentVersion}',
+        '已是最新版本'.tr,
+        '当前版本 v@v'.trParams({'v': AppConfig.currentVersion}),
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -54,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         title: Text(
-          '发现新版本 v${info.version}',
+          '发现新版本 v@v'.trParams({'v': info.version}),
           style: const TextStyle(
             color: AppColors.textPrimary,
             fontSize: 16,
@@ -65,16 +66,16 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '更新内容',
-              style: TextStyle(
+            Text(
+              '更新内容'.tr,
+              style: const TextStyle(
                 color: AppColors.textTertiary,
                 fontSize: 11,
               ),
             ),
             const SizedBox(height: 6),
             Text(
-              info.releaseNotes.isEmpty ? '（未提供更新说明）' : info.releaseNotes,
+              info.releaseNotes.isEmpty ? '（未提供更新说明）'.tr : info.releaseNotes,
               style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 13,
@@ -82,9 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              '当前版本 v${AppConfig.currentVersion}',
-              style: TextStyle(
+            Text(
+              '当前版本 v@v'.trParams({'v': AppConfig.currentVersion}),
+              style: const TextStyle(
                 color: AppColors.textTertiary,
                 fontSize: 11,
               ),
@@ -94,9 +95,9 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text(
-              '暂不更新',
-              style: TextStyle(color: AppColors.textSecondary),
+            child: Text(
+              '暂不更新'.tr,
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
           FilledButton(
@@ -105,9 +106,9 @@ class _SettingsPageState extends State<SettingsPage> {
               foregroundColor: Colors.black,
             ),
             onPressed: () => _openDownload(info.downloadUrl),
-            child: const Text(
-              '立即更新',
-              style: TextStyle(fontWeight: FontWeight.w600),
+            child: Text(
+              '立即更新'.tr,
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -121,8 +122,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final uri = Uri.tryParse(url);
     if (uri == null) {
       Get.snackbar(
-        '打开失败',
-        '下载地址无效',
+        '打开失败'.tr,
+        '下载地址无效'.tr,
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -130,8 +131,8 @@ class _SettingsPageState extends State<SettingsPage> {
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok) {
       Get.snackbar(
-        '打开失败',
-        '未找到可处理该链接的应用',
+        '打开失败'.tr,
+        '未找到可处理该链接的应用'.tr,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -140,10 +141,13 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('设置')),
+      appBar: AppBar(title: Text('设置'.tr)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [
+          const _SectionTitle('通用'),
+          const _LanguageTile(),
+          const SizedBox(height: 20),
           const _SectionTitle('关于'),
           const _InfoTile(
             icon: Icons.verified_outlined,
@@ -191,7 +195,7 @@ class _SettingsPageState extends State<SettingsPage> {
             () => _InfoTile(
               icon: Icons.inventory_2_outlined,
               title: '模型数量',
-              value: '${ModelRepository.to.models.length} 个',
+              value: '@n 个'.trParams({'n': '${ModelRepository.to.models.length}'}),
             ),
           ),
           const SizedBox(height: 8),
@@ -200,6 +204,146 @@ class _SettingsPageState extends State<SettingsPage> {
             '断网时使用 App 内置数据，全程无需手动操作。',
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 界面语言选择：跟随系统 / 中文 / English（即时生效）
+class _LanguageTile extends StatelessWidget {
+  const _LanguageTile();
+
+  Future<void> _pick() async {
+    final service = Get.find<LocaleService>();
+    final current = service.mode.value;
+    final selected = await Get.dialog<LanguageMode>(
+      AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          '语言'.tr,
+          style: const TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 8),
+        content: RadioGroup<LanguageMode>(
+          groupValue: service.mode.value,
+          onChanged: (v) => Get.back(result: v),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final m in LanguageMode.values)
+                RadioListTile<LanguageMode>(
+                  value: m,
+                  activeColor: AppColors.accent,
+                  title: Text(
+                    m.label.tr,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 14,
+                    ),
+                  ),
+                  subtitle: m == LanguageMode.system
+                      ? Text(
+                          _systemLanguageName(),
+                          style: const TextStyle(
+                            color: AppColors.textTertiary,
+                            fontSize: 11,
+                          ),
+                        )
+                      : null,
+                ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              '取消'.tr,
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (selected != null && selected != current) {
+      await service.setMode(selected);
+    }
+  }
+
+  static String _systemLanguageName() {
+    final code = Get.deviceLocale?.languageCode ?? '';
+    return code.startsWith('zh') ? '中文' : 'English';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final service = Get.find<LocaleService>();
+    return GestureDetector(
+      onTap: _pick,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.language,
+              size: 18,
+              color: AppColors.accent,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '语言'.tr,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '选择界面语言'.tr,
+                    style: const TextStyle(
+                      color: AppColors.textTertiary,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Obx(
+              () => Text(
+                service.mode.value.label.tr,
+                style: const TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(
+              Icons.chevron_right,
+              size: 18,
+              color: AppColors.textTertiary,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -215,7 +359,7 @@ class _SectionTitle extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 10),
       child: Text(
-        text,
+        text.tr,
         style: const TextStyle(
           color: AppColors.textTertiary,
           fontSize: 12,
@@ -252,7 +396,7 @@ class _InfoTile extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              title,
+              title.tr,
               style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 13.5,
@@ -309,7 +453,7 @@ class _ActionTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    title.tr,
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 13.5,
@@ -318,7 +462,7 @@ class _ActionTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    subtitle,
+                    subtitle.tr,
                     style: const TextStyle(
                       color: AppColors.textTertiary,
                       fontSize: 11,
@@ -359,7 +503,7 @@ class _HintText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Text(
-        text,
+        text.tr,
         style: const TextStyle(
           color: AppColors.textTertiary,
           fontSize: 11,
@@ -380,8 +524,8 @@ class _ApiSection extends StatelessWidget {
       final ok = await api.start(allowLan: api.allowLan.value);
       if (!ok) {
         Get.snackbar(
-          '启动失败',
-          api.lastError ?? '未知错误',
+          '启动失败'.tr,
+          api.lastError ?? '未知错误'.tr,
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -403,7 +547,7 @@ class _ApiSection extends StatelessWidget {
   void _copyAddress(String url) {
     Clipboard.setData(ClipboardData(text: url));
     Get.snackbar(
-      '已复制',
+      '已复制'.tr,
       url,
       snackPosition: SnackPosition.BOTTOM,
       duration: const Duration(seconds: 2),
@@ -439,8 +583,8 @@ class _ApiSection extends StatelessWidget {
             _AddressTile(
               url: api.baseUrl,
               lanHint: api.allowLan.value && api.lanAddress.value.isNotEmpty
-                  ? '局域网地址 · ${api.port.value} 端口'
-                  : '仅本机访问 · ${api.port.value} 端口',
+                  ? '局域网地址 · @p 端口'.trParams({'p': '${api.port.value}'})
+                  : '仅本机访问 · @p 端口'.trParams({'p': '${api.port.value}'}),
               onCopy: () => _copyAddress(api.baseUrl),
             ),
             const SizedBox(height: 8),
@@ -474,9 +618,9 @@ class _McpClientSection extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
-          '添加 MCP 服务器',
-          style: TextStyle(
+        title: Text(
+          '添加 MCP 服务器'.tr,
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -486,9 +630,9 @@ class _McpClientSection extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '输入 MCP 服务器的 Streamable HTTP 端点地址',
-              style: TextStyle(color: AppColors.textTertiary, fontSize: 12),
+            Text(
+              '输入 MCP 服务器的 Streamable HTTP 端点地址'.tr,
+              style: const TextStyle(color: AppColors.textTertiary, fontSize: 12),
             ),
             const SizedBox(height: 10),
             TextField(
@@ -514,9 +658,9 @@ class _McpClientSection extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text(
-              '取消',
-              style: TextStyle(color: AppColors.textSecondary),
+            child: Text(
+              '取消'.tr,
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
           FilledButton(
@@ -526,7 +670,7 @@ class _McpClientSection extends StatelessWidget {
             ),
             onPressed: () =>
                 Get.back(result: controller.text.trim()),
-            child: const Text('连接'),
+            child: Text('连接'.tr),
           ),
         ],
       ),
@@ -538,8 +682,8 @@ class _McpClientSection extends StatelessWidget {
         (s) => s.url == McpController.normalizeUrl(url),
       );
       Get.snackbar(
-        '连接成功',
-        '发现 ${entry.tools.length} 个工具',
+        '连接成功'.tr,
+        '发现 @n 个工具'.trParams({'n': '${entry.tools.length}'}),
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
@@ -548,8 +692,8 @@ class _McpClientSection extends StatelessWidget {
           .map((s) => s.error.value)
           .firstOrNull;
       Get.snackbar(
-        '连接失败',
-        error ?? '请检查地址与网络',
+        '连接失败'.tr,
+        error ?? '请检查地址与网络'.tr,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -567,7 +711,7 @@ class _McpClientSection extends StatelessWidget {
               const _SectionTitle('MCP 客户端'),
               const Spacer(),
               Text(
-                '${mcp.totalToolCount} 个工具可用',
+                '@n 个工具可用'.trParams({'n': '${mcp.totalToolCount}'}),
                 style: const TextStyle(
                   color: AppColors.textTertiary,
                   fontSize: 11,
@@ -587,18 +731,19 @@ class _McpClientSection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.border),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.extension_outlined,
                     size: 18,
                     color: AppColors.textTertiary,
                   ),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      '尚未连接任何 MCP 服务器\n连接后，本地模型即可调用外部工具',
-                      style: TextStyle(
+                      '尚未连接任何 MCP 服务器\n连接后，本地模型即可调用外部工具'
+                          .tr,
+                      style: const TextStyle(
                         color: AppColors.textTertiary,
                         fontSize: 12,
                         height: 1.5,
@@ -683,10 +828,10 @@ class _McpServerCard extends StatelessWidget {
                 Obx(
                   () => Text(
                     entry.connected.value
-                        ? '${entry.tools.length} 个工具'
+                        ? '@n 个工具'.trParams({'n': '${entry.tools.length}'})
                         : (entry.error.value.isNotEmpty
                               ? entry.error.value
-                              : '未连接'),
+                              : '未连接'.tr),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -706,7 +851,7 @@ class _McpServerCard extends StatelessWidget {
               size: 16,
               color: AppColors.textSecondary,
             ),
-            tooltip: '重新连接',
+            tooltip: '重新连接'.tr,
             onPressed: () => mcp.reconnect(entry),
           ),
           IconButton(
@@ -715,7 +860,7 @@ class _McpServerCard extends StatelessWidget {
               size: 16,
               color: AppColors.textSecondary,
             ),
-            tooltip: '移除',
+            tooltip: '移除'.tr,
             onPressed: () => mcp.removeServer(entry),
           ),
         ],
@@ -845,7 +990,7 @@ class _AddressTile extends StatelessWidget {
               size: 16,
               color: AppColors.accent,
             ),
-            tooltip: '复制地址',
+            tooltip: '复制地址'.tr,
             onPressed: onCopy,
           ),
         ],

@@ -15,14 +15,15 @@ class HistoryPage extends StatelessWidget {
     final controller = Get.find<HistoryController>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('历史对话'),
+        title: Text('历史对话'.tr),
         actions: [
           Obx(
             () => Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Center(
                 child: Text(
-                  '${controller.sessions.length} 条记录',
+                  '@n 条记录'
+                      .trParams({'n': '${controller.sessions.length}'}),
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 13,

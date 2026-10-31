@@ -31,15 +31,17 @@ class _MyModelsPageState extends State<MyModelsPage> {
       if (!mounted) return;
       if (model != null) {
         Get.snackbar(
-          '导入成功',
-          '${model.name}（${model.format.label}）已加入我的模型',
+          '导入成功'.tr,
+          '@name（@f）已加入我的模型'.trParams(
+            {'name': model.name, 'f': model.format.label},
+          ),
           snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
       if (!mounted) return;
       Get.snackbar(
-        '导入失败',
+        '导入失败'.tr,
         e.toString().replaceFirst('Exception: ', ''),
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -53,7 +55,7 @@ class _MyModelsPageState extends State<MyModelsPage> {
     final controller = Get.find<MyModelsController>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('我的模型'),
+        title: Text('我的模型'.tr),
         actions: [
           // 群聊（多 AI 串行对话）
           IconButton(

@@ -33,26 +33,30 @@ class MainScreen extends StatelessWidget {
         () => BottomNavigationBar(
           currentIndex: controller.tabIndex.value,
           onTap: controller.changeTab,
-          items: const <BottomNavigationBarItem>[
+          // 4 个 Tab 默认 shifting 会隐藏未选中标签，固定为 fixed
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 11.5,
+          unselectedFontSize: 11,
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.memory_outlined),
-              activeIcon: Icon(Icons.memory),
-              label: '我的模型',
+              icon: const Icon(Icons.memory_outlined),
+              activeIcon: const Icon(Icons.memory),
+              label: '我的模型'.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.storefront_outlined),
-              activeIcon: Icon(Icons.storefront),
-              label: '模型商店',
+              icon: const Icon(Icons.storefront_outlined),
+              activeIcon: const Icon(Icons.storefront),
+              label: '模型商店'.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline),
-              activeIcon: Icon(Icons.chat_bubble),
-              label: '历史对话',
+              icon: const Icon(Icons.chat_bubble_outline),
+              activeIcon: const Icon(Icons.chat_bubble),
+              label: '历史对话'.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.hub_outlined),
-              activeIcon: Icon(Icons.hub),
-              label: 'Work',
+              icon: const Icon(Icons.hub_outlined),
+              activeIcon: const Icon(Icons.hub),
+              label: '工作'.tr,
             ),
           ],
         ),

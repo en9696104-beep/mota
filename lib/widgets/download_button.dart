@@ -18,7 +18,7 @@ class DownloadButton extends StatelessWidget {
     return Obx(() {
       if (controller.isDownloaded(model.id)) {
         return _StoreButton(
-          label: '打开',
+          label: '打开'.tr,
           filled: false,
           onTap: () => Get.find<MainController>().changeTab(0),
         );
@@ -59,7 +59,7 @@ class DownloadButton extends StatelessWidget {
         );
       }
       return _StoreButton(
-        label: '下载',
+        label: '下载'.tr,
         filled: true,
         onTap: () => controller.startDownload(model),
       );

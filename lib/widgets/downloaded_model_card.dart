@@ -63,23 +63,23 @@ class DownloadedModelCard extends StatelessWidget {
           children: [
             FormatBadge(format: format),
             const SizedBox(width: 10),
-            const Flexible(
+            Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '该架构引擎正在适配中，敬请期待',
-                    style: TextStyle(
+                    '该架构引擎正在适配中，敬请期待'.tr,
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(
-                    'GGUF 模型可直接对话；其他架构可正常管理文件',
-                    style: TextStyle(
+                    'GGUF 模型可直接对话；其他架构可正常管理文件'.tr,
+                    style: const TextStyle(
                       color: AppColors.textTertiary,
                       fontSize: 11,
                     ),
@@ -117,16 +117,17 @@ class DownloadedModelCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        title: const Text(
-          '删除模型',
-          style: TextStyle(
+        title: Text(
+          '删除模型'.tr,
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
         content: Text(
-          '确定要删除该模型文件以释放空间吗？\n\n${model.name}（${model.sizeLabel}）将从本机移除，如需使用需重新下载。',
+          '确定要删除该模型文件以释放空间吗？\n\n@name（@size）将从本机移除，如需使用需重新下载。'
+              .trParams({'name': model.name, 'size': model.sizeLabel}),
           style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 13,
@@ -136,16 +137,16 @@ class DownloadedModelCard extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
-            child: const Text(
-              '取消',
-              style: TextStyle(color: AppColors.textSecondary),
+            child: Text(
+              '取消'.tr,
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
           TextButton(
             onPressed: () => Get.back(result: true),
-            child: const Text(
-              '删除',
-              style: TextStyle(
+            child: Text(
+              '删除'.tr,
+              style: const TextStyle(
                 color: AppColors.danger,
                 fontWeight: FontWeight.w600,
               ),
@@ -204,7 +205,8 @@ class DownloadedModelCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    '${model.params} · ${model.quant} · 已就绪',
+                    '@params · @quant · 已就绪'
+                        .trParams({'params': model.params, 'quant': model.quant}),
                     style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 11,
@@ -233,9 +235,9 @@ class DownloadedModelCard extends StatelessWidget {
                         color: AppColors.accent,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Text(
-                        '开始对话',
-                        style: TextStyle(
+                      child: Text(
+                        '开始对话'.tr,
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,

@@ -88,10 +88,17 @@ class ModelCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
+                // 标签限行：窄屏下最多展示 6 个，防止卡片被撑得过长
                 Wrap(
                   spacing: 6,
                   runSpacing: 4,
-                  children: model.tags.map((t) => TagChip(t)).toList(),
+                  children: [
+                    ...model.tags
+                        .take(6)
+                        .map((t) => TagChip(t)),
+                    if (model.tags.length > 6)
+                      TagChip('+${model.tags.length - 6}'),
+                  ],
                 ),
               ],
             ),

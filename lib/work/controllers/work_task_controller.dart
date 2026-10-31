@@ -300,9 +300,9 @@ class _PairCodeDialogState extends State<_PairCodeDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Text(
-            '请在对端设备的 MOTA → Work 工作台中查看本机配对码（6 位数字）并输入：',
-            style: TextStyle(
+          Text(
+            '请在对端设备的 MOTA → 工作台中查看本机配对码（6 位数字）并输入：'.tr,
+            style: const TextStyle(
                 color: AppColors.textTertiary, fontSize: 12, height: 1.6),
           ),
           const SizedBox(height: 12),

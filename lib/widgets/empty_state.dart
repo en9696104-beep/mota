@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../theme/app_theme.dart';
 
@@ -39,7 +40,7 @@ class EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              title,
+              title.tr,
               style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 16,
@@ -48,7 +49,7 @@ class EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              subtitle,
+              subtitle.tr,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: AppColors.textSecondary,
@@ -71,7 +72,7 @@ class EmptyState extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text(actionLabel!),
+                child: Text(actionLabel!.tr),
               ),
             ],
           ],
