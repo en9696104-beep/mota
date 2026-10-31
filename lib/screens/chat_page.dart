@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 
 import '../controllers/chat_controller.dart';
 import '../controllers/main_controller.dart';
+import '../controllers/store_controller.dart';
 import '../theme/app_theme.dart';
 import '../widgets/chat_settings_sheet.dart';
+import '../widgets/model_avatar.dart';
 
 /// 对话页：本地 llama.cpp 流式推理
 class ChatPage extends StatelessWidget {
@@ -17,6 +19,27 @@ class ChatPage extends StatelessWidget {
     final controller = Get.find<ChatController>();
     return Scaffold(
       appBar: AppBar(
+        leading: Obx(() {
+          // 品牌头像：按模型 id 回查商店作者；未知回退字块
+          String? author;
+          final id = controller.modelId;
+          if (id != null && Get.isRegistered<StoreController>()) {
+            for (final m in Get.find<StoreController>().models) {
+              if (m.id == id) {
+                author = m.author;
+                break;
+              }
+            }
+          }
+          return Center(
+            child: ModelAvatar(
+              name: controller.modelName.value,
+              colorIndex: 0,
+              author: author,
+              size: 30,
+            ),
+          );
+        }),
         title: Row(
           children: [
             Flexible(

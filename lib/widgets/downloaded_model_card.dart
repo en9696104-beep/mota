@@ -178,6 +178,7 @@ class DownloadedModelCard extends StatelessWidget {
                 ModelAvatar(
                   name: model.name,
                   colorIndex: model.colorIndex,
+                  author: model.author,
                   size: 38,
                 ),
                 const Spacer(),

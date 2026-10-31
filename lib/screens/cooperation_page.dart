@@ -177,6 +177,7 @@ class _RoleCard extends StatelessWidget {
                 ModelAvatar(
                   name: selected.model.name,
                   colorIndex: selected.model.colorIndex,
+                  author: selected.model.author,
                   size: 28,
                 ),
               const SizedBox(width: 6),
@@ -273,6 +274,7 @@ class _RolePickerSheet extends StatelessWidget {
                   leading: ModelAvatar(
                     name: model.name,
                     colorIndex: model.colorIndex,
+                    author: model.author,
                     size: 36,
                   ),
                   title: Text(

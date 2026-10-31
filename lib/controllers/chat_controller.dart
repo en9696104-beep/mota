@@ -84,6 +84,9 @@ class ChatController extends GetxController {
   /// 语音识别转写中
   final isTranscribing = false.obs;
 
+  /// 当前模型 id（供 UI 解析品牌图标等；合作系统主模型切换后同步更新）
+  String? get modelId => _modelId;
+
   /// TTS 朗读中
   final isSpeaking = false.obs;
 

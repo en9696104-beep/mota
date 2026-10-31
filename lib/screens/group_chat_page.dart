@@ -125,6 +125,7 @@ class _MemberStrip extends StatelessWidget {
                         ModelAvatar(
                           name: m.modelName,
                           colorIndex: m.colorIndex,
+                          author: m.author,
                           size: 34,
                         ),
                         if (speaking)
@@ -251,6 +252,7 @@ class _GroupBubble extends StatelessWidget {
                     ModelAvatar(
                       name: message.senderName,
                       colorIndex: message.colorIndex,
+                      author: message.member?.author,
                       size: 18,
                     ),
                     const SizedBox(width: 6),
@@ -528,6 +530,7 @@ class _MemberPickerTile extends StatelessWidget {
       leading: ModelAvatar(
         name: model.name,
         colorIndex: model.colorIndex,
+        author: model.author,
         size: 36,
       ),
       title: Text(

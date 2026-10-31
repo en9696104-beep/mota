@@ -60,3 +60,5 @@ flutter:
   assets:
     # 商店模型目录（100 个 GGUF，真实直链，不在 Dart 中硬编码）
     - assets/store_data.json
+    # 模型品牌图标（author → assets/model_icons/{key}.png）
+    - assets/model_icons/

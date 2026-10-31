@@ -16,6 +16,7 @@ class GroupMember {
     required this.modelName,
     required this.colorIndex,
     required this.path,
+    this.author = '',
     this.projectorPath,
     this.chatTemplate,
   });
@@ -25,6 +26,9 @@ class GroupMember {
 
   /// 头像渐变色索引（与商店 colorIndex 一致）
   final int colorIndex;
+
+  /// 作者/厂商（匹配品牌图标；旧记录为空串则回退字块头像）
+  final String author;
 
   /// 本地 GGUF 路径
   final String path;
@@ -40,6 +44,7 @@ class GroupMember {
     'modelName': modelName,
     'colorIndex': colorIndex,
     'path': path,
+    'author': author,
     'projectorPath': projectorPath,
     'chatTemplate': chatTemplate,
   };
@@ -53,6 +58,7 @@ class GroupMember {
       modelName: json['modelName'] as String? ?? modelId,
       colorIndex: (json['colorIndex'] as num?)?.toInt() ?? 0,
       path: path,
+      author: json['author'] as String? ?? '',
       projectorPath: json['projectorPath'] as String?,
       chatTemplate: json['chatTemplate'] as String?,
     );
@@ -169,6 +175,7 @@ class GroupChatController extends GetxController {
         modelName: model.name,
         colorIndex: model.colorIndex,
         path: path,
+        author: model.author,
         projectorPath: StorageService.to.projectorPathFor(model.id),
         chatTemplate: model.chatTemplate,
       ),

@@ -25,7 +25,11 @@ class ModelCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ModelAvatar(name: model.name, colorIndex: model.colorIndex),
+          ModelAvatar(
+            name: model.name,
+            colorIndex: model.colorIndex,
+            author: model.author,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
