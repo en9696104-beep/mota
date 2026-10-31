@@ -56,6 +56,10 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+        <!-- Shizuku 官方集成要求：声明 API 版本（provider 运行时校验） -->
+        <meta-data
+            android:name="moe.shizuku.client.API_VERSION"
+            android:value="13" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

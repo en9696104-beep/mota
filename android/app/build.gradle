@@ -59,4 +59,7 @@ flutter {
 dependencies {
     // Work 工作台：Shizuku 客户端 API（无障碍/Root 走系统通道，无需三方库）
     implementation "dev.rikka.shizuku:api:13.1.5"
+    // Manifest 中声明的 rikka.shizuku.ShizukuProvider 属于 provider 包，缺失会导致
+    // App 启动实例化 ContentProvider 时 ClassNotFoundException → 启动即闪退
+    implementation "dev.rikka.shizuku:provider:13.1.5"
 }
