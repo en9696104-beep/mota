@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/models/ai_model.dart';
 import 'llama_service.dart';
 import 'model_repository.dart';
+import 'ocr_service.dart';
 import 'storage_service.dart';
 
 /// 合作管线角色。
@@ -49,6 +50,7 @@ class CooperationConfig {
     this.enabled = false,
     this.chatModelId,
     this.ocrModelId,
+    this.ocrPrompt,
     this.asrModelId,
     this.ttsModelId,
     this.embeddingModelId,
@@ -63,6 +65,9 @@ class CooperationConfig {
 
   /// OCR 模型 id
   String? ocrModelId;
+
+  /// OCR 提示词（null 时用 [defaultOcrPrompt]）
+  String? ocrPrompt;
 
   /// ASR 模型 id
   String? asrModelId;
@@ -80,6 +85,18 @@ class CooperationConfig {
   String? securityModelId;
 
   static const String _prefsKey = 'cooperation_pipeline_v1';
+
+  /// 默认 OCR 提示词
+  static const String defaultOcrPrompt =
+      '请识别并转录这张图片中的全部内容：文字逐行转录，保持原有格式；'
+      '图表、流程图请用文字描述其结构与数据关系；如有表格请用 Markdown 表格输出。'
+      '不要添加任何评价或解释。';
+
+  /// 生效的 OCR 提示词
+  String get effectiveOcrPrompt =>
+      (ocrPrompt == null || ocrPrompt!.trim().isEmpty)
+          ? defaultOcrPrompt
+          : ocrPrompt!.trim();
 
   /// 按角色读取配置的模型 id
   String? modelIdFor(PipelineRole role) => switch (role) {
@@ -127,6 +144,7 @@ class CooperationConfig {
     bool? enabled,
     String? chatModelId,
     String? ocrModelId,
+    String? ocrPrompt,
     String? asrModelId,
     String? ttsModelId,
     String? embeddingModelId,
@@ -137,6 +155,7 @@ class CooperationConfig {
         enabled: enabled ?? this.enabled,
         chatModelId: chatModelId ?? this.chatModelId,
         ocrModelId: ocrModelId ?? this.ocrModelId,
+        ocrPrompt: ocrPrompt ?? this.ocrPrompt,
         asrModelId: asrModelId ?? this.asrModelId,
         ttsModelId: ttsModelId ?? this.ttsModelId,
         embeddingModelId: embeddingModelId ?? this.embeddingModelId,
@@ -148,6 +167,7 @@ class CooperationConfig {
     'enabled': enabled,
     'chatModelId': chatModelId,
     'ocrModelId': ocrModelId,
+    'ocrPrompt': ocrPrompt,
     'asrModelId': asrModelId,
     'ttsModelId': ttsModelId,
     'embeddingModelId': embeddingModelId,
@@ -160,6 +180,7 @@ class CooperationConfig {
         enabled: json['enabled'] as bool? ?? false,
         chatModelId: json['chatModelId'] as String?,
         ocrModelId: json['ocrModelId'] as String?,
+        ocrPrompt: json['ocrPrompt'] as String?,
         asrModelId: json['asrModelId'] as String?,
         ttsModelId: json['ttsModelId'] as String?,
         embeddingModelId: json['embeddingModelId'] as String?,
@@ -242,10 +263,46 @@ class CooperationService extends GetxService {
 
   // ---------- 各阶段执行（严格串行：load → execute → dispose） ----------
 
-  /// OCR 阶段：图片 → 文本（视觉模型 + 图像部件）。
+  /// OCR 阶段：图片 → 文本（自动回退链 + 3 天结果缓存）。
   ///
-  /// 未配置 OCR 模型时返回 null。
+  /// 回退链（对齐 RikkaHub 的「聊天模型不支持视觉 → 指定模型自动 OCR」机制，
+  /// 并针对本地推理场景扩展）：
+  /// 1. 桌面端且配置了 OCR 角色模型 → 视觉模型 OCR（提示词可配置）
+  /// 2. 移动端 → ML Kit 设备端离线 OCR（视觉模型引擎不支持图像输入）
+  ///
+  /// 结果按「图片内容 + 提示词」缓存 3 天，重复发送不重复识别。
   Future<String?> runOcr(String imagePath) async {
+    final prompt = config.value.effectiveOcrPrompt;
+
+    // 缓存命中：直接复用
+    try {
+      final cached = await OcrCache.get(imagePath, prompt);
+      if (cached != null) return cached;
+    } catch (_) {}
+
+    String? text;
+    // 1. 视觉模型 OCR（仅桌面端引擎支持图像输入）
+    if (LlamaService.supportsMultimodal) {
+      try {
+        text = await _runVisionModelOcr(imagePath, prompt);
+      } on UnsupportedError {
+        text = null;
+      }
+    }
+    // 2. 设备端 ML Kit OCR（移动端离线兜底）
+    text ??= await OcrService.instance.recognizeFile(imagePath);
+
+    if (text != null && text.trim().isNotEmpty) {
+      try {
+        await OcrCache.put(imagePath, prompt, text.trim());
+      } catch (_) {}
+      return text.trim();
+    }
+    return null;
+  }
+
+  /// 视觉模型执行 OCR（自包含：load → generate → dispose）
+  Future<String?> _runVisionModelOcr(String imagePath, String prompt) async {
     final role = resolveRole(PipelineRole.ocr);
     if (role == null) return null;
     final loaded = await LlamaService.instance.loadModel(
@@ -257,11 +314,7 @@ class CooperationService extends GetxService {
       final buffer = StringBuffer();
       await for (final chunk in LlamaService.instance.generateChatStreamWithMedia(
         [
-          LlamaTurn(
-            role: 'user',
-            content: '请提取这张图片中的全部文字内容，保持原有格式转换为 Markdown 输出。',
-            imagePaths: [imagePath],
-          ),
+          LlamaTurn(role: 'user', content: prompt, imagePaths: [imagePath]),
         ],
         temperature: 0.1,
         maxTokens: 4096,
@@ -273,6 +326,12 @@ class CooperationService extends GetxService {
       await LlamaService.instance.dispose();
     }
   }
+
+  /// OCR 通道是否可用（移动端 ML Kit 恒可用；桌面端需配置 OCR 模型）。
+  /// 聊天页据此放行图片附件（纯文本模型也能收图：先 OCR 转文字）。
+  bool get ocrAvailable =>
+      OcrService.isSupported ||
+      resolveRole(PipelineRole.ocr) != null;
 
   /// ASR 阶段：音频文件 → 文本。
   Future<String?> runAsr(String audioPath) async {

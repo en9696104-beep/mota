@@ -65,6 +65,8 @@ class CooperationPage extends StatelessWidget {
             ...PipelineRole.values.map(
               (role) => _RoleCard(service: service, role: role),
             ),
+            // OCR 提示词（视觉模型 OCR 的转录指令，可自定义）
+            const _OcrPromptTile(),
             const SizedBox(height: 16),
             // 说明
             Container(
@@ -94,8 +96,9 @@ class CooperationPage extends StatelessWidget {
                   SizedBox(height: 8),
                   Text(
                     '· 每个角色选择一个已下载的对应能力模型\n'
-                    '· 对话时：安全审核先检查输入 → 图片经 OCR 转文字 → 主对话模型生成回复 → 可一键 TTS 朗读\n'
-                    '· 语音输入：录音后由 ASR 模型转文字填入输入框\n'
+                    '· 对话时：安全审核先检查输入 → 图片自动 OCR 转文字 → 主对话模型生成回复 → 可一键 TTS 朗读\n'
+                    '· 手机端图片由系统内置离线识别引擎转录，无需配置模型；桌面端由 OCR 角色模型转录\n'
+                    '· OCR 结果缓存 3 天，同一张图片重复发送不会重复识别\n'
                     '· 为保护内存，所有模型严格串行加载/卸载，绝不并发',
                     style: TextStyle(
                       color: AppColors.textTertiary,
@@ -311,5 +314,121 @@ class _RolePickerSheet extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// OCR 提示词编辑入口：点击弹出多行编辑框，可恢复默认。
+class _OcrPromptTile extends StatelessWidget {
+  const _OcrPromptTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final service = Get.find<CooperationService>();
+      final isDefault = service.config.value.ocrPrompt == null ||
+          service.config.value.ocrPrompt!.trim().isEmpty;
+      final prompt = isDefault
+          ? CooperationConfig.defaultOcrPrompt
+          : service.config.value.ocrPrompt!.trim();
+      return Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: ListTile(
+          onTap: () => _editPrompt(context),
+          leading: Container(
+            width: 38,
+            height: 38,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceHigh,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.text_snippet_outlined,
+                size: 18, color: AppColors.accent),
+          ),
+          title: const Text(
+            'OCR 提示词',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: Text(
+            isDefault ? '默认：转录全部文字并保持格式（点击自定义）' : prompt,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(color: AppColors.textTertiary, fontSize: 11),
+          ),
+          trailing: const Icon(Icons.chevron_right,
+              size: 16, color: AppColors.textTertiary),
+        ),
+      );
+    });
+  }
+
+  Future<void> _editPrompt(BuildContext context) async {
+    final service = Get.find<CooperationService>();
+    final controller = TextEditingController(
+      text: service.config.value.ocrPrompt ??
+          CooperationConfig.defaultOcrPrompt,
+    );
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: const Text('OCR 提示词',
+            style: TextStyle(color: AppColors.textPrimary, fontSize: 16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: controller,
+              maxLines: 6,
+              style: const TextStyle(
+                  color: AppColors.textPrimary, fontSize: 13, height: 1.5),
+              decoration: const InputDecoration(
+                hintText: '描述希望如何转录图片内容…',
+                hintStyle: TextStyle(color: AppColors.textTertiary),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => controller.text =
+                    CooperationConfig.defaultOcrPrompt,
+                child: const Text('恢复默认',
+                    style: TextStyle(color: AppColors.accent, fontSize: 12)),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('取消',
+                style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('保存',
+                style: TextStyle(
+                    color: AppColors.accent, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      ),
+    );
+    if (saved != true) return;
+    final text = controller.text.trim();
+    // 与默认一致时存 null，避免污染配置
+    final next = text.isEmpty || text == CooperationConfig.defaultOcrPrompt
+        ? service.config.value.copyWith(ocrPrompt: null)
+        : service.config.value.copyWith(ocrPrompt: text);
+    await service.updateConfig(next);
   }
 }

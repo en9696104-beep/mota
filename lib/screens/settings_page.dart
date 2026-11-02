@@ -8,9 +8,11 @@ import '../controllers/mcp_controller.dart';
 import '../routes/app_routes.dart';
 import '../services/api_service.dart';
 import '../services/locale_service.dart';
+import '../services/memory_service.dart';
 import '../services/model_repository.dart';
 import '../services/update_checker.dart';
 import '../theme/app_theme.dart';
+import '../widgets/model_avatar.dart';
 
 /// 设置页：版本信息、检查更新、商店数据来源
 class SettingsPage extends StatefulWidget {
@@ -147,6 +149,12 @@ class _SettingsPageState extends State<SettingsPage> {
         children: [
           const _SectionTitle('通用'),
           const _LanguageTile(),
+          const SizedBox(height: 20),
+          const _SectionTitle('记忆'),
+          const _MemorySection(),
+          const SizedBox(height: 20),
+          const _SectionTitle('插件'),
+          const _DshSection(),
           const SizedBox(height: 20),
           const _SectionTitle('关于'),
           const _InfoTile(
@@ -510,6 +518,273 @@ class _HintText extends StatelessWidget {
           height: 1.6,
         ),
       ),
+    );
+  }
+}
+
+/// 「记忆」区块：主开关 + 高级选项 + 提取模型 + 管理入口。
+/// 开关语义对齐 RikkaHub 记忆设置（enableMemory / useGlobalMemory /
+/// enableRecentChatsReference / enableTimeReminder）。
+class _MemorySection extends StatelessWidget {
+  const _MemorySection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final memory = MemoryService.to;
+      final settings = memory.settings.value;
+      return Column(
+        children: [
+          _SwitchTile(
+            icon: Icons.psychology_outlined,
+            title: '启用记忆',
+            subtitle: '模型跨对话记住你的偏好与背景，对话更连贯',
+            value: settings.enabled,
+            onChanged: (v) {
+              final next = MemorySettings()
+                ..enabled = v
+                ..useGlobalMemory = settings.useGlobalMemory
+                ..enableRecentChats = settings.enableRecentChats
+                ..enableTimeReminder = settings.enableTimeReminder
+                ..extractionModelId = settings.extractionModelId;
+              memory.updateSettings(next);
+            },
+          ),
+          if (settings.enabled) ...[
+            const SizedBox(height: 8),
+            _SwitchTile(
+              icon: Icons.public_outlined,
+              title: '使用全局记忆',
+              subtitle: '开启后所有模型共享同一记忆池；关闭则每个模型独立记忆',
+              value: settings.useGlobalMemory,
+              onChanged: (v) {
+                final next = MemorySettings()
+                  ..enabled = settings.enabled
+                  ..useGlobalMemory = v
+                  ..enableRecentChats = settings.enableRecentChats
+                  ..enableTimeReminder = settings.enableTimeReminder
+                  ..extractionModelId = settings.extractionModelId;
+                memory.updateSettings(next);
+              },
+            ),
+            const SizedBox(height: 8),
+            _SwitchTile(
+              icon: Icons.history_outlined,
+              title: '最近对话引用',
+              subtitle: '让模型了解最近几轮对话的主题，保持连续性',
+              value: settings.enableRecentChats,
+              onChanged: (v) {
+                final next = MemorySettings()
+                  ..enabled = settings.enabled
+                  ..useGlobalMemory = settings.useGlobalMemory
+                  ..enableRecentChats = v
+                  ..enableTimeReminder = settings.enableTimeReminder
+                  ..extractionModelId = settings.extractionModelId;
+                memory.updateSettings(next);
+              },
+            ),
+            const SizedBox(height: 8),
+            _SwitchTile(
+              icon: Icons.schedule_outlined,
+              title: '时间提醒',
+              subtitle: '告诉模型距上次对话过去了多久',
+              value: settings.enableTimeReminder,
+              onChanged: (v) {
+                final next = MemorySettings()
+                  ..enabled = settings.enabled
+                  ..useGlobalMemory = settings.useGlobalMemory
+                  ..enableRecentChats = settings.enableRecentChats
+                  ..enableTimeReminder = v
+                  ..extractionModelId = settings.extractionModelId;
+                memory.updateSettings(next);
+              },
+            ),
+            const SizedBox(height: 8),
+            _ActionTile(
+              icon: Icons.folder_open_outlined,
+              title: '记忆管理',
+              subtitle: '查看、编辑或手动添加记忆条目',
+              loading: false,
+              onTap: () => Get.toNamed(AppRoutes.memory),
+            ),
+            const SizedBox(height: 8),
+            _ExtractionModelTile(settings: settings),
+            const SizedBox(height: 8),
+            const _HintText(
+              '每轮对话结束后，提取模型会分析对话并把值得记住的信息存为独立条目，'
+              '下次对话前自动注入上下文。提取用快速小模型即可，本地推理无额外费用。',
+            ),
+          ],
+        ],
+      );
+    });
+  }
+}
+
+/// 记忆提取模型选择行
+class _ExtractionModelTile extends StatelessWidget {
+  const _ExtractionModelTile({required this.settings});
+
+  final MemorySettings settings;
+
+  String _label() {
+    if (settings.extractionModelId == null) return '自动（最小的已下载模型）';
+    final model = ModelRepository.to.byId(settings.extractionModelId!);
+    return model?.name ?? '模型 ${settings.extractionModelId}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _pick(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.speed_outlined, size: 18, color: AppColors.accent),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '记忆提取模型',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _label(),
+                    style: const TextStyle(
+                        color: AppColors.textTertiary, fontSize: 11),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right,
+                size: 18, color: AppColors.textTertiary),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pick(BuildContext context) async {
+    final memory = MemoryService.to;
+    final candidates = memory.downloadedChatModels();
+    if (candidates.isEmpty) {
+      Get.snackbar(
+        '没有可用模型',
+        '请先在商店下载对话模型',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(12),
+              child: Text(
+                '选择记忆提取模型（建议小而快的模型）',
+                style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.auto_awesome,
+                  size: 20, color: AppColors.accent),
+              title: const Text('自动（最小的已下载模型）',
+                  style: TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+              trailing: settings.extractionModelId == null
+                  ? const Icon(Icons.check_circle,
+                      color: AppColors.accent, size: 20)
+                  : null,
+              onTap: () => Navigator.of(ctx).pop(''),
+            ),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: candidates.length,
+                itemBuilder: (_, index) {
+                  final model = candidates[index];
+                  final selected = model.id == settings.extractionModelId;
+                  return ListTile(
+                    leading: ModelAvatar(
+                      name: model.name,
+                      colorIndex: model.colorIndex,
+                      author: model.author,
+                      size: 32,
+                    ),
+                    title: Text(model.name,
+                        style: const TextStyle(
+                            color: AppColors.textPrimary, fontSize: 14)),
+                    subtitle: Text('${model.params} · ${model.sizeLabel}',
+                        style: const TextStyle(
+                            color: AppColors.textTertiary, fontSize: 11)),
+                    trailing: selected
+                        ? const Icon(Icons.check_circle,
+                            color: AppColors.accent, size: 20)
+                        : null,
+                    onTap: () => Navigator.of(ctx).pop(model.id),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (picked == null) return; // 点外部关闭：不修改
+    final next = MemorySettings()
+      ..enabled = settings.enabled
+      ..useGlobalMemory = settings.useGlobalMemory
+      ..enableRecentChats = settings.enableRecentChats
+      ..enableTimeReminder = settings.enableTimeReminder
+      ..extractionModelId = picked.isEmpty ? null : picked;
+    await MemoryService.to.updateSettings(next);
+  }
+}
+
+/// 「插件」区块：DSH（DeepSeek Harness）插件兼容层入口
+class _DshSection extends StatelessWidget {
+  const _DshSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _ActionTile(
+          icon: Icons.extension_outlined,
+          title: 'DSH 插件',
+          subtitle: '安装并管理 DeepSeek Harness 兼容插件',
+          loading: false,
+          onTap: () => Get.toNamed(AppRoutes.dshPlugins),
+        ),
+        const SizedBox(height: 8),
+        const _HintText(
+          '兼容 DeepSeek Harness 插件格式（package.json + cordis.patch.yml + apply(ctx)）。'
+          '插件运行在无网络、无文件访问的 JS 沙箱中，注册的工具会出现在模型可用工具列表里。',
+        ),
+      ],
     );
   }
 }

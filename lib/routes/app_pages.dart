@@ -8,7 +8,9 @@ import '../controllers/my_models_controller.dart';
 import '../controllers/scripts_controller.dart';
 import '../controllers/store_controller.dart';
 import '../screens/chat_page.dart';
+import '../screens/dsh_plugins_page.dart';
 import '../screens/main_screen.dart';
+import '../screens/memory_page.dart';
 import '../screens/script_editor_page.dart';
 import '../screens/scripts_page.dart';
 import '../screens/settings_page.dart';
@@ -74,6 +76,18 @@ class AppPages {
       name: AppRoutes.scriptEditor,
       page: () => const ScriptEditorPage(),
       binding: const ScriptsBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 220),
+    ),
+    GetPage(
+      name: AppRoutes.memory,
+      page: () => const MemoryPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 220),
+    ),
+    GetPage(
+      name: AppRoutes.dshPlugins,
+      page: () => const DshPluginsPage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 220),
     ),

@@ -113,6 +113,27 @@ class ChatHistoryDatabase {
     await db.delete(_table, where: 'id = ?', whereArgs: <Object?>[id]);
   }
 
+  /// 某个模型最近一轮对话的时间（记忆系统时间提醒用；无记录返回 null）
+  Future<DateTime?> lastTurnTimeFor(String modelId) async {
+    try {
+      final db = await database;
+      final rows = await db.query(
+        _table,
+        columns: <String>['created_at'],
+        where: 'model_id = ?',
+        whereArgs: <Object?>[modelId],
+        orderBy: 'created_at DESC',
+        limit: 1,
+      );
+      if (rows.isEmpty) return null;
+      final ts = rows.first['created_at'];
+      if (ts is! int) return null;
+      return DateTime.fromMillisecondsSinceEpoch(ts);
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// 启动期安全初始化：数据库异常（如磁盘不可写）只降级历史功能，不阻塞启动
   Future<void> ensureInitialized() async {
     try {

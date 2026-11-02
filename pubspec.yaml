@@ -40,6 +40,12 @@ dependencies:
   record: ^7.1.2
   # 语音播放（合作系统 TTS 阶段：PCM → WAV → 播放）
   audioplayers: ^6.8.1
+  # OCR 文字识别（移动端离线 OCR：图片 → 文字，合作系统 OCR 阶段的设备端兜底）
+  google_mlkit_text_recognition: ^0.17.1
+  # 内容哈希（OCR 结果缓存键）
+  crypto: ^3.0.3
+  # zip 解压（DSH 插件包安装）
+  archive: ^4.5.2
 
 dev_dependencies:
   flutter_test:

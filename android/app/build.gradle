@@ -62,4 +62,6 @@ dependencies {
     // Manifest 中声明的 rikka.shizuku.ShizukuProvider 属于 provider 包，缺失会导致
     // App 启动实例化 ContentProvider 时 ClassNotFoundException → 启动即闪退
     implementation "dev.rikka.shizuku:provider:13.1.5"
+    // OCR 文字识别：中文模型包（离线捆绑，含拉丁字符识别主包）
+    implementation "com.google.mlkit:text-recognition-chinese:16.0.1"
 }

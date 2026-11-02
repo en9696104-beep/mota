@@ -9,9 +9,12 @@ import '../data/models/ai_model.dart';
 import '../data/models/chat_turn.dart';
 import '../services/chat_history_db.dart';
 import '../services/cooperation_pipeline.dart';
+import '../services/dsh/dsh_models.dart';
+import '../services/dsh/dsh_plugin_service.dart';
 import '../services/js_code_parser.dart';
 import '../services/js_sandbox.dart';
 import '../services/llama_service.dart';
+import '../services/memory_service.dart';
 import '../services/mcp/mcp_protocol.dart';
 import '../services/mcp/tool_prompt.dart';
 import '../services/model_repository.dart';
@@ -131,9 +134,17 @@ class ChatController extends GetxController {
   }
 
   /// 按当前模型的能力刷新图片输入开关
+  ///
+  /// 放行条件（任一满足）：
+  /// - 移动端：ML Kit 设备端 OCR 恒可用，图片先转文字再进对话
+  /// - 桌面端 + 配置了合作管线 OCR 模型：图片经 OCR 模型转文字
+  /// - 当前对话模型自身具备视觉能力：图片直接进多模态通道
   void _refreshImageSupport() {
     if (!LlamaService.supportsMultimodal) {
-      supportsImageInput.value = false;
+      // 移动端引擎不支持图像输入，但设备端 OCR 兜底恒可用
+      supportsImageInput.value =
+          Get.isRegistered<CooperationService>() &&
+              Get.find<CooperationService>().ocrAvailable;
       return;
     }
     // 合作管线配置了 OCR 角色时，图片经 OCR 模型转文字，对话模型无需视觉能力
@@ -185,7 +196,7 @@ class ChatController extends GetxController {
     if (!supportsImageInput.value) {
       Get.snackbar(
         '当前模型不支持图片输入',
-        '请切换到具备视觉能力的模型（如 DeepSeek-OCR、Qwen2.5-VL、Gemma-3），或在合作系统中配置 OCR 模型',
+        '桌面端请切换到具备视觉能力的模型，或在合作系统中配置 OCR 模型',
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 4),
       );
@@ -530,17 +541,49 @@ class ChatController extends GetxController {
           return;
         }
       }
+    }
 
-      // 2. OCR 预处理（图片 → 文字，拼入消息）
-      if (images.isNotEmpty && config.ocrModelId != null) {
-        final ocrTexts = <String>[];
+    // ---------- OCR 自动回退（对齐 RikkaHub 多模态机制） ----------
+    // 聊天模型不支持视觉（或引擎不支持图像输入）时，图片自动走 OCR：
+    // 桌面端 → 合作管线 OCR 模型；移动端 → ML Kit 设备端离线识别。
+    // 转录文本以内容块形式注入消息，替代原图交给主模型。
+    final chatModelHasVision =
+        _findStoreModel(_modelId)?.hasCapability(ModelCapability.vision) ??
+            true;
+    final nativeVision =
+        LlamaService.supportsMultimodal && chatModelHasVision;
+    if (images.isNotEmpty && !nativeVision) {
+      if (Get.isRegistered<CooperationService>()) {
+        final coop = Get.find<CooperationService>();
+        final ocrBlocks = <String>[];
         for (final image in images) {
-          final ocr = await coop.runOcr(image);
-          if (ocr != null && ocr.trim().isNotEmpty) ocrTexts.add(ocr.trim());
+          try {
+            final ocr = await coop.runOcr(image);
+            if (ocr != null && ocr.trim().isNotEmpty) {
+              ocrBlocks.add(
+                '## user sent an image\n[content]\n${ocr.trim()}\n[/content]',
+              );
+            }
+          } on UnsupportedError {
+            // 桌面端引擎异常兜底（正常不会走到）
+          } catch (e) {
+            Get.snackbar('图片识别失败', e.toString(),
+                snackPosition: SnackPosition.BOTTOM);
+          }
         }
-        if (ocrTexts.isNotEmpty) {
-          finalText =
-              '$finalText\n\n【图片文字识别】\n${ocrTexts.join('\n\n')}';
+        if (ocrBlocks.isNotEmpty) {
+          final blockText = ocrBlocks.join('\n\n');
+          finalText = finalText.isEmpty
+              ? blockText
+              : '$blockText\n\n$finalText';
+        } else if (finalText.isEmpty) {
+          // 全部识别失败且消息只有图片：给出明确提示
+          Get.snackbar(
+            '图片识别失败',
+            '未能从图片中提取到文字，请检查图片内容或重试',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          return;
         }
       }
     }
@@ -572,19 +615,27 @@ class ChatController extends GetxController {
   }
 
   /// 多轮生成循环：生成 → 解析工具调用 → 执行 → 结果回喂 → 再生成
-  /// （maxRounds 防死循环；无 MCP 工具时退化为普通单轮对话）
+  /// （maxRounds 防死循环；无 MCP / DSH 工具时退化为普通单轮对话）
   Future<void> _runGenerationWithTools(ChatMessage reply) async {
     final settings = ChatSettingsController.instance;
     final mcp = Get.isRegistered<McpController>()
         ? Get.find<McpController>()
         : null;
     final tools = mcp?.allTools ?? <({McpServerEntry server, McpTool tool})>[];
+    // DSH 插件工具与 MCP 工具并列：同名时 DSH（本地沙箱）优先
+    final dsh = Get.isRegistered<DshPluginService>()
+        ? Get.find<DshPluginService>()
+        : null;
+    final dshTools = dsh?.enabledTools ?? const <DshToolDef>[];
 
-    // 上下文策略：system prompt（工具指令 + JS 沙箱能力）+ 全量历史，
+    // 上下文策略：system prompt（记忆 + 工具指令 + JS 沙箱能力）+ 全量历史，
     // 保证任意上下文长度下行为正确
+    final memoryPrompt = await _buildMemoryPromptSafe();
     final systemContent = [
       settings.systemPrompt.value,
+      if (memoryPrompt != null) memoryPrompt,
       if (tools.isNotEmpty) ToolPrompt.buildToolsPrompt(tools),
+      if (dshTools.isNotEmpty) DshToolPrompt.build(dshTools),
       JsPrompt.instruction,
     ].where((s) => s.isNotEmpty).join('\n\n');
     final history = <LlamaTurn>[
@@ -671,21 +722,36 @@ class ChatController extends GetxController {
       // 回喂历史：assistant 原始输出 + 工具/代码执行结果（标为 user，chatml 兼容性最好）
       history.add(LlamaTurn(role: 'assistant', content: output));
       for (final call in calls) {
-        final matches = tools.where((t) => t.tool.name == call.name);
-        final entry = matches.isEmpty ? null : matches.first;
         String result;
-        if (entry == null || mcp == null) {
-          result = '工具不存在：${call.name}';
-        } else {
+        // 1. DSH 插件工具（本地 QuickJS 沙箱）
+        final dshTool = dshTools.where((t) => t.name == call.name).toList();
+        if (dshTool.isNotEmpty && dsh != null) {
           try {
-            final toolResult = await mcp.callTool(
-              entry.server,
-              call.name,
-              call.arguments,
-            );
-            result = toolResult.text.isEmpty ? '（工具无返回）' : toolResult.text;
+            final toolResult = await dsh.callTool(call.name, call.arguments);
+            result = toolResult.feedback;
+            if (toolResult.output.trim().isNotEmpty) {
+              result = '${toolResult.output.trim()}\n$result';
+            }
           } catch (e) {
-            result = '工具执行失败：$e';
+            result = '插件工具执行失败：$e';
+          }
+        } else {
+          // 2. MCP 工具
+          final matches = tools.where((t) => t.tool.name == call.name);
+          final entry = matches.isEmpty ? null : matches.first;
+          if (entry == null || mcp == null) {
+            result = '工具不存在：${call.name}';
+          } else {
+            try {
+              final toolResult = await mcp.callTool(
+                entry.server,
+                call.name,
+                call.arguments,
+              );
+              result = toolResult.text.isEmpty ? '（工具无返回）' : toolResult.text;
+            } catch (e) {
+              result = '工具执行失败：$e';
+            }
           }
         }
         history.add(
@@ -741,7 +807,39 @@ class ChatController extends GetxController {
     }
 
     _persistTurnIfNeeded();
+    _scheduleMemoryExtraction(reply);
     _finish();
+  }
+
+  /// 记忆注入（失败静默跳过，不影响对话）
+  Future<String?> _buildMemoryPromptSafe() async {
+    try {
+      final memory = Get.isRegistered<MemoryService>()
+          ? MemoryService.to
+          : null;
+      if (memory == null) return null;
+      return await memory.buildMemoryPrompt(_modelId ?? '');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 对话结束后异步提取记忆（对齐 RikkaHub：快速模型监控对话 → 条目入库）
+  void _scheduleMemoryExtraction(ChatMessage reply) {
+    final userText = _pendingUserText;
+    final modelId = _modelId;
+    if (userText == null || modelId == null) return;
+    if (!Get.isRegistered<MemoryService>()) return;
+    if (!MemoryService.to.settings.value.enabled) return;
+    unawaited(
+      MemoryService.to
+          .extractFromTurn(
+            modelId: modelId,
+            userText: userText,
+            assistantText: reply.text,
+          )
+          .catchError((_) {}),
+    );
   }
 
   /// 停止生成：保留已生成的部分内容（并落库，避免丢失）

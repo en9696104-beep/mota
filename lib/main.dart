@@ -10,9 +10,11 @@ import 'controllers/chat_settings_controller.dart';
 import 'services/api_service.dart';
 import 'services/chat_history_db.dart';
 import 'services/cooperation_pipeline.dart';
+import 'services/dsh/dsh_plugin_service.dart';
 import 'services/github_stars_sync.dart';
 import 'services/llama_service.dart';
 import 'services/locale_service.dart';
+import 'services/memory_service.dart';
 import 'services/model_repository.dart';
 import 'services/storage_service.dart';
 import 'work/services/work_agent_server.dart';
@@ -51,6 +53,10 @@ Future<void> main(List<String> args) async {
       await Get.putAsync<CooperationService>(
         () => CooperationService().init(),
       );
+      // 记忆系统（对话提取 + 跨对话注入；数据库失败仅降级该功能）
+      await Get.putAsync<MemoryService>(() => MemoryService().init());
+      // DSH 插件兼容层（DeepSeek Harness 插件：工具注册进聊天工具循环）
+      await Get.putAsync<DshPluginService>(() => DshPluginService().init());
       // 本地 API 服务（OpenAI 兼容，默认不启动，用户在设置页手动开启）
       Get.put<ApiService>(ApiService.instance);
       // Work 工作台被控端（配对码/档位持久化恢复；端点随 API 服务挂载）

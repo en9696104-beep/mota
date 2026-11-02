@@ -17,4 +17,10 @@ abstract class AppRoutes {
   /// JS 脚本列表页 / 编辑运行页
   static const String scripts = '/scripts';
   static const String scriptEditor = '/scripts/editor';
+
+  /// 记忆管理页（条目查看 / 编辑 / 手动添加）
+  static const String memory = '/memory';
+
+  /// DSH 插件管理页（DeepSeek Harness 插件兼容层）
+  static const String dshPlugins = '/dsh-plugins';
 }
