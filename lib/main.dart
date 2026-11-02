@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'app.dart';
 import 'controllers/chat_settings_controller.dart';
 import 'services/api_service.dart';
+import 'services/ask_user_service.dart';
 import 'services/chat_history_db.dart';
 import 'services/cooperation_pipeline.dart';
 import 'services/dsh/dsh_plugin_service.dart';
@@ -16,8 +17,10 @@ import 'services/llama_service.dart';
 import 'services/locale_service.dart';
 import 'services/memory_service.dart';
 import 'services/model_repository.dart';
+import 'services/remote/api_model_service.dart';
 import 'services/storage_service.dart';
 import 'work/services/work_agent_server.dart';
+
 Future<void> main(List<String> args) async {
   // 推理自检模式（无 GUI）：桌面端运行
   //   MOTA_SELFTEST_MODEL=/path/to/model.gguf ./mota
@@ -50,13 +53,17 @@ Future<void> main(List<String> args) async {
         () => ChatSettingsController.instance.init(),
       );
       // 合作系统（多模型接力管线配置，shared_preferences 持久化）
-      await Get.putAsync<CooperationService>(
-        () => CooperationService().init(),
-      );
+      await Get.putAsync<CooperationService>(() => CooperationService().init());
       // 记忆系统（对话提取 + 跨对话注入；数据库失败仅降级该功能）
       await Get.putAsync<MemoryService>(() => MemoryService().init());
       // DSH 插件兼容层（DeepSeek Harness 插件：工具注册进聊天工具循环）
       await Get.putAsync<DshPluginService>(() => DshPluginService().init());
+      // 导入的 API 模型（OpenAI 兼容远程通道）
+      await Get.putAsync<ApiModelService>(
+        () => ApiModelService.instance.init(),
+      );
+      // Ask 技能开关（模型向用户提问）
+      await Get.putAsync<AskUserService>(() => AskUserService.instance.init());
       // 本地 API 服务（OpenAI 兼容，默认不启动，用户在设置页手动开启）
       Get.put<ApiService>(ApiService.instance);
       // Work 工作台被控端（配对码/档位持久化恢复；端点随 API 服务挂载）
@@ -76,8 +83,10 @@ Future<void> main(List<String> args) async {
 Future<void> _runInferenceSelfTest(String modelPath) async {
   final sw = Stopwatch()..start();
   stdout.writeln('== MOTA 推理自检 ==');
-  stdout.writeln('平台: ${Platform.operatingSystem} | '
-      '引擎可用: ${LlamaService.isEngineAvailable}');
+  stdout.writeln(
+    '平台: ${Platform.operatingSystem} | '
+    '引擎可用: ${LlamaService.isEngineAvailable}',
+  );
   stdout.writeln('模型: $modelPath');
 
   if (!File(modelPath).existsSync()) {
@@ -110,7 +119,9 @@ Future<void> _runInferenceSelfTest(String modelPath) async {
     buf.write(token);
   }
   final reply = buf.toString().trim();
-  stdout.writeln('回复 (${sw.elapsedMilliseconds}ms): ${reply.isEmpty ? "<空>" : reply}');
+  stdout.writeln(
+    '回复 (${sw.elapsedMilliseconds}ms): ${reply.isEmpty ? "<空>" : reply}',
+  );
   stdout.writeln(reply.isNotEmpty ? '== 自检通过 ==' : '== 自检失败: 无输出 ==');
 
   await LlamaService.instance.dispose();

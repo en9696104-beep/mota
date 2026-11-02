@@ -7,9 +7,11 @@ import '../config/app_config.dart';
 import '../controllers/mcp_controller.dart';
 import '../routes/app_routes.dart';
 import '../services/api_service.dart';
+import '../services/ask_user_service.dart';
 import '../services/locale_service.dart';
 import '../services/memory_service.dart';
 import '../services/model_repository.dart';
+import '../services/remote/api_model_service.dart';
 import '../services/update_checker.dart';
 import '../theme/app_theme.dart';
 import '../widgets/model_avatar.dart';
@@ -53,9 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Get.dialog(
       AlertDialog(
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           '发现新版本 v@v'.trParams({'v': info.version}),
           style: const TextStyle(
@@ -123,11 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
     Get.back(); // 先关闭弹窗
     final uri = Uri.tryParse(url);
     if (uri == null) {
-      Get.snackbar(
-        '打开失败'.tr,
-        '下载地址无效'.tr,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('打开失败'.tr, '下载地址无效'.tr, snackPosition: SnackPosition.BOTTOM);
       return;
     }
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
@@ -152,6 +148,12 @@ class _SettingsPageState extends State<SettingsPage> {
           const SizedBox(height: 20),
           const _SectionTitle('记忆'),
           const _MemorySection(),
+          const SizedBox(height: 20),
+          const _SectionTitle('对话'),
+          const _AskSection(),
+          const SizedBox(height: 20),
+          const _SectionTitle('API 模型'),
+          const _ApiModelsSection(),
           const SizedBox(height: 20),
           const _SectionTitle('插件'),
           const _DshSection(),
@@ -203,7 +205,9 @@ class _SettingsPageState extends State<SettingsPage> {
             () => _InfoTile(
               icon: Icons.inventory_2_outlined,
               title: '模型数量',
-              value: '@n 个'.trParams({'n': '${ModelRepository.to.models.length}'}),
+              value: '@n 个'.trParams({
+                'n': '${ModelRepository.to.models.length}',
+              }),
             ),
           ),
           const SizedBox(height: 8),
@@ -227,9 +231,7 @@ class _LanguageTile extends StatelessWidget {
     final selected = await Get.dialog<LanguageMode>(
       AlertDialog(
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           '语言'.tr,
           style: const TextStyle(
@@ -305,11 +307,7 @@ class _LanguageTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(
-              Icons.language,
-              size: 18,
-              color: AppColors.accent,
-            ),
+            const Icon(Icons.language, size: 18, color: AppColors.accent),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -665,13 +663,18 @@ class _ExtractionModelTile extends StatelessWidget {
                   Text(
                     _label(),
                     style: const TextStyle(
-                        color: AppColors.textTertiary, fontSize: 11),
+                      color: AppColors.textTertiary,
+                      fontSize: 11,
+                    ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right,
-                size: 18, color: AppColors.textTertiary),
+            const Icon(
+              Icons.chevron_right,
+              size: 18,
+              color: AppColors.textTertiary,
+            ),
           ],
         ),
       ),
@@ -704,19 +707,28 @@ class _ExtractionModelTile extends StatelessWidget {
               child: Text(
                 '选择记忆提取模型（建议小而快的模型）',
                 style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
+                  color: AppColors.textPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.auto_awesome,
-                  size: 20, color: AppColors.accent),
-              title: const Text('自动（最小的已下载模型）',
-                  style: TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+              leading: const Icon(
+                Icons.auto_awesome,
+                size: 20,
+                color: AppColors.accent,
+              ),
+              title: const Text(
+                '自动（最小的已下载模型）',
+                style: TextStyle(color: AppColors.textPrimary, fontSize: 14),
+              ),
               trailing: settings.extractionModelId == null
-                  ? const Icon(Icons.check_circle,
-                      color: AppColors.accent, size: 20)
+                  ? const Icon(
+                      Icons.check_circle,
+                      color: AppColors.accent,
+                      size: 20,
+                    )
                   : null,
               onTap: () => Navigator.of(ctx).pop(''),
             ),
@@ -734,15 +746,26 @@ class _ExtractionModelTile extends StatelessWidget {
                       author: model.author,
                       size: 32,
                     ),
-                    title: Text(model.name,
-                        style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 14)),
-                    subtitle: Text('${model.params} · ${model.sizeLabel}',
-                        style: const TextStyle(
-                            color: AppColors.textTertiary, fontSize: 11)),
+                    title: Text(
+                      model.name,
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 14,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '${model.params} · ${model.sizeLabel}',
+                      style: const TextStyle(
+                        color: AppColors.textTertiary,
+                        fontSize: 11,
+                      ),
+                    ),
                     trailing: selected
-                        ? const Icon(Icons.check_circle,
-                            color: AppColors.accent, size: 20)
+                        ? const Icon(
+                            Icons.check_circle,
+                            color: AppColors.accent,
+                            size: 20,
+                          )
                         : null,
                     onTap: () => Navigator.of(ctx).pop(model.id),
                   );
@@ -890,9 +913,7 @@ class _McpClientSection extends StatelessWidget {
     final url = await Get.dialog<String>(
       AlertDialog(
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           '添加 MCP 服务器'.tr,
           style: const TextStyle(
@@ -907,7 +928,10 @@ class _McpClientSection extends StatelessWidget {
           children: [
             Text(
               '输入 MCP 服务器的 Streamable HTTP 端点地址'.tr,
-              style: const TextStyle(color: AppColors.textTertiary, fontSize: 12),
+              style: const TextStyle(
+                color: AppColors.textTertiary,
+                fontSize: 12,
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
@@ -943,8 +967,7 @@ class _McpClientSection extends StatelessWidget {
               backgroundColor: AppColors.accent,
               foregroundColor: Colors.black,
             ),
-            onPressed: () =>
-                Get.back(result: controller.text.trim()),
+            onPressed: () => Get.back(result: controller.text.trim()),
             child: Text('连接'.tr),
           ),
         ],
@@ -997,10 +1020,7 @@ class _McpClientSection extends StatelessWidget {
           const SizedBox(height: 10),
           if (mcp.servers.isEmpty)
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(12),
@@ -1016,8 +1036,7 @@ class _McpClientSection extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      '尚未连接任何 MCP 服务器\n连接后，本地模型即可调用外部工具'
-                          .tr,
+                      '尚未连接任何 MCP 服务器\n连接后，本地模型即可调用外部工具'.tr,
                       style: const TextStyle(
                         color: AppColors.textTertiary,
                         fontSize: 12,
@@ -1267,6 +1286,291 @@ class _AddressTile extends StatelessWidget {
             ),
             tooltip: '复制地址'.tr,
             onPressed: onCopy,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 「对话」区块：Ask 提问开关
+class _AskSection extends StatelessWidget {
+  const _AskSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final ask = AskUserService.to;
+      return Column(
+        children: [
+          _SwitchTile(
+            icon: Icons.quiz_outlined,
+            title: '允许模型向我提问',
+            subtitle:
+                '任务中缺少关键信息时，模型会弹出问卷请你选择；'
+                '关闭后模型只能靠猜测推进',
+            value: ask.enabled.value,
+            onChanged: ask.setEnabled,
+          ),
+          const SizedBox(height: 8),
+          const _HintText(
+            'Ask 技能对齐 DeepSeek Harness 的人机问答机制：'
+            '模型发出结构化问题（含选项、可多选），你提交答案后它继续任务；'
+            '跳过提问会回喂 ASK_ABORTED，模型自行决定换路推进。',
+          ),
+        ],
+      );
+    });
+  }
+}
+
+/// 「API 模型」区块：导入 OpenAI 兼容远程模型，与本地模型并存
+class _ApiModelsSection extends StatelessWidget {
+  const _ApiModelsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final service = ApiModelService.to;
+      final configs = service.configs;
+      return Column(
+        children: [
+          _ActionTile(
+            icon: Icons.cloud_upload_outlined,
+            title: '导入 API 模型',
+            subtitle: '填入 Base URL / API Key / 模型名（OpenAI 兼容接口）',
+            loading: false,
+            onTap: () => showConfigDialog(),
+          ),
+          for (final config in configs) ...[
+            const SizedBox(height: 8),
+            _ApiModelCard(config: config),
+          ],
+          if (configs.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            const _HintText(
+              'API 模型不走本地推理：对话、记忆、工具调用均在远程模型上生效，'
+              '费用由你的 API 提供商计费；API Key 仅保存在本机。',
+            ),
+          ],
+        ],
+      );
+    });
+  }
+
+  static Future<void> showConfigDialog({ApiModelConfig? existing}) async {
+    final name = TextEditingController(text: existing?.name ?? '');
+    final baseUrl = TextEditingController(text: existing?.baseUrl ?? '');
+    final apiKey = TextEditingController(text: existing?.apiKey ?? '');
+    final model = TextEditingController(text: existing?.model ?? '');
+    final formKey = GlobalKey<FormState>();
+
+    await Get.dialog<void>(
+      AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(
+          existing == null ? '导入 API 模型' : '编辑 API 模型',
+          style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+        ),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _field(name, '名称（如 DeepSeek 官方）'),
+              _field(
+                baseUrl,
+                'Base URL（如 https://api.deepseek.com）',
+                validator: (v) => v == null || !v.startsWith('http')
+                    ? '需以 http(s):// 开头'
+                    : null,
+              ),
+              _field(apiKey, 'API Key（sk-…）', obscure: true),
+              _field(
+                model,
+                '模型名（如 deepseek-chat）',
+                validator: (v) => v == null || v.trim().isEmpty ? '必填' : null,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back<void>(),
+            child: const Text(
+              '取消',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (formKey.currentState?.validate() != true) return;
+              final service = ApiModelService.to;
+              if (existing == null) {
+                await service.add(
+                  name: name.text,
+                  baseUrl: baseUrl.text,
+                  apiKey: apiKey.text,
+                  model: model.text,
+                );
+              } else {
+                existing
+                  ..name = name.text.trim().isEmpty
+                      ? existing.model
+                      : name.text.trim()
+                  ..baseUrl = baseUrl.text.trim()
+                  ..apiKey = apiKey.text.trim()
+                  ..model = model.text.trim();
+                service.configs.refresh();
+                await service.update(existing);
+              }
+              Get.back<void>();
+            },
+            child: const Text(
+              '保存',
+              style: TextStyle(
+                color: AppColors.accent,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget _field(
+    TextEditingController controller,
+    String hint, {
+    bool obscure = false,
+    String? Function(String?)? validator,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        validator: validator,
+        style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: const TextStyle(
+            color: AppColors.textTertiary,
+            fontSize: 12,
+          ),
+          isDense: true,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+}
+
+/// 单个 API 模型卡片：开始对话 / 编辑 / 删除
+class _ApiModelCard extends StatelessWidget {
+  const _ApiModelCard({required this.config});
+
+  final ApiModelConfig config;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.accentSoft,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(
+              Icons.cloud_outlined,
+              size: 20,
+              color: AppColors.accent,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  config.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  '${config.model} · ${config.maskedKey}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.textTertiary,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get.toNamed(
+              AppRoutes.chat,
+              arguments: <String, dynamic>{
+                'apiModelId': config.id,
+                'modelName': config.name,
+              },
+            ),
+            child: const Text(
+              '对话',
+              style: TextStyle(
+                color: AppColors.accent,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          PopupMenuButton<String>(
+            color: AppColors.surfaceHigh,
+            icon: const Icon(
+              Icons.more_vert,
+              size: 18,
+              color: AppColors.textSecondary,
+            ),
+            onSelected: (value) async {
+              if (value == 'edit') {
+                await _ApiModelsSection.showConfigDialog(existing: config);
+              } else if (value == 'delete') {
+                await ApiModelService.to.remove(config.id);
+              }
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(
+                value: 'edit',
+                child: Text(
+                  '编辑',
+                  style: TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text(
+                  '删除',
+                  style: TextStyle(color: AppColors.danger, fontSize: 13),
+                ),
+              ),
+            ],
           ),
         ],
       ),

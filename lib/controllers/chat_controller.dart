@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../data/models/ai_model.dart';
 import '../data/models/chat_turn.dart';
+import '../services/ask_user_service.dart';
 import '../services/chat_history_db.dart';
 import '../services/cooperation_pipeline.dart';
 import '../services/dsh/dsh_models.dart';
@@ -18,9 +19,12 @@ import '../services/memory_service.dart';
 import '../services/mcp/mcp_protocol.dart';
 import '../services/mcp/tool_prompt.dart';
 import '../services/model_repository.dart';
+import '../services/remote/api_chat_client.dart';
+import '../services/remote/api_model_service.dart';
 import '../services/tts_player.dart';
 import '../services/voice_recorder.dart';
 import '../theme/app_theme.dart';
+import '../widgets/ask_user_dialog.dart';
 import 'chat_settings_controller.dart';
 import 'main_controller.dart';
 import 'mcp_controller.dart';
@@ -69,6 +73,9 @@ class ChatController extends GetxController {
   String? _chatTemplate;
   StreamSubscription<String>? _subscription;
 
+  /// 导入的 API 模型（非空时走远程 OpenAI 兼容通道，不加载本地引擎）
+  ApiModelConfig? _apiConfig;
+
   /// 当前轮次的用户输入与助手回复（流式结束后持久化到数据库）
   String? _pendingUserText;
   ChatMessage? _currentReply;
@@ -104,6 +111,18 @@ class ChatController extends GetxController {
       modelName.value = arguments['modelName'] as String? ?? modelName.value;
       _modelId = arguments['modelId'] as String?;
       _modelPath = arguments['modelPath'] as String?;
+      // API 模型：走远程通道，跳过本地引擎加载
+      final apiModelId = arguments['apiModelId'] as String?;
+      if (apiModelId != null && Get.isRegistered<ApiModelService>()) {
+        final config = ApiModelService.to.byId(apiModelId);
+        if (config != null) {
+          _apiConfig = config;
+          _modelId = 'api:${config.id}';
+          _modelPath = null;
+          modelName.value = config.name;
+          modelReady.value = true;
+        }
+      }
     }
     // 合作系统开启且配置了主对话模型：以管线主模型为准
     _applyCooperationPrimaryModel();
@@ -114,7 +133,10 @@ class ChatController extends GetxController {
     }
     // 合作开关 / OCR 角色变更时同步刷新
     if (Get.isRegistered<CooperationService>()) {
-      ever(Get.find<CooperationService>().config, (_) => _refreshImageSupport());
+      ever(
+        Get.find<CooperationService>().config,
+        (_) => _refreshImageSupport(),
+      );
     }
     _refreshImageSupport();
     // 从历史对话点入：恢复该模型的往期上下文
@@ -144,7 +166,7 @@ class ChatController extends GetxController {
       // 移动端引擎不支持图像输入，但设备端 OCR 兜底恒可用
       supportsImageInput.value =
           Get.isRegistered<CooperationService>() &&
-              Get.find<CooperationService>().ocrAvailable;
+          Get.find<CooperationService>().ocrAvailable;
       return;
     }
     // 合作管线配置了 OCR 角色时，图片经 OCR 模型转文字，对话模型无需视觉能力
@@ -207,7 +229,9 @@ class ChatController extends GetxController {
         allowMultiple: true,
         type: FileType.image,
       );
-      final paths = result?.paths.whereType<String>().where((p) => p.isNotEmpty);
+      final paths = result?.paths.whereType<String>().where(
+        (p) => p.isNotEmpty,
+      );
       if (paths != null) {
         for (final p in paths) {
           addPendingImage(p);
@@ -265,11 +289,7 @@ class ChatController extends GetxController {
     }
     final path = await VoiceRecorderService.instance.start();
     if (path == null) {
-      Get.snackbar(
-        '无法录音',
-        '请检查麦克风权限',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('无法录音', '请检查麦克风权限', snackPosition: SnackPosition.BOTTOM);
       return;
     }
     isRecording.value = true;
@@ -547,11 +567,11 @@ class ChatController extends GetxController {
     // 聊天模型不支持视觉（或引擎不支持图像输入）时，图片自动走 OCR：
     // 桌面端 → 合作管线 OCR 模型；移动端 → ML Kit 设备端离线识别。
     // 转录文本以内容块形式注入消息，替代原图交给主模型。
-    final chatModelHasVision =
-        _findStoreModel(_modelId)?.hasCapability(ModelCapability.vision) ??
-            true;
-    final nativeVision =
-        LlamaService.supportsMultimodal && chatModelHasVision;
+    final chatModelHasVision = _apiConfig != null
+        ? false
+        : _findStoreModel(_modelId)?.hasCapability(ModelCapability.vision) ??
+              true;
+    final nativeVision = LlamaService.supportsMultimodal && chatModelHasVision;
     if (images.isNotEmpty && !nativeVision) {
       if (Get.isRegistered<CooperationService>()) {
         final coop = Get.find<CooperationService>();
@@ -567,8 +587,11 @@ class ChatController extends GetxController {
           } on UnsupportedError {
             // 桌面端引擎异常兜底（正常不会走到）
           } catch (e) {
-            Get.snackbar('图片识别失败', e.toString(),
-                snackPosition: SnackPosition.BOTTOM);
+            Get.snackbar(
+              '图片识别失败',
+              e.toString(),
+              snackPosition: SnackPosition.BOTTOM,
+            );
           }
         }
         if (ocrBlocks.isNotEmpty) {
@@ -627,14 +650,23 @@ class ChatController extends GetxController {
         ? Get.find<DshPluginService>()
         : null;
     final dshTools = dsh?.enabledTools ?? const <DshToolDef>[];
+    // Ask 技能（对齐 DSH 人机问答接缝）：允许模型向用户发结构化提问
+    final askService = Get.isRegistered<AskUserService>()
+        ? AskUserService.to
+        : null;
+    final askEnabled = askService?.enabled.value ?? false;
 
     // 上下文策略：system prompt（记忆 + 工具指令 + JS 沙箱能力）+ 全量历史，
     // 保证任意上下文长度下行为正确
     final memoryPrompt = await _buildMemoryPromptSafe();
+    final askLine = askEnabled
+        ? <String>[AskToolHandler.promptLine]
+        : const <String>[];
     final systemContent = [
       settings.systemPrompt.value,
       if (memoryPrompt != null) memoryPrompt,
-      if (tools.isNotEmpty) ToolPrompt.buildToolsPrompt(tools),
+      if (tools.isNotEmpty || askLine.isNotEmpty)
+        ToolPrompt.buildToolsPrompt(tools, extraToolLines: askLine),
       if (dshTools.isNotEmpty) DshToolPrompt.build(dshTools),
       JsPrompt.instruction,
     ].where((s) => s.isNotEmpty).join('\n\n');
@@ -651,60 +683,102 @@ class ChatController extends GetxController {
           ),
     ];
     // 带图消息走多模态流的条件：桌面端引擎 + 当前对话模型自身具备视觉能力。
-    // 纯文本对话模型（配合合作管线 OCR 角色）只接收 OCR 提取的文字。
-    final chatModelHasVision =
-        _findStoreModel(_modelId)?.hasCapability(ModelCapability.vision) ?? true;
+    // API 模型暂不支持图像部件：图片一律先走 OCR 转文字
+    final chatModelHasVision = _apiConfig != null
+        ? false
+        : _findStoreModel(_modelId)?.hasCapability(ModelCapability.vision) ??
+              true;
     final hasImages = history.any((t) => t.imagePaths.isNotEmpty);
     final useMedia =
         hasImages && LlamaService.supportsMultimodal && chatModelHasVision;
 
     const maxRounds = 4;
     var display = ''; // 已定稿的展示文本（含工具调用摘要）
+    var malformedRetries = 0; // 工具格式矫正重试计数
     isGenerating.value = true;
     _stopRequested = false;
+
+    // 小参数模型工具调用可靠性优化：配置了工具时钳制采样温度。
+    // 小模型高温下 JSON 极易跑偏，温度 ≤0.5 显著提升工具调用成功率
+    // （仅影响带工具的会话，普通聊天温度不受限）
+    final hasAnyTools = tools.isNotEmpty || dshTools.isNotEmpty || askEnabled;
+    final temperature = hasAnyTools && settings.temperature.value > 0.5
+        ? 0.5
+        : settings.temperature.value;
 
     for (var round = 0; round < maxRounds; round++) {
       reply.text = display;
       messages.refresh();
 
-      // 流式生成一轮（带图消息走多模态通道）
+      // 流式生成一轮：API 模型走远程 SSE，本地模型走 llama 引擎
+      // （带图消息 + 桌面端 + 视觉模型走多模态通道）
       final roundText = StringBuffer();
       final roundCompleter = Completer<void>();
       _roundCompleter = roundCompleter;
-      final stream = useMedia
-          ? LlamaService.instance.generateChatStreamWithMedia(
-              history,
-              template: _chatTemplate,
-              temperature: settings.temperature.value,
-            )
-          : LlamaService.instance.generateChatStream(
-              history,
-              template: _chatTemplate,
-              temperature: settings.temperature.value,
-            );
+      final Stream<String> stream;
+      if (_apiConfig != null) {
+        stream = ApiChatClient.streamChat(
+          baseUrl: _apiConfig!.baseUrl,
+          apiKey: _apiConfig!.apiKey,
+          model: _apiConfig!.model,
+          history: history,
+          temperature: temperature,
+        );
+      } else if (useMedia) {
+        stream = LlamaService.instance.generateChatStreamWithMedia(
+          history,
+          template: _chatTemplate,
+          temperature: temperature,
+        );
+      } else {
+        stream = LlamaService.instance.generateChatStream(
+          history,
+          template: _chatTemplate,
+          temperature: temperature,
+        );
+      }
       _subscription = stream.listen(
-            (token) {
-              roundText.write(token);
-              reply.text = '$display${roundText.toString()}';
-              messages.refresh();
-            },
-            onError: (Object error) {
-              roundText.write('（生成失败：$error）');
-              reply.text = '$display${roundText.toString()}';
-              messages.refresh();
-              if (!roundCompleter.isCompleted) roundCompleter.complete();
-            },
-            onDone: () {
-              if (!roundCompleter.isCompleted) roundCompleter.complete();
-            },
-          );
+        (token) {
+          roundText.write(token);
+          reply.text = '$display${roundText.toString()}';
+          messages.refresh();
+        },
+        onError: (Object error) {
+          roundText.write('（生成失败：$error）');
+          reply.text = '$display${roundText.toString()}';
+          messages.refresh();
+          if (!roundCompleter.isCompleted) roundCompleter.complete();
+        },
+        onDone: () {
+          if (!roundCompleter.isCompleted) roundCompleter.complete();
+        },
+      );
       await roundCompleter.future;
       if (_stopRequested) break;
 
       final output = roundText.toString();
-      final calls = ToolCallParser.parse(output);
+      final parsed = ToolCallParser.parseDetailed(output);
+      final calls = parsed.calls;
       final jsBlocks = JsCodeBlockParser.parse(output);
       if (calls.isEmpty && jsBlocks.isEmpty) {
+        // 模型试图调用工具但格式不合法：矫正回喂后重试（最多 2 次）。
+        // 错误尝试的原文不展示、不落历史定稿，避免污染对话气泡
+        if (parsed.hasAttempt && hasAnyTools && malformedRetries < 2) {
+          malformedRetries++;
+          history.add(LlamaTurn(role: 'assistant', content: output));
+          history.add(
+            LlamaTurn(
+              role: 'user',
+              content:
+                  '【格式错误】你的上一条输出不是合法的工具调用：'
+                  '${parsed.error}\n'
+                  '请严格按以下格式重新输出（一次只一个代码块，JSON 必须合法）：\n'
+                  '```tool\n{"name": "工具名", "arguments": {"参数": "值"}}\n```\n'
+                  '若不需要工具，请直接用自然语言回答用户。',
+            ),
+          );
+          continue;
+        }
         // 纯文本回复：定稿收尾
         display = '$display$output';
         reply.text = display;
@@ -723,43 +797,52 @@ class ChatController extends GetxController {
       history.add(LlamaTurn(role: 'assistant', content: output));
       for (final call in calls) {
         String result;
-        // 1. DSH 插件工具（本地 QuickJS 沙箱）
-        final dshTool = dshTools.where((t) => t.name == call.name).toList();
-        if (dshTool.isNotEmpty && dsh != null) {
-          try {
-            final toolResult = await dsh.callTool(call.name, call.arguments);
-            result = toolResult.feedback;
-            if (toolResult.output.trim().isNotEmpty) {
-              result = '${toolResult.output.trim()}\n$result';
-            }
-          } catch (e) {
-            result = '插件工具执行失败：$e';
-          }
+        // 0. Ask 技能：内置人机问答工具（兼容 ask_user / ask_user_question /
+        //    ask / askuser 等命名变体）
+        final askMatch = call.name.toLowerCase().contains('ask');
+        if (askMatch) {
+          result = await _runAskTool(call.arguments);
+          final answered =
+              !result.contains('ASK_ABORTED') && !result.contains('参数错误');
+          display = '$display↳ ${answered ? '你已回答提问' : '提问被跳过'}\n';
+          reply.text = display;
+          messages.refresh();
         } else {
-          // 2. MCP 工具
-          final matches = tools.where((t) => t.tool.name == call.name);
-          final entry = matches.isEmpty ? null : matches.first;
-          if (entry == null || mcp == null) {
-            result = '工具不存在：${call.name}';
-          } else {
+          // 1. DSH 插件工具（本地 QuickJS 沙箱）
+          final dshTool = dshTools.where((t) => t.name == call.name).toList();
+          if (dshTool.isNotEmpty && dsh != null) {
             try {
-              final toolResult = await mcp.callTool(
-                entry.server,
-                call.name,
-                call.arguments,
-              );
-              result = toolResult.text.isEmpty ? '（工具无返回）' : toolResult.text;
+              final toolResult = await dsh.callTool(call.name, call.arguments);
+              result = toolResult.feedback;
+              if (toolResult.output.trim().isNotEmpty) {
+                result = '${toolResult.output.trim()}\n$result';
+              }
             } catch (e) {
-              result = '工具执行失败：$e';
+              result = '插件工具执行失败：$e';
+            }
+          } else {
+            // 2. MCP 工具
+            final matches = tools.where((t) => t.tool.name == call.name);
+            final entry = matches.isEmpty ? null : matches.first;
+            if (entry == null || mcp == null) {
+              result = '工具不存在：${call.name}';
+            } else {
+              try {
+                final toolResult = await mcp.callTool(
+                  entry.server,
+                  call.name,
+                  call.arguments,
+                );
+                result = toolResult.text.isEmpty ? '（工具无返回）' : toolResult.text;
+              } catch (e) {
+                result = '工具执行失败：$e';
+              }
             }
           }
+          history.add(
+            LlamaTurn(role: 'user', content: '【工具 ${call.name} 执行结果】\n$result'),
+          );
         }
-        history.add(
-          LlamaTurn(
-            role: 'user',
-            content: '【工具 ${call.name} 执行结果】\n$result',
-          ),
-        );
       }
 
       // 执行 JS 代码块：气泡实时展示执行状态与结果，并回喂模型继续推理
@@ -788,8 +871,8 @@ class ChatController extends GetxController {
         // 回喂内容截断到 2000 字，防止超长输出挤占上下文
         final feedback = result.ok
             ? '【JavaScript 执行结果】\n'
-                '${result.hasOutput ? "console 输出:\n${result.output}\n" : ""}'
-                '${ret != null && ret.isNotEmpty && ret != 'undefined' ? '返回值: $ret' : '（无返回值）'}'
+                  '${result.hasOutput ? "console 输出:\n${result.output}\n" : ""}'
+                  '${ret != null && ret.isNotEmpty && ret != 'undefined' ? '返回值: $ret' : '（无返回值）'}'
             : '【JavaScript 执行失败】\n${result.error}';
         history.add(
           LlamaTurn(
@@ -809,6 +892,17 @@ class ChatController extends GetxController {
     _persistTurnIfNeeded();
     _scheduleMemoryExtraction(reply);
     _finish();
+  }
+
+  /// 执行 ask_user_question：弹问卷收集结构化答案或中止。
+  /// 返回工具结果文本（回喂模型）。
+  Future<String> _runAskTool(Map<String, dynamic> arguments) async {
+    final normalized = AskToolHandler.normalize(arguments);
+    if (normalized.error != null) {
+      return '【ask_user_question 参数错误】${normalized.error}';
+    }
+    final outcome = await AskUserDialog.show(normalized.questions);
+    return outcome.feedback;
   }
 
   /// 记忆注入（失败静默跳过，不影响对话）
