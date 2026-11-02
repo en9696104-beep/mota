@@ -9,3 +9,9 @@
 -keepclasseswithmembernames class * {
     native <methods>;
 }
+
+# ML Kit 文字识别：仅打包中文识别模型包，其他语言识别器类由插件引用但不存在，
+# R8 需显式忽略（运行时不会走到这些分支）
+-dontwarn com.google.mlkit.vision.text.devanagari.**
+-dontwarn com.google.mlkit.vision.text.japanese.**
+-dontwarn com.google.mlkit.vision.text.korean.**
