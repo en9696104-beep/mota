@@ -94,21 +94,17 @@ class WorkRegistry {
   /// 插入或更新（按 id 主键冲突替换）
   Future<void> upsert(WorkDevice device) async {
     final db = await database;
-    await db.insert(
-      _table,
-      <String, dynamic>{
-        'id': device.id,
-        'name': device.name,
-        'platform': device.platform.id,
-        'endpoint': device.endpoint,
-        'token': device.token,
-        'tier_id': device.tierId,
-        'created_at': device.createdAt,
-        'last_seen_at': device.lastSeenAt,
-        'device_model': device.deviceModel,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.insert(_table, <String, dynamic>{
+      'id': device.id,
+      'name': device.name,
+      'platform': device.platform.id,
+      'endpoint': device.endpoint,
+      'token': device.token,
+      'tier_id': device.tierId,
+      'created_at': device.createdAt,
+      'last_seen_at': device.lastSeenAt,
+      'device_model': device.deviceModel,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
     debugPrint('WorkRegistry: upsert ${device.name} (${device.endpoint})');
   }
 

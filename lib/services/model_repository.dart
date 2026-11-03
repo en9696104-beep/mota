@@ -35,23 +35,29 @@ class ModelRepository extends GetxService {
     List<AiModel>? list;
     var source = '本地内置';
 
-    // 1. 远端拉取（GitHub Raw）；成功则覆盖本地缓存
-    try {
-      final response = await Dio()
-          .get<String>(
-            AppConfig.storeDataUrl,
-            options: Options(responseType: ResponseType.plain),
-          )
-          .timeout(AppConfig.storeFetchTimeout);
-      final raw = response.data;
-      final parsed = _parseModels(raw);
-      if (parsed != null && parsed.isNotEmpty) {
-        list = parsed;
-        source = '远程';
-        await prefs.setString(AppConfig.storeDataCacheKey, raw!);
+    // 1. 远端拉取（多源回退：CNB → Gitee → GitHub Raw）；
+    //    源未配置（<OWNER> 未替换）时跳过，零等待直接走本地
+    if (AppConfig.remoteConfigured) {
+      for (final url in AppConfig.storeDataUrls) {
+        try {
+          final response = await Dio()
+              .get<String>(
+                url,
+                options: Options(responseType: ResponseType.plain),
+              )
+              .timeout(AppConfig.storeFetchTimeout);
+          final raw = response.data;
+          final parsed = _parseModels(raw);
+          if (parsed != null && parsed.isNotEmpty) {
+            list = parsed;
+            source = '远程';
+            await prefs.setString(AppConfig.storeDataCacheKey, raw!);
+            break;
+          }
+        } catch (_) {
+          continue; // 当前源不可达：切下一源
+        }
       }
-    } catch (_) {
-      // 断网 / 超时 / 远端异常：无缝走本地，不阻塞启动
     }
 
     // 2. 本地缓存（上次远程成功拉取的数据）
@@ -72,8 +78,9 @@ class ModelRepository extends GetxService {
     final cached = prefs.getString(_starsCacheKey);
     if (cached != null && cached.isNotEmpty) {
       try {
-        final map = (jsonDecode(cached) as Map<String, dynamic>)
-            .map((k, v) => MapEntry(k, (v as num).toInt()));
+        final map = (jsonDecode(cached) as Map<String, dynamic>).map(
+          (k, v) => MapEntry(k, (v as num).toInt()),
+        );
         for (var i = 0; i < list.length; i++) {
           final repo = list[i].githubRepo;
           if (repo != null && map.containsKey(repo)) {

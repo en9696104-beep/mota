@@ -116,10 +116,7 @@ class WorkAgentServer {
 
   /// 强制刷新配对码（旧配对码立即作废）
   Future<String> regeneratePairCode() async {
-    final code = List.generate(
-      6,
-      (_) => _random.nextInt(10),
-    ).join();
+    final code = List.generate(6, (_) => _random.nextInt(10)).join();
     _pairCode = code;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefsPairCode, code);
@@ -155,7 +152,8 @@ class WorkAgentServer {
     return token.isEmpty ? null : token;
   }
 
-  bool _authorized(shelf.Request request) => _tokens.containsKey(_tokenOf(request) ?? '');
+  bool _authorized(shelf.Request request) =>
+      _tokens.containsKey(_tokenOf(request) ?? '');
 
   // ---------------------------------------------------------------- 处理器
 
@@ -164,10 +162,14 @@ class WorkAgentServer {
     Map<String, dynamic> body;
     try {
       final raw = await request.readAsString();
-      body = (raw.isEmpty ? <String, dynamic>{} : jsonDecode(raw))
-          as Map<String, dynamic>;
+      body =
+          (raw.isEmpty ? <String, dynamic>{} : jsonDecode(raw))
+              as Map<String, dynamic>;
     } catch (_) {
-      return _json(400, <String, dynamic>{'ok': false, 'error': '请求体不是合法 JSON'});
+      return _json(400, <String, dynamic>{
+        'ok': false,
+        'error': '请求体不是合法 JSON',
+      });
     }
     final code = (body['pair_code'] as String? ?? '').trim();
     final current = await ensurePairCode();
@@ -200,8 +202,7 @@ class WorkAgentServer {
           : <String, dynamic>{
               'id': tier.id,
               'label': tier.label,
-              'capabilities':
-                  tier.capabilities.map((c) => c.name).toList(),
+              'capabilities': tier.capabilities.map((c) => c.name).toList(),
               'requires_native_grant': tier.requiresNativeGrant,
             },
       'agent_ready': false, // Phase 3 起反映 LlamaService 状态
@@ -214,30 +215,40 @@ class WorkAgentServer {
     Map<String, dynamic> body;
     try {
       final raw = await request.readAsString();
-      body = (raw.isEmpty ? <String, dynamic>{} : jsonDecode(raw))
-          as Map<String, dynamic>;
+      body =
+          (raw.isEmpty ? <String, dynamic>{} : jsonDecode(raw))
+              as Map<String, dynamic>;
     } catch (_) {
-      return _json(400, <String, dynamic>{'ok': false, 'error': '请求体不是合法 JSON'});
+      return _json(400, <String, dynamic>{
+        'ok': false,
+        'error': '请求体不是合法 JSON',
+      });
     }
     final instruction = body['instruction'] as String? ?? '';
     final rawSteps = body['steps'];
     if (instruction.isEmpty && rawSteps is! List) {
-      return _json(400, <String, dynamic>{'ok': false, 'error': '缺少 instruction 或 steps'});
+      return _json(400, <String, dynamic>{
+        'ok': false,
+        'error': '缺少 instruction 或 steps',
+      });
     }
     final steps = <WorkTaskStep>[];
     if (rawSteps is List) {
       for (final item in rawSteps) {
         if (item is! Map) continue;
-        steps.add(WorkTaskStep(
-          action: item['action'] as String? ?? '',
-          reason: item['reason'] as String? ?? '',
-          target: item['target'] as String?,
-          args: (item['args'] as Map<String, dynamic>?) ?? const {},
-        ));
+        steps.add(
+          WorkTaskStep(
+            action: item['action'] as String? ?? '',
+            reason: item['reason'] as String? ?? '',
+            target: item['target'] as String?,
+            args: (item['args'] as Map<String, dynamic>?) ?? const {},
+          ),
+        );
       }
     }
     final task = WorkTask(
-      id: body['task_id'] as String? ??
+      id:
+          body['task_id'] as String? ??
           'task-${DateTime.now().millisecondsSinceEpoch.toRadixString(36)}',
       deviceId: 'local',
       originDeviceId: body['origin_device_id'] as String?,
@@ -251,8 +262,9 @@ class WorkAgentServer {
     // ask（默认每次询问）/ allow_all / allow_actions
     final rawPolicy = body['policy'];
     if (rawPolicy is Map) {
-      runtime.policy =
-          WorkGuardPolicy.fromJson(rawPolicy.cast<String, dynamic>());
+      runtime.policy = WorkGuardPolicy.fromJson(
+        rawPolicy.cast<String, dynamic>(),
+      );
     }
     _tasks[task.id] = runtime;
     // 异步执行，立即返回任务句柄
@@ -290,7 +302,9 @@ class WorkAgentServer {
           return;
         }
         heartbeat = Timer.periodic(const Duration(seconds: 15), (_) {
-          if (!body.isClosed) body.add(const Utf8Encoder().convert(': keep-alive\n\n'));
+          if (!body.isClosed) {
+            body.add(const Utf8Encoder().convert(': keep-alive\n\n'));
+          }
         });
         liveSub = runtime.events.stream.listen(
           (event) {
@@ -335,10 +349,14 @@ class WorkAgentServer {
     Map<String, dynamic> body;
     try {
       final raw = await request.readAsString();
-      body = (raw.isEmpty ? <String, dynamic>{} : jsonDecode(raw))
-          as Map<String, dynamic>;
+      body =
+          (raw.isEmpty ? <String, dynamic>{} : jsonDecode(raw))
+              as Map<String, dynamic>;
     } catch (_) {
-      return _json(400, <String, dynamic>{'ok': false, 'error': '请求体不是合法 JSON'});
+      return _json(400, <String, dynamic>{
+        'ok': false,
+        'error': '请求体不是合法 JSON',
+      });
     }
     final decision = body['decision'] as String? ?? 'deny';
     // allow_all / allow_action：写入会话策略（对应 Octop HITL 三态）
@@ -350,7 +368,8 @@ class WorkAgentServer {
         runtime.policy = runtime.policy.withAction(action);
       }
     }
-    final allowed = decision == 'allow' ||
+    final allowed =
+        decision == 'allow' ||
         decision == 'allow_all' ||
         decision == 'allow_action';
     final completer = runtime.approvalCompleter;
@@ -371,7 +390,10 @@ class WorkAgentServer {
       });
       return;
     }
-    _emit(runtime, <String, dynamic>{'type': 'task_started', 'task': task.toJson()});
+    _emit(runtime, <String, dynamic>{
+      'type': 'task_started',
+      'task': task.toJson(),
+    });
 
     for (var i = 0; i < task.steps.length; i++) {
       final step = task.steps[i];
@@ -383,8 +405,10 @@ class WorkAgentServer {
       );
 
       if (decision.verdict == GuardVerdict.deny) {
-        task.steps[i] =
-            step.copyWith(status: WorkStepStatus.failed, error: decision.reason);
+        task.steps[i] = step.copyWith(
+          status: WorkStepStatus.failed,
+          error: decision.reason,
+        );
         _emit(runtime, <String, dynamic>{
           'type': 'step_failed',
           'index': i,
@@ -411,8 +435,10 @@ class WorkAgentServer {
         final approved = await runtime.approvalCompleter!.future;
         runtime.awaitingIndex = -1;
         if (!approved) {
-          task.steps[i] =
-              step.copyWith(status: WorkStepStatus.rejected, error: '用户拒绝');
+          task.steps[i] = step.copyWith(
+            status: WorkStepStatus.rejected,
+            error: '用户拒绝',
+          );
           _emit(runtime, <String, dynamic>{
             'type': 'step_rejected',
             'index': i,
@@ -443,8 +469,10 @@ class WorkAgentServer {
           'output': result.output,
         });
       } else {
-        task.steps[i] =
-            step.copyWith(status: WorkStepStatus.failed, error: result.output);
+        task.steps[i] = step.copyWith(
+          status: WorkStepStatus.failed,
+          error: result.output,
+        );
         _emit(runtime, <String, dynamic>{
           'type': 'step_failed',
           'index': i,
@@ -476,12 +504,12 @@ class WorkAgentServer {
   // ---------------------------------------------------------------- 工具
 
   Map<String, dynamic> _deviceInfoJson() => <String, dynamic>{
-        'id': 'local',
-        'name': 'MOTA-${localPlatform.label}',
-        'platform': localPlatform.id,
-        'tier_id': _localTierId,
-        'model': localPlatform.label,
-      };
+    'id': 'local',
+    'name': 'MOTA-${localPlatform.label}',
+    'platform': localPlatform.id,
+    'tier_id': _localTierId,
+    'model': localPlatform.label,
+  };
 
   static shelf.Response _json(int status, Map<String, dynamic> body) =>
       shelf.Response(

@@ -17,8 +17,9 @@ import 'package:flutter/services.dart';
 class WorkNativeChannel {
   WorkNativeChannel._();
 
-  static const MethodChannel _channel =
-      MethodChannel('com.mota.app/work_native');
+  static const MethodChannel _channel = MethodChannel(
+    'com.mota.app/work_native',
+  );
 
   /// 仅 Android 真机有效（其他平台/测试环境一律降级为「不可用」）
   static bool get supported {
@@ -30,8 +31,10 @@ class WorkNativeChannel {
     }
   }
 
-  static Future<T?> _invoke<T>(String method,
-      [Map<String, Object?>? args]) async {
+  static Future<T?> _invoke<T>(
+    String method, [
+    Map<String, Object?>? args,
+  ]) async {
     if (!supported) return null;
     try {
       return await _channel.invokeMethod<T>(method, args);
@@ -94,7 +97,9 @@ class WorkNativeChannel {
 
   /// 经 Shizuku 执行 shell；未就绪时抛 [WorkNativeException]
   static Future<String> shizukuExec(String cmd) async {
-    final out = await _invoke<String>('shizukuExec', <String, Object?>{'cmd': cmd});
+    final out = await _invoke<String>('shizukuExec', <String, Object?>{
+      'cmd': cmd,
+    });
     if (out == null) {
       throw const WorkNativeException('UNSUPPORTED', '当前平台不支持 Shizuku');
     }
@@ -110,7 +115,9 @@ class WorkNativeChannel {
 
   /// 经 su 执行 shell；未 Root 时抛 [WorkNativeException]
   static Future<String> rootExec(String cmd) async {
-    final out = await _invoke<String>('rootExec', <String, Object?>{'cmd': cmd});
+    final out = await _invoke<String>('rootExec', <String, Object?>{
+      'cmd': cmd,
+    });
     if (out == null) {
       throw const WorkNativeException('UNSUPPORTED', '当前平台不支持 Root');
     }

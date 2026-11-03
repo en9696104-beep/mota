@@ -83,38 +83,38 @@ class WorkTaskStep {
     WorkStepStatus? status,
     String? result,
     String? error,
-  }) =>
-      WorkTaskStep(
-        action: action,
-        reason: reason,
-        target: target,
-        args: args,
-        status: status ?? this.status,        result: result ?? this.result,
-        error: error ?? this.error,
-      );
+  }) => WorkTaskStep(
+    action: action,
+    reason: reason,
+    target: target,
+    args: args,
+    status: status ?? this.status,
+    result: result ?? this.result,
+    error: error ?? this.error,
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'action': action,
-        'reason': reason,
-        'target': target,
-        'args': args,
-        'status': status.id,
-        'result': result,
-        'error': error,
-      };
+    'action': action,
+    'reason': reason,
+    'target': target,
+    'args': args,
+    'status': status.id,
+    'result': result,
+    'error': error,
+  };
 
   static WorkTaskStep fromJson(Map<String, dynamic> json) => WorkTaskStep(
-        action: json['action'] as String? ?? '',
-        reason: json['reason'] as String? ?? '',
-        target: json['target'] as String?,
-        args: (json['args'] as Map<String, dynamic>?) ?? const {},
-        status: WorkStepStatus.values.firstWhere(
-          (s) => s.id == json['status'],
-          orElse: () => WorkStepStatus.pending,
-        ),
-        result: json['result'] as String?,
-        error: json['error'] as String?,
-      );
+    action: json['action'] as String? ?? '',
+    reason: json['reason'] as String? ?? '',
+    target: json['target'] as String?,
+    args: (json['args'] as Map<String, dynamic>?) ?? const {},
+    status: WorkStepStatus.values.firstWhere(
+      (s) => s.id == json['status'],
+      orElse: () => WorkStepStatus.pending,
+    ),
+    result: json['result'] as String?,
+    error: json['error'] as String?,
+  );
 }
 
 /// 一个跨设备 Agent 任务
@@ -152,7 +152,8 @@ class WorkTask {
 
   final int? finishedAt;
 
-  int get doneCount => steps.where((s) => s.status == WorkStepStatus.done).length;
+  int get doneCount =>
+      steps.where((s) => s.status == WorkStepStatus.done).length;
 
   /// 当前等待执行的步骤（首个未完成步骤）
   WorkTaskStep? get currentStep {
@@ -170,45 +171,44 @@ class WorkTask {
     WorkTaskStatus? status,
     String? error,
     int? finishedAt,
-  }) =>
-      WorkTask(
-        id: id,
-        deviceId: deviceId,
-        instruction: instruction,
-        steps: steps ?? this.steps,
-        status: status ?? this.status,
-        createdAt: createdAt,
-        originDeviceId: originDeviceId,
-        error: error ?? this.error,
-        finishedAt: finishedAt ?? this.finishedAt,
-      );
+  }) => WorkTask(
+    id: id,
+    deviceId: deviceId,
+    instruction: instruction,
+    steps: steps ?? this.steps,
+    status: status ?? this.status,
+    createdAt: createdAt,
+    originDeviceId: originDeviceId,
+    error: error ?? this.error,
+    finishedAt: finishedAt ?? this.finishedAt,
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        'device_id': deviceId,
-        'origin_device_id': originDeviceId,
-        'instruction': instruction,
-        'steps': steps.map((s) => s.toJson()).toList(),
-        'status': status.id,
-        'created_at': createdAt,
-        'error': error,
-        'finished_at': finishedAt,
-      };
+    'id': id,
+    'device_id': deviceId,
+    'origin_device_id': originDeviceId,
+    'instruction': instruction,
+    'steps': steps.map((s) => s.toJson()).toList(),
+    'status': status.id,
+    'created_at': createdAt,
+    'error': error,
+    'finished_at': finishedAt,
+  };
 
   static WorkTask fromJson(Map<String, dynamic> json) => WorkTask(
-        id: json['id'] as String,
-        deviceId: json['device_id'] as String? ?? '',
-        originDeviceId: json['origin_device_id'] as String?,
-        instruction: json['instruction'] as String? ?? '',
-        steps: ((json['steps'] as List?) ?? const [])
-            .map((e) => WorkTaskStep.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        status: WorkTaskStatus.values.firstWhere(
-          (s) => s.id == json['status'],
-          orElse: () => WorkTaskStatus.pending,
-        ),
-        createdAt: json['created_at'] as int? ?? 0,
-        error: json['error'] as String?,
-        finishedAt: json['finished_at'] as int?,
-      );
+    id: json['id'] as String,
+    deviceId: json['device_id'] as String? ?? '',
+    originDeviceId: json['origin_device_id'] as String?,
+    instruction: json['instruction'] as String? ?? '',
+    steps: ((json['steps'] as List?) ?? const [])
+        .map((e) => WorkTaskStep.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    status: WorkTaskStatus.values.firstWhere(
+      (s) => s.id == json['status'],
+      orElse: () => WorkTaskStatus.pending,
+    ),
+    createdAt: json['created_at'] as int? ?? 0,
+    error: json['error'] as String?,
+    finishedAt: json['finished_at'] as int?,
+  );
 }

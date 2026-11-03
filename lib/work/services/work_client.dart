@@ -54,8 +54,8 @@ class WorkClient {
   Uri _uri(String path) => Uri.parse('$endpoint$path');
 
   Map<String, String> get _authHeaders => <String, String>{
-        if (token != null) 'authorization': 'Bearer $token',
-      };
+    if (token != null) 'authorization': 'Bearer $token',
+  };
 
   /// 配对：配对码换令牌
   Future<bool> pair({
@@ -112,10 +112,13 @@ class WorkClient {
         tierId: tier?['id'] as String? ?? 'view_only',
         tierLabel: tier?['label'] as String?,
         capabilities:
-            (tier?['capabilities'] as List?)?.cast<String>() ?? const <String>[],
+            (tier?['capabilities'] as List?)?.cast<String>() ??
+            const <String>[],
         agentReady: body['agent_ready'] == true,
-        deviceName: (body['device'] as Map<String, dynamic>?)?['name'] as String?,
-        platform: (body['device'] as Map<String, dynamic>?)?['platform'] as String?,
+        deviceName:
+            (body['device'] as Map<String, dynamic>?)?['name'] as String?,
+        platform:
+            (body['device'] as Map<String, dynamic>?)?['platform'] as String?,
       );
     } catch (e) {
       return WorkPeerStatus(
@@ -139,7 +142,10 @@ class WorkClient {
   }) async {
     final resp = await _http.post(
       _uri('/work/task'),
-      headers: <String, String>{..._authHeaders, 'Content-Type': 'application/json'},
+      headers: <String, String>{
+        ..._authHeaders,
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(<String, dynamic>{
         'task_id': taskId,
         'instruction': instruction,
@@ -169,16 +175,23 @@ class WorkClient {
       resp.stream
           .transform(utf8.decoder)
           .transform(const LineSplitter())
-          .listen((line) {
-        if (!line.startsWith('data: ')) return;
-        try {
-          final payload = jsonDecode(line.substring(6)) as Map<String, dynamic>;
-          controller.add(WorkTaskEvent(
-            payload['type'] as String? ?? 'unknown',
-            payload,
-          ));
-        } catch (_) {}
-      }, onDone: controller.close, onError: controller.addError);
+          .listen(
+            (line) {
+              if (!line.startsWith('data: ')) return;
+              try {
+                final payload =
+                    jsonDecode(line.substring(6)) as Map<String, dynamic>;
+                controller.add(
+                  WorkTaskEvent(
+                    payload['type'] as String? ?? 'unknown',
+                    payload,
+                  ),
+                );
+              } catch (_) {}
+            },
+            onDone: controller.close,
+            onError: controller.addError,
+          );
     }, onError: controller.addError);
     return controller.stream;
   }
@@ -191,7 +204,10 @@ class WorkClient {
   }) async {
     final resp = await _http.post(
       _uri('/work/task/$taskId/approve'),
-      headers: <String, String>{..._authHeaders, 'Content-Type': 'application/json'},
+      headers: <String, String>{
+        ..._authHeaders,
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(<String, dynamic>{
         'decision': decision,
         if (action != null) 'action': action,

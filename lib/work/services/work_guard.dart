@@ -71,23 +71,23 @@ class WorkGuardRule {
   }
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        'action': action,
-        'pattern': pattern,
-        'verdict': verdict.name,
-        'note': note,
-      };
+    'id': id,
+    'action': action,
+    'pattern': pattern,
+    'verdict': verdict.name,
+    'note': note,
+  };
 
   static WorkGuardRule fromJson(Map<String, dynamic> json) => WorkGuardRule(
-        id: json['id'] as String? ?? '',
-        action: json['action'] as String? ?? '*',
-        pattern: json['pattern'] as String?,
-        verdict: GuardVerdict.values.firstWhere(
-          (v) => v.name == json['verdict'],
-          orElse: () => GuardVerdict.requireApproval,
-        ),
-        note: json['note'] as String?,
-      );
+    id: json['id'] as String? ?? '',
+    action: json['action'] as String? ?? '*',
+    pattern: json['pattern'] as String?,
+    verdict: GuardVerdict.values.firstWhere(
+      (v) => v.name == json['verdict'],
+      orElse: () => GuardVerdict.requireApproval,
+    ),
+    note: json['note'] as String?,
+  );
 }
 
 /// 每任务的会话审批策略（HITL 三态，对应 Octop HitlSessionPolicy）
@@ -95,12 +95,12 @@ class WorkGuardPolicy {
   const WorkGuardPolicy({this.mode = GuardMode.ask, this.actions = const {}});
 
   const WorkGuardPolicy.allowAll()
-      : mode = GuardMode.allowAll,
-        actions = const {};
+    : mode = GuardMode.allowAll,
+      actions = const {};
 
   const WorkGuardPolicy.allowActions(Set<String> names)
-      : mode = GuardMode.allowActions,
-        actions = names;
+    : mode = GuardMode.allowActions,
+      actions = names;
 
   final GuardMode mode;
 
@@ -129,16 +129,17 @@ class WorkGuardPolicy {
       WorkGuardPolicy.allowActions(actions.where((a) => a != name).toSet());
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'mode': mode.id,
-        'actions': actions.toList(),
-      };
+    'mode': mode.id,
+    'actions': actions.toList(),
+  };
 
   static WorkGuardPolicy fromJson(Map<String, dynamic> json) {
     final mode = GuardMode.values.firstWhere(
       (m) => m.id == json['mode'],
       orElse: () => GuardMode.ask,
     );
-    final names = (json['actions'] as List?)?.cast<String>().toSet() ?? const {};
+    final names =
+        (json['actions'] as List?)?.cast<String>().toSet() ?? const {};
     return WorkGuardPolicy(mode: mode, actions: names);
   }
 }
@@ -184,7 +185,8 @@ class WorkGuard {
     WorkGuardRule(
       id: 'write_outside_home',
       action: 'write_file',
-      pattern: r'^(/etc|/usr|/bin|/sbin|/boot|/sys|/proc|C:\\Windows|C:\\Program)',
+      pattern:
+          r'^(/etc|/usr|/bin|/sbin|/boot|/sys|/proc|C:\\Windows|C:\\Program)',
       verdict: GuardVerdict.requireApproval,
       note: '写入系统关键路径，需人工确认',
     ),
@@ -267,9 +269,6 @@ class WorkGuard {
     if (p.sessionAllows(action)) {
       return const GuardDecision(GuardVerdict.allow);
     }
-    return const GuardDecision(
-      GuardVerdict.requireApproval,
-      reason: '默认每次询问',
-    );
+    return const GuardDecision(GuardVerdict.requireApproval, reason: '默认每次询问');
   }
 }

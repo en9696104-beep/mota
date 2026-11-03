@@ -53,8 +53,9 @@ class WorkTaskController extends GetxController {
   final RxList<WorkTaskEvent> events = <WorkTaskEvent>[].obs;
 
   /// 当前待审批请求（null 表示无）
-  final Rx<Map<String, dynamic>?> approvalRequest =
-      Rx<Map<String, dynamic>?>(null);
+  final Rx<Map<String, dynamic>?> approvalRequest = Rx<Map<String, dynamic>?>(
+    null,
+  );
 
   /// 任务级错误（下发失败 / 连接失败等）
   final RxString taskError = ''.obs;
@@ -107,7 +108,9 @@ class WorkTaskController extends GetxController {
     if (action.isEmpty) return;
     final step = WorkTaskStep(
       action: action,
-      reason: (reason == null || reason.trim().isEmpty) ? '手动添加' : reason.trim(),
+      reason: (reason == null || reason.trim().isEmpty)
+          ? '手动添加'
+          : reason.trim(),
       target: (target == null || target.trim().isEmpty) ? null : target.trim(),
     );
     plannedSteps.add(step);
@@ -154,8 +157,10 @@ class WorkTaskController extends GetxController {
         taskError.value = '配对失败：配对码错误或对端未在线';
         return false;
       }
-      await Get.find<WorkController>()
-          .updateDeviceToken(device.id, _client.token ?? '');
+      await Get.find<WorkController>().updateDeviceToken(
+        device.id,
+        _client.token ?? '',
+      );
     } else {
       _client.token = device.token;
     }
@@ -180,19 +185,21 @@ class WorkTaskController extends GetxController {
   }
 
   WorkGuardPolicy _policyForMode(GuardMode mode) => switch (mode) {
-        GuardMode.ask => const WorkGuardPolicy(),
-        GuardMode.allowAll => const WorkGuardPolicy.allowAll(),
-        GuardMode.allowActions => const WorkGuardPolicy.allowActions(<String>{}),
-      };
+    GuardMode.ask => const WorkGuardPolicy(),
+    GuardMode.allowAll => const WorkGuardPolicy.allowAll(),
+    GuardMode.allowActions => const WorkGuardPolicy.allowActions(<String>{}),
+  };
 
   void _subscribeEvents(String id) {
     _eventSub?.cancel();
-    _eventSub = _client.taskEvents(id).listen(
-      _onEvent,
-      onError: (Object e) {
-        taskError.value = '事件流中断：$e';
-      },
-    );
+    _eventSub = _client
+        .taskEvents(id)
+        .listen(
+          _onEvent,
+          onError: (Object e) {
+            taskError.value = '事件流中断：$e';
+          },
+        );
   }
 
   // ---------------------------------------------------------------- 事件
@@ -237,8 +244,12 @@ class WorkTaskController extends GetxController {
     }
   }
 
-  void _patchStep(int? index,
-      {required WorkStepStatus status, String? result, String? error}) {
+  void _patchStep(
+    int? index, {
+    required WorkStepStatus status,
+    String? result,
+    String? error,
+  }) {
     if (index == null || index < 0 || index >= liveSteps.length) return;
     liveSteps[index] = liveSteps[index].copyWith(
       status: status,
@@ -264,9 +275,7 @@ class WorkTaskController extends GetxController {
   Future<String?> _askPairCode() async {
     final ctx = Get.context;
     if (ctx == null) return null;
-    return Get.dialog<String>(
-      _PairCodeDialog(deviceName: device.name),
-    );
+    return Get.dialog<String>(_PairCodeDialog(deviceName: device.name));
   }
 }
 
@@ -294,8 +303,10 @@ class _PairCodeDialogState extends State<_PairCodeDialog> {
     return AlertDialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      title: Text('与「${widget.deviceName}」配对',
-          style: const TextStyle(color: AppColors.textPrimary, fontSize: 16)),
+      title: Text(
+        '与「${widget.deviceName}」配对',
+        style: const TextStyle(color: AppColors.textPrimary, fontSize: 16),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,7 +314,10 @@ class _PairCodeDialogState extends State<_PairCodeDialog> {
           Text(
             '请在对端设备的 MOTA → 工作台中查看本机配对码（6 位数字）并输入：'.tr,
             style: const TextStyle(
-                color: AppColors.textTertiary, fontSize: 12, height: 1.6),
+              color: AppColors.textTertiary,
+              fontSize: 12,
+              height: 1.6,
+            ),
           ),
           const SizedBox(height: 12),
           TextField(
@@ -311,9 +325,10 @@ class _PairCodeDialogState extends State<_PairCodeDialog> {
             keyboardType: TextInputType.number,
             maxLength: 6,
             style: const TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 20,
-                letterSpacing: 8),
+              color: AppColors.textPrimary,
+              fontSize: 20,
+              letterSpacing: 8,
+            ),
             textAlign: TextAlign.center,
             decoration: const InputDecoration(
               counterText: '',
@@ -332,15 +347,18 @@ class _PairCodeDialogState extends State<_PairCodeDialog> {
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('取消',
-              style: TextStyle(color: AppColors.textSecondary)),
+          child: const Text(
+            '取消',
+            style: TextStyle(color: AppColors.textSecondary),
+          ),
         ),
         FilledButton(
           style: FilledButton.styleFrom(backgroundColor: AppColors.accent),
-          onPressed: () =>
-              Navigator.of(context).pop(_controller.text.trim()),
-          child: const Text('配对',
-              style: TextStyle(color: AppColors.background)),
+          onPressed: () => Navigator.of(context).pop(_controller.text.trim()),
+          child: const Text(
+            '配对',
+            style: TextStyle(color: AppColors.background),
+          ),
         ),
       ],
     );

@@ -89,9 +89,9 @@ enum WorkPlatform {
   bool get isMobile => group == '移动';
 
   static WorkPlatform fromId(String? id) => WorkPlatform.values.firstWhere(
-        (p) => p.id == id,
-        orElse: () => WorkPlatform.unknown,
-      );
+    (p) => p.id == id,
+    orElse: () => WorkPlatform.unknown,
+  );
 
   /// 当前运行平台（按 dart:io 解析；解析失败回落 unknown）
   static WorkPlatform get current {

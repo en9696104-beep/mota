@@ -94,12 +94,16 @@ class WorkPlanner {
       final reason = (item['reason'] as String? ?? '').trim();
       final target = (item['target'] as String?)?.trim();
       final args = item['args'];
-      steps.add(WorkTaskStep(
-        action: action,
-        reason: reason.isEmpty ? '模型规划步骤' : reason,
-        target: (target == null || target.isEmpty) ? null : target,
-        args: args is Map ? args.cast<String, dynamic>() : const <String, dynamic>{},
-      ));
+      steps.add(
+        WorkTaskStep(
+          action: action,
+          reason: reason.isEmpty ? '模型规划步骤' : reason,
+          target: (target == null || target.isEmpty) ? null : target,
+          args: args is Map
+              ? args.cast<String, dynamic>()
+              : const <String, dynamic>{},
+        ),
+      );
     }
     return steps;
   }
@@ -147,7 +151,8 @@ class WorkPlanner {
   }
 
   /// 规划用的系统提示词
-  static String get systemPrompt => '''
+  static String get systemPrompt =>
+      '''
 你是 MOTA 工作台的任务规划器。把用户的自然语言指令拆解为对目标设备执行的步骤序列。
 
 可用动作（只能使用以下动作，不得自造）：

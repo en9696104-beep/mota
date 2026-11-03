@@ -31,7 +31,8 @@ class WorkController extends GetxController {
 
   Future<void> _loadLocal() async {
     final prefs = await SharedPreferences.getInstance();
-    deviceName.value = prefs.getString(_keyDeviceName) ??
+    deviceName.value =
+        prefs.getString(_keyDeviceName) ??
         '${localPlatform.label}-${DateTime.now().millisecondsSinceEpoch % 100000}';
     localTierId.value = prefs.getString(_keyLocalTier) ?? 'view_only';
   }
@@ -44,7 +45,8 @@ class WorkController extends GetxController {
   List<WorkPermissionTier> get localTiers =>
       WorkPermissions.tiersFor(localPlatform);
 
-  WorkPermissionTier? get localTier => WorkPermissions.tierById(localTierId.value);
+  WorkPermissionTier? get localTier =>
+      WorkPermissions.tierById(localTierId.value);
 
   /// 切换本机被控档位
   Future<void> setLocalTier(String tierId) async {
@@ -69,7 +71,8 @@ class WorkController extends GetxController {
   }) async {
     final existing = await WorkRegistry.instance.findByEndpoint(endpoint);
     final device = WorkDevice(
-      id: existing?.id ??
+      id:
+          existing?.id ??
           'dev-${DateTime.now().millisecondsSinceEpoch.toRadixString(36)}',
       name: name,
       platform: platform,

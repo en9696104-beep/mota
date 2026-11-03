@@ -37,25 +37,44 @@ class MobileWorkExecutor {
           final x = _numArg(args, 'x') ?? _parsePair(target)?.$1;
           final y = _numArg(args, 'y') ?? _parsePair(target)?.$2;
           if (x == null || y == null) {
-            return const ExecResult(false, 'tap 需要坐标：args.x/args.y 或 target "x,y"');
+            return const ExecResult(
+              false,
+              'tap 需要坐标：args.x/args.y 或 target "x,y"',
+            );
           }
           final ok = await WorkNativeChannel.tap(x, y);
           return ExecResult(ok, ok ? '已点击 ($x, $y)' : '手势分发失败：无障碍服务未开启或系统拒绝');
         case 'swipe':
           final p = _parseQuad(args, target);
           if (p == null) {
-            return const ExecResult(false, 'swipe 需要坐标：args.x1/y1/x2/y2 或 target "x1,y1,x2,y2"');
+            return const ExecResult(
+              false,
+              'swipe 需要坐标：args.x1/y1/x2/y2 或 target "x1,y1,x2,y2"',
+            );
           }
           final ok = await WorkNativeChannel.swipe(
-            p.$1, p.$2, p.$3, p.$4,
+            p.$1,
+            p.$2,
+            p.$3,
+            p.$4,
             durationMs: (args['duration'] as num?)?.toInt() ?? 300,
           );
-          return ExecResult(ok, ok ? '已滑动 (${p.$1},${p.$2})→(${p.$3},${p.$4})' : '手势分发失败：无障碍服务未开启或系统拒绝');
+          return ExecResult(
+            ok,
+            ok
+                ? '已滑动 (${p.$1},${p.$2})→(${p.$3},${p.$4})'
+                : '手势分发失败：无障碍服务未开启或系统拒绝',
+          );
         case 'input_text':
           final text = (args['text'] as String?) ?? target ?? '';
-          if (text.isEmpty) return const ExecResult(false, 'input_text 需要 args.text');
+          if (text.isEmpty) {
+            return const ExecResult(false, 'input_text 需要 args.text');
+          }
           final ok = await WorkNativeChannel.inputText(text);
-          return ExecResult(ok, ok ? '已输入 ${text.length} 字符' : '输入失败：未找到焦点输入框或无障碍服务未开启');
+          return ExecResult(
+            ok,
+            ok ? '已输入 ${text.length} 字符' : '输入失败：未找到焦点输入框或无障碍服务未开启',
+          );
         case 'read_screen':
           final text = await WorkNativeChannel.readScreen();
           if (text == null) {

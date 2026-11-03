@@ -23,6 +23,11 @@ class GitHubStarsSyncService {
   );
 
   /// 与目录中全部不重复的 GitHub 仓库同步星数（低频请求，避免触发匿名限流）
+  ///
+  /// 防护策略（国内 api.github.com 常被墙，逐仓库超时累积可达数分钟）：
+  /// - 最多同步 8 个仓库（星数展示优先头部项目）
+  /// - 连续 3 次失败即判定网络受限，整体熔断退出
+  /// - 总耗时预算 20 秒
   static Future<void> sync() async {
     try {
       final repos = ModelRepository.to.models
@@ -30,11 +35,16 @@ class GitHubStarsSyncService {
           .whereType<String>()
           .where((r) => r.isNotEmpty)
           .toSet()
+          .take(8)
           .toList();
       if (repos.isEmpty) return;
 
+      final deadline = DateTime.now().add(const Duration(seconds: 20));
       final stars = <String, int>{};
+      var consecutiveFailures = 0;
       for (final repo in repos) {
+        if (DateTime.now().isAfter(deadline)) break;
+        if (consecutiveFailures >= 3) break; // 网络受限：熔断
         try {
           final resp = await _dio.get<dynamic>(
             'https://api.github.com/repos/$repo',
@@ -42,9 +52,10 @@ class GitHubStarsSyncService {
           final data = resp.data;
           if (data is Map && data['stargazers_count'] is int) {
             stars[repo] = data['stargazers_count'] as int;
+            consecutiveFailures = 0;
           }
         } catch (_) {
-          // 单个仓库失败（网络/限流/仓库不存在）不影响其他仓库
+          consecutiveFailures++;
         }
       }
       if (stars.isNotEmpty) {

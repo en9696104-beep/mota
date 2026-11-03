@@ -40,17 +40,20 @@ class WorkPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
             children: <Widget>[
+              _SectionHeader(title: '本机节点'.tr, count: null),
               _LocalAgentCard(controller: controller),
               const SizedBox(height: 20),
               _SectionHeader(
-                title: '设备网格'.tr,
+                title: '我的设备'.tr,
                 count: list.length,
                 onAdd: () => _showAddDeviceSheet(context, controller),
               ),
               if (list.isEmpty)
                 const _EmptyDevices()
               else
-                ...list.map((d) => _DeviceCard(device: d, controller: controller)),
+                ...list.map(
+                  (d) => _DeviceCard(device: d, controller: controller),
+                ),
             ],
           );
         }),
@@ -110,25 +113,32 @@ class _LocalAgentCardState extends State<_LocalAgentCard> {
                   color: AppColors.accentSoft,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.dns_outlined,
-                    color: AppColors.accent, size: 20),
+                child: const Icon(
+                  Icons.dns_outlined,
+                  color: AppColors.accent,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Obx(() => Text(
-                          controller.deviceName.value,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )),
+                    Obx(
+                      () => Text(
+                        controller.deviceName.value,
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 2),
                     Text(
-                      '本机 · @p · 被控节点'.trParams({'p': controller.localPlatform.label}),
+                      '本机 · @p · 被控节点'.trParams({
+                        'p': controller.localPlatform.label,
+                      }),
                       style: const TextStyle(
                         color: AppColors.textTertiary,
                         fontSize: 12,
@@ -146,14 +156,19 @@ class _LocalAgentCardState extends State<_LocalAgentCard> {
             children: <Widget>[
               Text(
                 '他人请求本机时的权限档位'.tr,
-                style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13,
+                ),
               ),
               const Spacer(),
-              Obx(() => _TierDropdown(
-                    tiers: controller.localTiers,
-                    value: controller.localTierId.value,
-                    onChanged: controller.setLocalTier,
-                  )),
+              Obx(
+                () => _TierDropdown(
+                  tiers: controller.localTiers,
+                  value: controller.localTierId.value,
+                  onChanged: controller.setLocalTier,
+                ),
+              ),
             ],
           ),
           Obx(() {
@@ -177,8 +192,9 @@ class _LocalAgentCardState extends State<_LocalAgentCard> {
                   Expanded(
                     child: Text(
                       tier.requiresNativeGrant
-                          ? '@t（授权引导见设备详情）'
-                          .trParams({'t': tier.nativeGrantLabel ?? ''})
+                          ? '@t（授权引导见设备详情）'.trParams({
+                              't': tier.nativeGrantLabel ?? '',
+                            })
                           : tier.description,
                       style: TextStyle(
                         color: tier.requiresNativeGrant
@@ -199,9 +215,13 @@ class _LocalAgentCardState extends State<_LocalAgentCard> {
           // 配对码：对端在 Work 工作台添加本设备时输入
           Row(
             children: <Widget>[
-              Text('本机配对码'.tr,
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 13)),
+              Text(
+                '本机配对码'.tr,
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13,
+                ),
+              ),
               const Spacer(),
               Text(
                 _pairCode,
@@ -214,39 +234,112 @@ class _LocalAgentCardState extends State<_LocalAgentCard> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.refresh,
-                    size: 18, color: AppColors.textTertiary),
+                icon: const Icon(
+                  Icons.refresh,
+                  size: 18,
+                  color: AppColors.textTertiary,
+                ),
                 tooltip: '刷新配对码（旧码立即作废）'.tr,
                 onPressed: _refreshPairCode,
               ),
             ],
           ),
+          // 被控服务开关：本页直达，无需跳设置
+          // （配对依赖局域网访问，开启时自动以 0.0.0.0 监听）
           Obx(() {
-            final running = ApiService.instance.isRunning.value;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Icon(
-                  running ? Icons.check_circle_outline : Icons.error_outline,
-                  size: 14,
-                  color: running ? AppColors.accent : AppColors.danger,
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    running
-                        ? '对方在 MOTA 工作台添加设备时，输入此配对码即可配对本机'.tr
-                        : '本地 API 服务未开启：被控端点不可用。请到 设置 → 本地 API 服务 开启（建议同时允许局域网访问）'.tr,
-                    style: TextStyle(
-                      color: running
-                          ? AppColors.textTertiary
-                          : AppColors.danger,
-                      fontSize: 11,
-                      height: 1.5,
+            final api = ApiService.instance;
+            final running = api.isRunning.value;
+            return Container(
+              margin: const EdgeInsets.only(top: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceHigh,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.lan_outlined,
+                    size: 18,
+                    color: running ? AppColors.accent : AppColors.textTertiary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '被控服务（允许局域网访问）'.tr,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Text(
+                          running
+                              ? '已开启 · ${api.bindAddress.value}:${api.port.value}'
+                                    .tr
+                              : '关闭状态下其他设备无法配对/调度本机'.tr,
+                          style: TextStyle(
+                            color: running
+                                ? AppColors.accent
+                                : AppColors.textTertiary,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Switch(
+                    value: running,
+                    activeThumbColor: AppColors.accent,
+                    onChanged: (v) async {
+                      if (v) {
+                        final ok = await api.start(allowLan: true);
+                        if (!ok) {
+                          Get.snackbar(
+                            '启动失败'.tr,
+                            '端口被占用或无网络权限，请稍后重试'.tr,
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        }
+                      } else {
+                        await api.stop();
+                      }
+                    },
+                  ),
+                ],
+              ),
+            );
+          }),
+          const SizedBox(height: 6),
+          Obx(() {
+            final running = ApiService.instance.isRunning.value;
+            return Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Icon(
+                    running ? Icons.check_circle_outline : Icons.info_outline,
+                    size: 14,
+                    color: running ? AppColors.accent : AppColors.textTertiary,
+                  ),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      running
+                          ? '对方在 MOTA 工作台添加设备时，输入此配对码即可配对本机'.tr
+                          : '开启被控服务后，对端输入上方配对码即可配对本机'.tr,
+                      style: const TextStyle(
+                        color: AppColors.textTertiary,
+                        fontSize: 11,
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           }),
         ],
@@ -256,10 +349,10 @@ class _LocalAgentCardState extends State<_LocalAgentCard> {
 }
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title, required this.count, this.onAdd});
+  const _SectionHeader({required this.title, this.count, this.onAdd});
 
   final String title;
-  final int count;
+  final int? count;
   final VoidCallback? onAdd;
 
   @override
@@ -276,19 +369,23 @@ class _SectionHeader extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceHigh,
-              borderRadius: BorderRadius.circular(20),
+          if (count != null) ...<Widget>[
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceHigh,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                '$count',
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 11,
+                ),
+              ),
             ),
-            child: Text(
-              '$count',
-              style: const TextStyle(
-                  color: AppColors.textSecondary, fontSize: 11),
-            ),
-          ),
+          ],
           const Spacer(),
           if (onAdd != null)
             GestureDetector(
@@ -297,11 +394,14 @@ class _SectionHeader extends StatelessWidget {
                 children: <Widget>[
                   const Icon(Icons.add, size: 16, color: AppColors.accent),
                   const SizedBox(width: 2),
-                  Text('添加'.tr,
-                      style: const TextStyle(
-                          color: AppColors.accent,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500)),
+                  Text(
+                    '添加'.tr,
+                    style: const TextStyle(
+                      color: AppColors.accent,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -325,18 +425,28 @@ class _EmptyDevices extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          const Icon(Icons.hub_outlined, color: AppColors.textTertiary, size: 36),
+          const Icon(
+            Icons.hub_outlined,
+            color: AppColors.textTertiary,
+            size: 36,
+          ),
           const SizedBox(height: 12),
           Text(
             '还没有配对任何设备'.tr,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             '在另一台设备的 MOTA 中开启工作台，\n输入其 IP 与端口即可发起配对'.tr,
             textAlign: TextAlign.center,
             style: const TextStyle(
-                color: AppColors.textTertiary, fontSize: 12, height: 1.6),
+              color: AppColors.textTertiary,
+              fontSize: 12,
+              height: 1.6,
+            ),
           ),
         ],
       ),
@@ -350,10 +460,9 @@ class _DeviceCard extends StatelessWidget {
   final WorkDevice device;
   final WorkController controller;
 
-  Color get _statusColor =>
-      device.status == WorkDeviceStatus.online
-          ? AppColors.accent
-          : AppColors.textTertiary;
+  Color get _statusColor => device.status == WorkDeviceStatus.online
+      ? AppColors.accent
+      : AppColors.textTertiary;
 
   @override
   Widget build(BuildContext context) {
@@ -422,7 +531,9 @@ class _DeviceCard extends StatelessWidget {
                   '${device.platform.label} · ${device.endpoint}',
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                      color: AppColors.textTertiary, fontSize: 11),
+                    color: AppColors.textTertiary,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),
@@ -458,14 +569,20 @@ class _DeviceCard extends StatelessWidget {
           ),
           // 发起调度（控制端任务页）
           IconButton(
-            icon: const Icon(Icons.bolt_outlined,
-                size: 20, color: AppColors.accent),
+            icon: const Icon(
+              Icons.bolt_outlined,
+              size: 20,
+              color: AppColors.accent,
+            ),
             tooltip: '发起调度'.tr,
             onPressed: () => Get.to(() => WorkTaskPage(device: device)),
           ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert,
-                size: 18, color: AppColors.textTertiary),
+            icon: const Icon(
+              Icons.more_vert,
+              size: 18,
+              color: AppColors.textTertiary,
+            ),
             color: AppColors.surfaceHigh,
             onSelected: (value) {
               if (value == 'delete') controller.removeDevice(device.id);
@@ -473,8 +590,10 @@ class _DeviceCard extends StatelessWidget {
             itemBuilder: (_) => <PopupMenuEntry<String>>[
               PopupMenuItem<String>(
                 value: 'delete',
-                child: Text('解绑设备'.tr,
-                    style: const TextStyle(color: AppColors.danger, fontSize: 13)),
+                child: Text(
+                  '解绑设备'.tr,
+                  style: const TextStyle(color: AppColors.danger, fontSize: 13),
+                ),
               ),
             ],
           ),
@@ -506,29 +625,38 @@ class _DeviceCard extends StatelessWidget {
                 ),
               ),
             ),
-            ...tiers.map((t) => ListTile(
-                  leading: Icon(
-                    device.tierId == t.id
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    color: device.tierId == t.id
-                        ? AppColors.accent
-                        : AppColors.textTertiary,
-                    size: 20,
+            ...tiers.map(
+              (t) => ListTile(
+                leading: Icon(
+                  device.tierId == t.id
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  color: device.tierId == t.id
+                      ? AppColors.accent
+                      : AppColors.textTertiary,
+                  size: 20,
+                ),
+                title: Text(
+                  t.label,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
                   ),
-                  title: Text(t.label,
-                      style: const TextStyle(
-                          color: AppColors.textPrimary, fontSize: 14)),
-                  subtitle: Text(t.description,
-                      style: const TextStyle(
-                          color: AppColors.textTertiary,
-                          fontSize: 11,
-                          height: 1.4)),
-                  onTap: () {
-                    controller.requestTier(device.id, t.id);
-                    Navigator.pop(context);
-                  },
-                )),
+                ),
+                subtitle: Text(
+                  t.description,
+                  style: const TextStyle(
+                    color: AppColors.textTertiary,
+                    fontSize: 11,
+                    height: 1.4,
+                  ),
+                ),
+                onTap: () {
+                  controller.requestTier(device.id, t.id);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
             const SizedBox(height: 8),
           ],
         ),
@@ -566,12 +694,18 @@ class _TierDropdown extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           style: const TextStyle(color: AppColors.accent, fontSize: 13),
           items: tiers
-              .map((t) => DropdownMenuItem<String>(
-                    value: t.id,
-                    child: Text(t.label,
-                        style: const TextStyle(
-                            color: AppColors.textPrimary, fontSize: 13)),
-                  ))
+              .map(
+                (t) => DropdownMenuItem<String>(
+                  value: t.id,
+                  child: Text(
+                    t.label,
+                    style: const TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              )
               .toList(),
           onChanged: (v) {
             if (v != null) onChanged(v);
@@ -606,14 +740,19 @@ void _showAddDeviceSheet(BuildContext context, WorkController controller) {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('添加设备'.tr,
-              style: const TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600)),
+          Text(
+            '添加设备'.tr,
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text('输入对端 MOTA 的地址（对端需开启局域网访问）'.tr,
-              style: const TextStyle(color: AppColors.textTertiary, fontSize: 12)),
+          Text(
+            '输入对端 MOTA 的地址（对端需开启局域网访问）'.tr,
+            style: const TextStyle(color: AppColors.textTertiary, fontSize: 12),
+          ),
           const SizedBox(height: 16),
           _SheetField(
             controller: nameCtrl,
@@ -627,33 +766,43 @@ void _showAddDeviceSheet(BuildContext context, WorkController controller) {
             hint: 'http://192.168.1.5:8080',
           ),
           const SizedBox(height: 12),
-          Obx(() => Row(
-                children: <Widget>[
-                  Text('平台'.tr,
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 13)),
-                  const SizedBox(width: 12),
-                  ...WorkPlatform.values
-                      .where((p) => p != WorkPlatform.unknown)
-                      .map((p) => Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: ChoiceChip(
-                              label: Text(p.label,
-                                  style: const TextStyle(fontSize: 12)),
-                              selected: platform.value == p,
-                              selectedColor: AppColors.accentSoft,
-                              backgroundColor: AppColors.surfaceHigh,
-                              labelStyle: TextStyle(
-                                color: platform.value == p
-                                    ? AppColors.accent
-                                    : AppColors.textSecondary,
-                              ),
-                              side: const BorderSide(color: AppColors.border),
-                              onSelected: (_) => platform.value = p,
-                            ),
-                          )),
-                ],
-              )),
+          Obx(
+            () => Row(
+              children: <Widget>[
+                Text(
+                  '平台'.tr,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                ...WorkPlatform.values
+                    .where((p) => p != WorkPlatform.unknown)
+                    .map(
+                      (p) => Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(
+                            p.label,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                          selected: platform.value == p,
+                          selectedColor: AppColors.accentSoft,
+                          backgroundColor: AppColors.surfaceHigh,
+                          labelStyle: TextStyle(
+                            color: platform.value == p
+                                ? AppColors.accent
+                                : AppColors.textSecondary,
+                          ),
+                          side: const BorderSide(color: AppColors.border),
+                          onSelected: (_) => platform.value = p,
+                        ),
+                      ),
+                    ),
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -663,7 +812,8 @@ void _showAddDeviceSheet(BuildContext context, WorkController controller) {
                 foregroundColor: Colors.black,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
               onPressed: () async {
                 final name = nameCtrl.text.trim();
@@ -707,7 +857,10 @@ class _SheetField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+        labelStyle: const TextStyle(
+          color: AppColors.textSecondary,
+          fontSize: 13,
+        ),
         hintStyle: const TextStyle(color: AppColors.textTertiary, fontSize: 12),
         filled: true,
         fillColor: AppColors.surfaceHigh,

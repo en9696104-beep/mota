@@ -27,22 +27,24 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   bool _checking = false;
 
-  /// 检查更新：拉远端版本 JSON → 比较 → 有新版本弹窗（可直接跳转 download_url）
+  /// 检查更新：多源拉远端版本 JSON → 比较 → 有新版本弹窗（可直接跳转 download_url）
   Future<void> _checkUpdate() async {
     if (_checking) return;
     setState(() => _checking = true);
-    final info = await UpdateChecker.fetch();
+    final result = await UpdateChecker.check();
     if (!mounted) return;
     setState(() => _checking = false);
 
-    if (info == null) {
+    if (!result.ok) {
       Get.snackbar(
         '检查更新失败'.tr,
-        '网络异常或更新配置无效，请稍后重试'.tr,
+        (result.reason ?? '网络异常或更新配置无效，请稍后重试').tr,
         snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 4),
       );
       return;
     }
+    final info = result.info!;
     if (!UpdateChecker.isNewer(info.version, AppConfig.currentVersion)) {
       Get.snackbar(
         '已是最新版本'.tr,

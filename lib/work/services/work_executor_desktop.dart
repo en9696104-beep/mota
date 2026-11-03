@@ -30,7 +30,8 @@ class DesktopWorkExecutor {
     final normalized = File(path).absolute.path;
     return restrictedRoots.any((root) {
       final r = Directory(root).absolute.path;
-      return normalized == r || normalized.startsWith('$r${Platform.pathSeparator}');
+      return normalized == r ||
+          normalized.startsWith('$r${Platform.pathSeparator}');
     });
   }
 
@@ -108,9 +109,18 @@ class DesktopWorkExecutor {
 
   Future<ExecResult> _deleteFile(String path, WorkPermissionTier tier) async {
     // 系统路径 + restricted 档：一律拒绝删除
-    final sysPrefixes = <String>['/etc', '/usr', '/bin', '/sbin', '/boot', '/sys', '/proc'];
+    final sysPrefixes = <String>[
+      '/etc',
+      '/usr',
+      '/bin',
+      '/sbin',
+      '/boot',
+      '/sys',
+      '/proc',
+    ];
     final normalized = File(path).absolute.path;
-    final isSystem = sysPrefixes.any((p) => normalized.startsWith(p)) ||
+    final isSystem =
+        sysPrefixes.any((p) => normalized.startsWith(p)) ||
         (Platform.isWindows &&
             normalized.toLowerCase().startsWith('c:\\windows'));
     if (isSystem) return const ExecResult(false, '系统路径禁止删除');
