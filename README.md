@@ -4,6 +4,19 @@
 
 > 当前版本 **v3.1.2** · 许可证 **Apache License 2.0**（SPDX: `Apache-2.0`）
 
+## 源码仓库
+
+公开仓库：**https://jihulab.com/mota-project/mota**（极狐 GitLab，`main` 分支）
+
+```bash
+git clone https://jihulab.com/mota-project/mota.git
+```
+
+仓库根目录的 `update.json` 与 `assets/store_data.json` 为纯静态 JSON，可直接作为「检查更新」与「商店数据」的远端数据源（多源回退、无需自建后端）：
+
+- `https://jihulab.com/mota-project/mota/-/raw/main/update.json` — 字段 `version` / `download_url` / `release_notes`
+- `https://jihulab.com/mota-project/mota/-/raw/main/assets/store_data.json` — 模型元数据数组
+
 ## 主要能力
 
 - **本地推理**：加载 GGUF 量化模型，数据不出设备
