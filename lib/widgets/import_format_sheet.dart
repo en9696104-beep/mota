@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'model_name_text.dart';
+
 import '../data/models/ai_model.dart';
 import '../theme/app_theme.dart';
 import '../theme/format_theme.dart';
@@ -71,16 +73,10 @@ class _ImportFormatSheetState extends State<ImportFormatSheet> {
   void _confirm() {
     final name = _nameController.text.trim();
     if (name.isEmpty) {
-      Get.snackbar(
-        '名称不能为空',
-        '请为模型输入一个名称',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('名称不能为空', '请为模型输入一个名称', snackPosition: SnackPosition.BOTTOM);
       return;
     }
-    Get.back<Map<String, dynamic>>(
-      result: {'name': name, 'format': _selected},
-    );
+    Get.back<Map<String, dynamic>>(result: {'name': name, 'format': _selected});
   }
 
   @override
@@ -122,10 +118,10 @@ class _ImportFormatSheetState extends State<ImportFormatSheet> {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
+            ModelNameText(
               '${widget.fileName} · ${widget.sizeLabel}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              tooltip: false,
               style: const TextStyle(
                 color: AppColors.textTertiary,
                 fontSize: 12,
@@ -200,14 +196,11 @@ class _ImportFormatSheetState extends State<ImportFormatSheet> {
                       vertical: 7,
                     ),
                     decoration: BoxDecoration(
-                      gradient:
-                          (format == ModelFormat.litert && isSelected)
+                      gradient: (format == ModelFormat.litert && isSelected)
                           ? FormatTheme.gradientOf(format)
                           : null,
                       color: format == ModelFormat.litert
-                          ? (isSelected
-                                ? null
-                                : FormatTheme.softOf(format))
+                          ? (isSelected ? null : FormatTheme.softOf(format))
                           : (isSelected
                                 ? FormatTheme.selectedOf(format)
                                 : FormatTheme.softOf(format)),
@@ -215,7 +208,9 @@ class _ImportFormatSheetState extends State<ImportFormatSheet> {
                       border: Border.all(
                         color: isSelected
                             ? FormatTheme.colorOf(format)
-                            : FormatTheme.colorOf(format).withValues(alpha: 0.35),
+                            : FormatTheme.colorOf(
+                                format,
+                              ).withValues(alpha: 0.35),
                       ),
                     ),
                     child: Row(

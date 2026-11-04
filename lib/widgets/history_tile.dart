@@ -4,6 +4,7 @@ import '../data/models/chat_session.dart';
 import '../theme/app_theme.dart';
 import '../utils/time_utils.dart';
 import 'model_avatar.dart';
+import 'model_name_text.dart';
 
 /// 历史对话列表项（支持左滑删除）
 class HistoryTile extends StatelessWidget {
@@ -58,12 +59,12 @@ class HistoryTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Text(
+                          child: ModelNameText(
                             session.modelName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                             style: const TextStyle(
                               color: AppColors.textPrimary,
                               fontSize: 14.5,

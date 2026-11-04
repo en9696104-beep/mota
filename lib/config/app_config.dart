@@ -26,7 +26,7 @@ class AppConfig {
   static bool get remoteConfigured => !updateUrls.first.contains('<OWNER>');
 
   /// 当前版本号（与 pubspec.yaml 的 version 保持同步）
-  static const String currentVersion = '3.1.0';
+  static const String currentVersion = '3.1.2';
 
   /// 远端商店数据本地缓存键（shared_preferences）
   static const String storeDataCacheKey = 'store_data_remote_v1';

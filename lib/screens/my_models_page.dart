@@ -32,9 +32,10 @@ class _MyModelsPageState extends State<MyModelsPage> {
       if (model != null) {
         Get.snackbar(
           '导入成功'.tr,
-          '@name（@f）已加入我的模型'.trParams(
-            {'name': model.name, 'f': model.format.label},
-          ),
+          '@name（@f）已加入我的模型'.trParams({
+            'name': model.name,
+            'f': model.format.label,
+          }),
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -122,7 +123,8 @@ class _MyModelsPageState extends State<MyModelsPage> {
             crossAxisCount: 2,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            childAspectRatio: 0.95,
+            // 卡片高度放宽：容纳模型名最长 3 行而不溢出
+            childAspectRatio: 0.74,
           ),
           itemCount: controller.models.length,
           itemBuilder: (_, index) =>

@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import 'download_button.dart';
 import 'format_badge.dart';
 import 'model_avatar.dart';
+import 'model_name_text.dart';
 import 'tag_chip.dart';
 
 /// 商店页模型卡片：头像 + 名称 + 体积 + 元信息 + 标签 + 下载按钮
@@ -36,12 +37,13 @@ class ModelCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(
+                      child: ModelNameText(
                         model.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        // 商店列表无固定高度：不限行数，完整换行展示
+                        maxLines: null,
                         style: const TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 15,
@@ -62,8 +64,8 @@ class ModelCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         '${model.author} · ${model.params} · ${model.quant}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
                         style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 12,
@@ -93,9 +95,7 @@ class ModelCard extends StatelessWidget {
                   spacing: 6,
                   runSpacing: 4,
                   children: [
-                    ...model.tags
-                        .take(6)
-                        .map((t) => TagChip(t)),
+                    ...model.tags.take(6).map((t) => TagChip(t)),
                     if (model.tags.length > 6)
                       TagChip('+${model.tags.length - 6}'),
                   ],

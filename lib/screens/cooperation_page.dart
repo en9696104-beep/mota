@@ -6,6 +6,7 @@ import '../services/cooperation_pipeline.dart';
 import '../services/llama_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/model_avatar.dart';
+import '../widgets/model_name_text.dart';
 
 /// 合作系统配置页：总开关 + 各角色模型选择。
 ///
@@ -19,9 +20,7 @@ class CooperationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final service = Get.find<CooperationService>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('合作系统', style: TextStyle(fontSize: 17)),
-      ),
+      appBar: AppBar(title: const Text('合作系统', style: TextStyle(fontSize: 17))),
       body: Obx(() {
         final config = service.config.value;
         return ListView(
@@ -80,8 +79,11 @@ class CooperationPage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.info_outline,
-                          size: 14, color: AppColors.textSecondary),
+                      Icon(
+                        Icons.info_outline,
+                        size: 14,
+                        color: AppColors.textSecondary,
+                      ),
                       SizedBox(width: 6),
                       Text(
                         '工作原理',
@@ -145,6 +147,7 @@ class _RoleCard extends StatelessWidget {
           border: Border.all(color: AppColors.border),
         ),
         child: ListTile(
+          isThreeLine: true,
           onTap: () => _openPicker(context),
           leading: Container(
             width: 38,
@@ -164,8 +167,9 @@ class _RoleCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          subtitle: Text(
+          subtitle: ModelNameText(
             selected == null ? role.hint : selected.model.name,
+            maxLines: 2,
             style: TextStyle(
               color: selected == null
                   ? AppColors.textTertiary
@@ -184,8 +188,11 @@ class _RoleCard extends StatelessWidget {
                   size: 28,
                 ),
               const SizedBox(width: 6),
-              const Icon(Icons.chevron_right,
-                  size: 16, color: AppColors.textTertiary),
+              const Icon(
+                Icons.chevron_right,
+                size: 16,
+                color: AppColors.textTertiary,
+              ),
             ],
           ),
         ),
@@ -220,9 +227,7 @@ class _RoleCard extends StatelessWidget {
           Get.back();
         },
         onCleared: () {
-          service.updateConfig(
-            service.config.value.copyWithModel(role, null),
-          );
+          service.updateConfig(service.config.value.copyWithModel(role, null));
           Get.back();
         },
       ),
@@ -273,6 +278,7 @@ class _RolePickerSheet extends StatelessWidget {
                 final model = candidates[index];
                 final selected = model.id == currentId;
                 return ListTile(
+                  isThreeLine: true,
                   onTap: () => onSelected(model),
                   leading: ModelAvatar(
                     name: model.name,
@@ -280,8 +286,9 @@ class _RolePickerSheet extends StatelessWidget {
                     author: model.author,
                     size: 36,
                   ),
-                  title: Text(
+                  title: ModelNameText(
                     model.name,
+                    maxLines: 2,
                     style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 14,
@@ -295,8 +302,11 @@ class _RolePickerSheet extends StatelessWidget {
                     ),
                   ),
                   trailing: selected
-                      ? const Icon(Icons.check_circle,
-                          color: AppColors.accent, size: 20)
+                      ? const Icon(
+                          Icons.check_circle,
+                          color: AppColors.accent,
+                          size: 20,
+                        )
                       : null,
                 );
               },
@@ -325,7 +335,8 @@ class _OcrPromptTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       final service = Get.find<CooperationService>();
-      final isDefault = service.config.value.ocrPrompt == null ||
+      final isDefault =
+          service.config.value.ocrPrompt == null ||
           service.config.value.ocrPrompt!.trim().isEmpty;
       final prompt = isDefault
           ? CooperationConfig.defaultOcrPrompt
@@ -347,8 +358,11 @@ class _OcrPromptTile extends StatelessWidget {
               color: AppColors.surfaceHigh,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.text_snippet_outlined,
-                size: 18, color: AppColors.accent),
+            child: const Icon(
+              Icons.text_snippet_outlined,
+              size: 18,
+              color: AppColors.accent,
+            ),
           ),
           title: const Text(
             'OCR 提示词',
@@ -364,8 +378,11 @@ class _OcrPromptTile extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(color: AppColors.textTertiary, fontSize: 11),
           ),
-          trailing: const Icon(Icons.chevron_right,
-              size: 16, color: AppColors.textTertiary),
+          trailing: const Icon(
+            Icons.chevron_right,
+            size: 16,
+            color: AppColors.textTertiary,
+          ),
         ),
       );
     });
@@ -374,15 +391,17 @@ class _OcrPromptTile extends StatelessWidget {
   Future<void> _editPrompt(BuildContext context) async {
     final service = Get.find<CooperationService>();
     final controller = TextEditingController(
-      text: service.config.value.ocrPrompt ??
-          CooperationConfig.defaultOcrPrompt,
+      text:
+          service.config.value.ocrPrompt ?? CooperationConfig.defaultOcrPrompt,
     );
     final saved = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
-        title: const Text('OCR 提示词',
-            style: TextStyle(color: AppColors.textPrimary, fontSize: 16)),
+        title: const Text(
+          'OCR 提示词',
+          style: TextStyle(color: AppColors.textPrimary, fontSize: 16),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -390,7 +409,10 @@ class _OcrPromptTile extends StatelessWidget {
               controller: controller,
               maxLines: 6,
               style: const TextStyle(
-                  color: AppColors.textPrimary, fontSize: 13, height: 1.5),
+                color: AppColors.textPrimary,
+                fontSize: 13,
+                height: 1.5,
+              ),
               decoration: const InputDecoration(
                 hintText: '描述希望如何转录图片内容…',
                 hintStyle: TextStyle(color: AppColors.textTertiary),
@@ -400,10 +422,12 @@ class _OcrPromptTile extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () => controller.text =
-                    CooperationConfig.defaultOcrPrompt,
-                child: const Text('恢复默认',
-                    style: TextStyle(color: AppColors.accent, fontSize: 12)),
+                onPressed: () =>
+                    controller.text = CooperationConfig.defaultOcrPrompt,
+                child: const Text(
+                  '恢复默认',
+                  style: TextStyle(color: AppColors.accent, fontSize: 12),
+                ),
               ),
             ),
           ],
@@ -411,14 +435,20 @@ class _OcrPromptTile extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('取消',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text(
+              '取消',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('保存',
-                style: TextStyle(
-                    color: AppColors.accent, fontWeight: FontWeight.w600)),
+            child: const Text(
+              '保存',
+              style: TextStyle(
+                color: AppColors.accent,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),

@@ -15,6 +15,7 @@ import '../services/remote/api_model_service.dart';
 import '../services/update_checker.dart';
 import '../theme/app_theme.dart';
 import '../widgets/model_avatar.dart';
+import '../widgets/model_name_text.dart';
 
 /// 设置页：版本信息、检查更新、商店数据来源
 class SettingsPage extends StatefulWidget {
@@ -742,14 +743,17 @@ class _ExtractionModelTile extends StatelessWidget {
                   final model = candidates[index];
                   final selected = model.id == settings.extractionModelId;
                   return ListTile(
+                    // 允许标题 2 行，避免长模型名被 ListTile 隐式截断
+                    isThreeLine: true,
                     leading: ModelAvatar(
                       name: model.name,
                       colorIndex: model.colorIndex,
                       author: model.author,
                       size: 32,
                     ),
-                    title: Text(
+                    title: ModelNameText(
                       model.name,
+                      maxLines: 2,
                       style: const TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 14,
@@ -1505,19 +1509,18 @@ class _ApiModelCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                ModelNameText(
                   config.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
                   style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 14,
                   ),
                 ),
-                Text(
+                ModelNameText(
                   '${config.model} · ${config.maskedKey}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  tooltip: false,
                   style: const TextStyle(
                     color: AppColors.textTertiary,
                     fontSize: 11,

@@ -8,6 +8,7 @@ import '../theme/app_theme.dart';
 import '../theme/format_theme.dart';
 import 'format_badge.dart';
 import 'model_avatar.dart';
+import 'model_name_text.dart';
 import 'tag_chip.dart';
 
 /// 「我的模型」网格卡片：头像 + 体积 + 名称 + 元信息 + 标签 + 操作按钮
@@ -114,9 +115,7 @@ class DownloadedModelCard extends StatelessWidget {
     final confirmed = await Get.dialog<bool>(
       AlertDialog(
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           '删除模型'.tr,
           style: const TextStyle(
@@ -126,8 +125,10 @@ class DownloadedModelCard extends StatelessWidget {
           ),
         ),
         content: Text(
-          '确定要删除该模型文件以释放空间吗？\n\n@name（@size）将从本机移除，如需使用需重新下载。'
-              .trParams({'name': model.name, 'size': model.sizeLabel}),
+          '确定要删除该模型文件以释放空间吗？\n\n@name（@size）将从本机移除，如需使用需重新下载。'.trParams({
+            'name': model.name,
+            'size': model.sizeLabel,
+          }),
           style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 13,
@@ -187,10 +188,10 @@ class DownloadedModelCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
+            ModelNameText(
               model.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              // 网格卡片有固定高度：3 行足以覆盖全部内置模型名
+              maxLines: 3,
               style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 14,
@@ -205,8 +206,10 @@ class DownloadedModelCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    '@params · @quant · 已就绪'
-                        .trParams({'params': model.params, 'quant': model.quant}),
+                    '@params · @quant · 已就绪'.trParams({
+                      'params': model.params,
+                      'quant': model.quant,
+                    }),
                     style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 11,

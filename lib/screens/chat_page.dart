@@ -9,6 +9,7 @@ import '../controllers/store_controller.dart';
 import '../theme/app_theme.dart';
 import '../widgets/chat_settings_sheet.dart';
 import '../widgets/model_avatar.dart';
+import '../widgets/model_name_text.dart';
 
 /// 对话页：本地 llama.cpp 流式推理
 class ChatPage extends StatelessWidget {
@@ -44,11 +45,15 @@ class ChatPage extends StatelessWidget {
           children: [
             Flexible(
               child: Obx(
-                () => Text(
-                  controller.modelName.value,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 17),
+                // AppBar 高度固定：字号自适应缩小，单行也要显示完整名称
+                () => FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: ModelNameText(
+                    controller.modelName.value,
+                    maxLines: 1,
+                    style: const TextStyle(fontSize: 17),
+                  ),
                 ),
               ),
             ),
@@ -59,12 +64,14 @@ class ChatPage extends StatelessWidget {
         actions: [
           // TTS 朗读最后一条回复（合作系统）
           IconButton(
-            icon: Obx(() => Icon(
-                  controller.isSpeaking.value
-                      ? Icons.graphic_eq
-                      : Icons.volume_up_outlined,
-                  size: 20,
-                )),
+            icon: Obx(
+              () => Icon(
+                controller.isSpeaking.value
+                    ? Icons.graphic_eq
+                    : Icons.volume_up_outlined,
+                size: 20,
+              ),
+            ),
             tooltip: '朗读回复',
             color: AppColors.textSecondary,
             onPressed: controller.speakLastReply,
@@ -100,8 +107,7 @@ class ChatPage extends StatelessWidget {
                 icon: Icons.cloud_download_outlined,
                 text: '该模型尚未下载到本地，请先到模型商店下载',
                 actionLabel: '去商店',
-                onAction: () =>
-                    Get.find<MainController>().changeTab(1),
+                onAction: () => Get.find<MainController>().changeTab(1),
               );
             }
             return const SizedBox.shrink();
@@ -138,7 +144,9 @@ class ChatPage extends StatelessWidget {
           ),
           // 待发送图片预览条
           Obx(() {
-            if (controller.pendingImages.isEmpty) return const SizedBox.shrink();
+            if (controller.pendingImages.isEmpty) {
+              return const SizedBox.shrink();
+            }
             return _PendingImageStrip(controller: controller);
           }),
           _InputBar(controller: controller),
@@ -389,27 +397,32 @@ class _InputBar extends StatelessWidget {
             Row(
               children: [
                 // 图片输入（OCR 管线 / 视觉模型直传）
-                Obx(() => _CircleAction(
-                      icon: Icons.image_outlined,
-                      tooltip: controller.supportsImageInput.value
-                          ? '上传图片'
-                          : '当前模型不支持图片输入',
-                      enabled: controller.supportsImageInput.value,
-                      onTap: controller.pickImages,
-                    )),
+                Obx(
+                  () => _CircleAction(
+                    icon: Icons.image_outlined,
+                    tooltip: controller.supportsImageInput.value
+                        ? '上传图片'
+                        : '当前模型不支持图片输入',
+                    enabled: controller.supportsImageInput.value,
+                    onTap: controller.pickImages,
+                  ),
+                ),
                 const SizedBox(width: 8),
                 // 语音输入（ASR 管线）
-                Obx(() => _CircleAction(
-                      icon: controller.isTranscribing.value
-                          ? Icons.transcribe
-                          : (controller.isRecording.value
+                Obx(
+                  () => _CircleAction(
+                    icon: controller.isTranscribing.value
+                        ? Icons.transcribe
+                        : (controller.isRecording.value
                               ? Icons.stop_circle_outlined
                               : Icons.mic_none),
-                      tooltip: controller.isRecording.value ? '停止录音' : '语音输入',
-                      highlight: controller.isRecording.value ||
-                          controller.isTranscribing.value,
-                      onTap: controller.toggleVoiceInput,
-                    )),
+                    tooltip: controller.isRecording.value ? '停止录音' : '语音输入',
+                    highlight:
+                        controller.isRecording.value ||
+                        controller.isTranscribing.value,
+                    onTap: controller.toggleVoiceInput,
+                  ),
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
@@ -487,10 +500,7 @@ class _InputBar extends StatelessWidget {
             const SizedBox(height: 6),
             const Text(
               '当前由本地 llama.cpp 驱动，不联网。',
-              style: TextStyle(
-                color: AppColors.textTertiary,
-                fontSize: 10,
-              ),
+              style: TextStyle(color: AppColors.textTertiary, fontSize: 10),
             ),
           ],
         ),
@@ -542,11 +552,7 @@ class _CircleAction extends StatelessWidget {
                   : (highlight ? AppColors.accent : AppColors.border),
             ),
           ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 18,
-          ),
+          child: Icon(icon, color: color, size: 18),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import '../controllers/group_chat_controller.dart';
 import '../data/models/ai_model.dart';
 import '../theme/app_theme.dart';
 import '../widgets/model_avatar.dart';
+import '../widgets/model_name_text.dart';
 
 /// 群聊页：多个本地 AI 轮流对话（严格串行，禁止并发驻留内存）。
 class GroupChatPage extends StatelessWidget {
@@ -144,13 +145,18 @@ class _MemberStrip extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      m.modelName,
-                      style: TextStyle(
-                        color: speaking
-                            ? AppColors.accent
-                            : AppColors.textTertiary,
-                        fontSize: 10,
+                    SizedBox(
+                      width: 68,
+                      child: ModelNameText(
+                        m.modelName,
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: speaking
+                              ? AppColors.accent
+                              : AppColors.textTertiary,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ],
@@ -181,16 +187,16 @@ class _EmptyMemberBanner extends StatelessWidget {
         color: AppColors.surfaceHigh,
         child: const Row(
           children: [
-            Icon(Icons.group_add_outlined,
-                size: 16, color: AppColors.textSecondary),
+            Icon(
+              Icons.group_add_outlined,
+              size: 16,
+              color: AppColors.textSecondary,
+            ),
             SizedBox(width: 8),
             Expanded(
               child: Text(
                 '还没有群成员，点击添加已下载的 AI 模型（至少 1 个）',
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
             ),
             Icon(Icons.chevron_right, size: 16, color: AppColors.textTertiary),
@@ -220,18 +226,14 @@ class _GroupBubble extends StatelessWidget {
           ),
           child: Text(
             message.text,
-            style: const TextStyle(
-              color: AppColors.textTertiary,
-              fontSize: 11,
-            ),
+            style: const TextStyle(color: AppColors.textTertiary, fontSize: 11),
           ),
         ),
       );
     }
 
     final isUser = message.isUser;
-    final bubbleColor =
-        isUser ? AppColors.accent : AppColors.surfaceHigh;
+    final bubbleColor = isUser ? AppColors.accent : AppColors.surfaceHigh;
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -240,8 +242,9 @@ class _GroupBubble extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.74,
         ),
         child: Column(
-          crossAxisAlignment:
-              isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isUser
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: [
             // 发言者标识：头像 + 名称（AI 之间互相可见的关键）
             if (!isUser)
@@ -256,12 +259,15 @@ class _GroupBubble extends StatelessWidget {
                       size: 18,
                     ),
                     const SizedBox(width: 6),
-                    Text(
-                      message.senderName,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                    Flexible(
+                      child: ModelNameText(
+                        message.senderName,
+                        maxLines: 2,
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -467,10 +473,7 @@ class MemberPickerSheet extends StatelessWidget {
                 SizedBox(width: 8),
                 Text(
                   '（已下载的对话模型）',
-                  style: TextStyle(
-                    color: AppColors.textTertiary,
-                    fontSize: 11,
-                  ),
+                  style: TextStyle(color: AppColors.textTertiary, fontSize: 11),
                 ),
               ],
             ),
@@ -526,6 +529,7 @@ class _MemberPickerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      isThreeLine: true,
       onTap: onTap,
       leading: ModelAvatar(
         name: model.name,
@@ -533,19 +537,14 @@ class _MemberPickerTile extends StatelessWidget {
         author: model.author,
         size: 36,
       ),
-      title: Text(
+      title: ModelNameText(
         model.name,
-        style: const TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 14,
-        ),
+        maxLines: 2,
+        style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
       ),
       subtitle: Text(
         '${model.params} · ${model.quant} · ${model.sizeLabel}',
-        style: const TextStyle(
-          color: AppColors.textTertiary,
-          fontSize: 11,
-        ),
+        style: const TextStyle(color: AppColors.textTertiary, fontSize: 11),
       ),
       trailing: Icon(
         selected ? Icons.check_circle : Icons.add_circle_outline,
