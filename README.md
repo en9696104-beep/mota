@@ -2,7 +2,7 @@
 
 本地大模型（GGUF）应用：在设备端离线运行开源模型，并提供模型商店、API 模型接入、多模型协作与技能扩展。支持 **Android** 与 **Linux 桌面**。
 
-> 当前版本 **v3.1.3** · 许可证 **Apache License 2.0**（SPDX: `Apache-2.0`）
+> 当前版本 **v3.1.4** · 许可证 **Apache License 2.0**（SPDX: `Apache-2.0`）
 
 ## 源码仓库
 

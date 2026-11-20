@@ -39,7 +39,10 @@ class ModelCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // 名称占大头；体积徽标用 Flexible 收进剩余空间，
+                    // 避免长文案（带投影器）把名称挤成逐字竖排
                     Expanded(
+                      flex: 3,
                       child: ModelNameText(
                         model.name,
                         // 商店列表无固定高度：不限行数，完整换行展示
@@ -52,7 +55,11 @@ class ModelCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    SizeBadge(model.sizeLabel),
+                    Flexible(
+                      flex: 2,
+                      fit: FlexFit.loose,
+                      child: SizeBadge(model.sizeLabel),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 4),
