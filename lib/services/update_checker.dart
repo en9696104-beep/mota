@@ -44,7 +44,7 @@ class UpdateChecker {
 
   /// 拉取远端版本信息：逐源尝试，全部失败时返回带原因的结果
   static Future<UpdateCheckResult> check() async {
-    // 更新源尚未配置（<OWNER> 未替换）：给出可行动的提示而非笼统"网络异常"
+    // 更新源尚未配置（占位符未替换）：给出可行动的提示而非笼统"网络异常"
     if (!AppConfig.remoteConfigured) {
       return const UpdateCheckResult(reason: '更新源尚未配置：等待代码仓库创建后自动生效');
     }

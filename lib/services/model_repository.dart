@@ -36,7 +36,7 @@ class ModelRepository extends GetxService {
     var source = '本地内置';
 
     // 1. 远端拉取（多源回退：CNB → Gitee → GitHub Raw）；
-    //    源未配置（<OWNER> 未替换）时跳过，零等待直接走本地
+    //    源未配置（占位符未替换）时跳过，零等待直接走本地
     if (AppConfig.remoteConfigured) {
       for (final url in AppConfig.storeDataUrls) {
         try {

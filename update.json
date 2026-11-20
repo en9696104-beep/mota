@@ -1,5 +1,5 @@
 {
-  "version": "3.1.2",
-  "download_url": "https://c.wss.ink/f/l9xyff2oy37",
-  "release_notes": "MOTA v3.1.2\n\n- 修复模型名称显示不全：去除全项目 12 处省略号截断，长名称完整换行展示\n- 新增 ModelNameText 统一组件（禁止省略号 + 长按看全名）\n- 我的模型网格卡片高度放宽、聊天页标题字号自适应\n- 采用 Apache License 2.0：新增 NOTICE 版权归属声明、重写 README\n- 全量测试 119/119 通过，16KB 页对齐全兼容\n\nAndroid 下载得到 zip 后缀，改回 .apk 后安装；Linux x64: https://c.wss.ink/f/l9xyikk2srp"
+  "version": "3.1.3",
+  "download_url": "https://c.wss.ink/f/lej2erdzc5p",
+  "release_notes": "MOTA v3.1.3\n\n- 启用「检查更新」：三源回退（极狐 → jsDelivr CDN → GitHub Raw），国内直连极狐最快\n- 商店数据同步多源化，远端可热更新\n- 继承 v3.1.2：模型名称完整展示（12 处省略号全去除 + ModelNameText 组件）、Apache 2.0 版权保护、16KB 页对齐、119/119 测试通过\n\nAndroid 若下载得到 zip 后缀，改回 .apk 后安装。完整说明见仓库 README。"
 }

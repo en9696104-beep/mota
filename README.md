@@ -2,20 +2,28 @@
 
 本地大模型（GGUF）应用：在设备端离线运行开源模型，并提供模型商店、API 模型接入、多模型协作与技能扩展。支持 **Android** 与 **Linux 桌面**。
 
-> 当前版本 **v3.1.2** · 许可证 **Apache License 2.0**（SPDX: `Apache-2.0`）
+> 当前版本 **v3.1.3** · 许可证 **Apache License 2.0**（SPDX: `Apache-2.0`）
 
 ## 源码仓库
 
-公开仓库：**https://jihulab.com/mota-project/mota**（极狐 GitLab，`main` 分支）
+- 极狐 GitLab（主仓）：**https://jihulab.com/mota-project/mota**
+- GitHub（镜像）：**https://github.com/en9696104-beep/mota**
+
+两个仓库内容同步，均为 `main` 分支、保留完整提交历史：
 
 ```bash
 git clone https://jihulab.com/mota-project/mota.git
+# 或
+git clone https://github.com/en9696104-beep/mota.git
 ```
 
-仓库根目录的 `update.json` 与 `assets/store_data.json` 为纯静态 JSON，可直接作为「检查更新」与「商店数据」的远端数据源（多源回退、无需自建后端）：
+仓库根目录的 `update.json` 与 `assets/store_data.json` 为纯静态 JSON，作为「检查更新」与「商店数据」的远端数据源（多源回退、无需自建后端）。App 内置三个源、按序回退：
 
-- `https://jihulab.com/mota-project/mota/-/raw/main/update.json` — 字段 `version` / `download_url` / `release_notes`
-- `https://jihulab.com/mota-project/mota/-/raw/main/assets/store_data.json` — 模型元数据数组
+- `https://jihulab.com/mota-project/mota/-/raw/main/update.json` — 极狐，国内最快（主源）
+- `https://cdn.jsdelivr.net/gh/en9696104-beep/mota@main/update.json` — jsDelivr CDN（海外兜底）
+- `https://raw.githubusercontent.com/en9696104-beep/mota/main/update.json` — GitHub Raw（兜底）
+
+`store_data.json` 路径相同（在以上地址末尾接 `assets/store_data.json`）。字段：`update.json` 为 `version` / `download_url` / `release_notes`，`store_data.json` 为模型元数据数组。
 
 ## 主要能力
 
