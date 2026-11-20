@@ -12,14 +12,14 @@ class AppConfig {
   /// 远端商店数据源（按序回退：极狐国内直连最快，CDN / GitHub 兜底）
   static const List<String> storeDataUrls = <String>[
     'https://jihulab.com/mota-project/mota/-/raw/main/assets/store_data.json',
-    'https://cdn.jsdelivr.net/gh/en9696104-beep/mota@main/assets/store_data.json',
+    'https://gcore.jsdelivr.net/gh/en9696104-beep/mota@main/assets/store_data.json',
     'https://raw.githubusercontent.com/en9696104-beep/mota/main/assets/store_data.json',
   ];
 
   /// 远端版本信息源（version / download_url / release_notes）
   static const List<String> updateUrls = <String>[
     'https://jihulab.com/mota-project/mota/-/raw/main/update.json',
-    'https://cdn.jsdelivr.net/gh/en9696104-beep/mota@main/update.json',
+    'https://gcore.jsdelivr.net/gh/en9696104-beep/mota@main/update.json',
     'https://raw.githubusercontent.com/en9696104-beep/mota/main/update.json',
   ];
 
