@@ -1,5 +1,5 @@
 {
-  "version": "3.1.4",
-  "download_url": "https://c.wss.ink/f/lej8wztaefn",
-  "release_notes": "MOTA v3.1.4\n\n- 修复商店卡片「超长蛋挞」：带投影器模型的长体积文案不再把模型名挤成逐字竖排\n- 体积徽标收进 Flexible、限制 2 行并加 Tooltip 兜底，名称列保住足够宽度\n- 新增 2 个布局回归测试，全量 121/121 通过\n- 继承 v3.1.3：检查更新三源回退；v3.1.2：模型名无省略号、Apache 2.0、16KB 页对齐\n\nAndroid 若下载得到 zip 后缀，改回 .apk 后安装。完整说明见仓库 README。"
+  "version": "3.2.0",
+  "download_url": "https://c.wss.ink/f/lfkucpny3ol",
+  "release_notes": "MOTA v3.2.0\n\n- 新增「选择下载源」：HF 官方 / HF 镜像（国内加速）/ 魔搭 ModelScope / 手动上传\n- 记住默认源；投影器随主源同 host 切换；不改数据文件，远端缓存零迁移\n- 仓库整洁化：README 置顶下载入口\n- 继承 v3.1.4：修复商店卡片「超长蛋挞」布局；v3.1.3：检查更新三源回退；v3.1.2：模型名无省略号、Apache 2.0、16KB 页对齐\n- 全量 131/131 测试通过\n\nAndroid 若下载得到 zip 后缀，改回 .apk 后安装。完整说明见仓库 README。"
 }

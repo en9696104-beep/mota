@@ -8,11 +8,11 @@
 
 | 平台 | 安装包 | 安装说明 |
 |---|---|---|
-| Android (arm64) | `mota-v3.1.4-android-arm64.apk` | 下载后若为 `.zip`，解压取 `.apk` 安装 |
-| Linux (x64) | `mota-v3.1.4-linux-x64.tar.gz` | 解压后进入 `bundle/` 运行可执行文件 |
+| Android (arm64) | `mota-v3.2.0-android-arm64.apk` | 下载后若为 `.zip`，解压取 `.apk` 安装 |
+| Linux (x64) | `mota-v3.2.0-linux-x64.tar.gz` | 解压后进入 `bundle/` 运行可执行文件 |
 
-- **统一下载地址**：[文叔叔交付包](https://c.wss.ink/f/lej8wztaefn)（约 114 MB，含 Android APK + Linux 包 + 许可证）。若链接打开是 `.zip`，解压后按上表取对应平台文件。
-- 当前可下载的是 **v3.1.4 稳定版**。源码已到 v3.2.0，新增「下载源可选」（HF 官方 / HF 镜像 / 魔搭 / 手动上传），安装包构建完成后会更新此链接。
+- **统一下载地址**：[文叔叔交付包](https://c.wss.ink/f/lfkucpny3ol)（约 110 MB，含 Android APK + Linux 包 + 许可证）。若链接打开是 `.zip`，解压后按上表取对应平台文件。
+- 当前可下载的是 **v3.2.0 稳定版**，新增「下载源可选」（HF 官方 / HF 镜像 / 魔搭 / 手动上传）。
 - 应用内「设置 → 检查更新」也会给出最新下载地址；国内访问建议优先用极狐源。
 
 ## 功能亮点
