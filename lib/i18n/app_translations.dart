@@ -32,6 +32,27 @@ class AppTranslations extends Translations {
     '按大小': 'Size',
     '按名称': 'Name',
 
+    // ---- 下载源选择 ----
+    '选择下载源': 'Choose download source',
+    '同一模型可选不同来源，HF 镜像国内访问更快':
+        'Same model, different sources. HF mirror is faster in China',
+    'HF 官方': 'HuggingFace',
+    'HF 镜像': 'HF Mirror',
+    'hf-mirror.com · 国内加速': 'hf-mirror.com · Faster in China',
+    '魔搭 ModelScope': 'ModelScope',
+    '手动上传': 'Import locally',
+    '从本地文件导入': 'Import from a local file',
+    '设为默认下载源': 'Set as default source',
+    '选择文件': 'Choose file',
+    '开始下载': 'Download',
+    '无法下载': 'Cannot download',
+    '@name 在该来源暂未提供下载地址':
+        'No download URL for @name from this source',
+    '下载失败': 'Download failed',
+    '@name 已加入我的模型': '@name added to My Models',
+    '下载完成': 'Download complete',
+    '@name 已保存到本地': '@name saved locally',
+
     // ---- 筛选面板 ----
     '多维度筛选': 'Filters',
     '未筛选': 'Off',

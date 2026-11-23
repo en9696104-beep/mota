@@ -1,3 +1,5 @@
+import 'download_source.dart';
+
 /// 模型能力标签（合作系统角色分配 / 群聊成员筛选的依据）。
 ///
 /// 与 [ModelCategory]（商店顶部旧四分筛选）不同，能力是**可叠加**的：
@@ -156,6 +158,17 @@ class AiModel {
 
   /// GGUF 直链下载地址（hf-mirror.com 镜像）
   final String? downloadUrl;
+
+  /// 该模型可用的下载源列表（按主链接域名派生，始终含「手动上传」）。
+  /// 纯派生，不改数据文件，远端 JSON 缓存天然兼容。
+  List<DownloadSource> get availableSources => availableSourcesFor(downloadUrl);
+
+  /// 指定下载源对应的主文件下载地址；手动上传或不适用时返回 null。
+  String? urlFor(DownloadSource source) => resolveUrl(downloadUrl, source);
+
+  /// 指定下载源对应的投影器地址（与主源同 host，保证官方/镜像不混用）。
+  String? projectorUrlFor(DownloadSource source) =>
+      resolveUrl(projectorUrl, source);
 
   /// llama.cpp 聊天模板：chatml / llama2 / alpaca / vicuna / phi / gemma / zephyr
   final String? chatTemplate;

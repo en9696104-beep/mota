@@ -1,8 +1,11 @@
 import 'package:get/get.dart';
 
 import '../data/models/ai_model.dart';
+import '../data/models/download_source.dart';
 import '../services/download_service.dart';
+import '../services/model_import_service.dart';
 import '../services/model_repository.dart';
+import '../widgets/download_source_sheet.dart';
 import 'my_models_controller.dart';
 
 /// 体积分档（与筛选面板一致）
@@ -219,14 +222,67 @@ class StoreController extends GetxController {
 
   double progressOf(String id) => progress[id] ?? 0;
 
-  /// 开始真实下载（dio → .tmp → rename 原子完成）
-  void startDownload(AiModel model) async {
+  /// 点击下载按钮：先弹出选源面板，再按选择结果下载 / 导入。
+  ///
+  /// - URL 源（HF 官方 / HF 镜像 / 魔搭）：走 startDownload
+  /// - 手动上传：走已有的本地文件导入链路
+  Future<void> pickSourceAndDownload(AiModel model) async {
     if (isDownloaded(model.id) || isDownloading(model.id)) return;
-    final url = model.downloadUrl;
+
+    final sources = model.availableSources;
+    final saved = await loadDefaultSource();
+    // 保存的偏好若不在可用列表（例如换了模型族），回退到第一个可用源
+    final initial = (saved != null && sources.contains(saved))
+        ? saved
+        : sources.first;
+
+    final source = await DownloadSourceSheet.show(
+      sources: sources,
+      initial: initial,
+    );
+    if (source == null) return;
+
+    if (source == DownloadSource.localImport) {
+      await _importLocalFile();
+      return;
+    }
+    await startDownload(model, source: source);
+  }
+
+  /// 手动上传：复用已有导入服务（选择本地文件 → 架构面板 → 落库）。
+  /// 导入的是新模型，不改变当前商店模型的下载状态，也不进入进度态。
+  Future<void> _importLocalFile() async {
+    try {
+      final model = await ModelImportService.instance.pickAndImport();
+      if (model == null) return; // 用户取消
+      Get.snackbar(
+        '导入成功'.tr,
+        '@name 已加入我的模型'.trParams({'name': model.name}),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      Get.snackbar(
+        '导入失败'.tr,
+        e.toString().replaceFirst('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  /// 开始真实下载（dio → .tmp → rename 原子完成）。
+  /// [source] 为空时兼容旧调用：取第一个可用的 URL 源。
+  Future<void> startDownload(AiModel model, {DownloadSource? source}) async {
+    if (isDownloaded(model.id) || isDownloading(model.id)) return;
+
+    final effective = source ?? model.availableSources.firstWhere(
+          (s) => s.isRemote,
+          orElse: () => DownloadSource.localImport,
+        );
+    final url = model.urlFor(effective);
     if (url == null || url.isEmpty) {
       Get.snackbar(
-        '无法下载',
-        '${model.name} 暂未提供下载地址',
+        '无法下载'.tr,
+        '@name 在该来源暂未提供下载地址'.trParams({'name': model.name}),
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -237,20 +293,20 @@ class StoreController extends GetxController {
       final ok = await DownloadService.instance.download(
         id: model.id,
         url: url,
-        projectorUrl: model.projectorUrl,
+        projectorUrl: model.projectorUrlFor(effective),
         onProgress: (p) => progress[model.id] = p,
       );
       if (ok) {
         await _myModels.addModel(model);
         Get.snackbar(
-          '下载完成',
-          '${model.name} 已保存到本地',
+          '下载完成'.tr,
+          '@name 已保存到本地'.trParams({'name': model.name}),
           snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
       Get.snackbar(
-        '下载失败',
+        '下载失败'.tr,
         e.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );

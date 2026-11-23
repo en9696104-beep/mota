@@ -61,7 +61,7 @@ class DownloadButton extends StatelessWidget {
       return _StoreButton(
         label: '下载'.tr,
         filled: true,
-        onTap: () => controller.startDownload(model),
+        onTap: () => controller.pickSourceAndDownload(model),
       );
     });
   }

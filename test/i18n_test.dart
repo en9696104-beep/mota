@@ -50,6 +50,12 @@ void main() {
         '多维度筛选',
         '能力',
         '领域',
+        '选择下载源',
+        'HF 官方',
+        'HF 镜像',
+        '魔搭 ModelScope',
+        '手动上传',
+        '设为默认下载源',
       ];
       for (final key in mustHave) {
         expect(en.containsKey(key), isTrue, reason: '缺少映射: $key');
